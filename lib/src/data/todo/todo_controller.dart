@@ -9,9 +9,9 @@ import 'package:time_range_picker/time_range_picker.dart';
 
 class ChartData {
   PieChartSectionData chartSectionData;
-  String percent;
+  double percent;
 
-  ChartData({required this.chartSectionData, this.percent = ''});
+  ChartData({required this.chartSectionData, this.percent = 0.0});
 }
 
 class TodoController extends GetxController {
@@ -42,7 +42,6 @@ class TodoController extends GetxController {
             title: title,
             value: value,
             color: colorList[Random().nextInt(colorList.length)]),
-        // percent: getPercent(value.toInt())
       ),
     );
   }
@@ -64,11 +63,11 @@ class TodoController extends GetxController {
     }
   }
 
-  String getPercent(int num) {
+  double getPercent(int num) {
     totalSum();
     allSum.toInt() / num * 100;
     print(allSum.toInt() / num * 100);
-    return '${(num / allSum.toInt() * 100).toStringAsFixed(1)}';
+    return (num / allSum.toInt() * 100).roundToDouble();
   }
 
 
@@ -83,6 +82,10 @@ class TodoController extends GetxController {
   void sortTodoList() {
     todoList
         .sort((a, b) => a.time.startTime.hour.compareTo(b.time.startTime.hour));
+  }
+
+  void sortChartList() {
+    chartClassList.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
   double getTime(TimeRange time) {

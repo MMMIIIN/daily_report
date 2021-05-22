@@ -76,6 +76,7 @@ class AddTodo extends StatelessWidget {
                           _todoController.sortTodoList();
                           _todoController.addClassChartData(_todoController.titleTextController.value.text, _todoController.getTime(_todoController.defaultTime.value));
                           _todoController.setPercent();
+                          _todoController.sortChartList();
                           Get.back();
                         },
                         color: Colors.white,
