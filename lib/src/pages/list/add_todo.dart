@@ -1,13 +1,17 @@
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
-import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
+import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 class AddTodo extends StatelessWidget {
   final TodoController _todoController = Get.put(TodoController());
-  // final ChartController _chartController = Get.put(ChartController());
+  int? year;
+  int? month;
+  int? day;
+
+  AddTodo({this.year, this.month, this.day});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +38,13 @@ class AddTodo extends StatelessWidget {
                           hintText: 'Title'),
                     ),
                   ),
+                ),
+                Row(
+                  children: [
+                    Text(year.toString()),
+                    Text(month.toString()),
+                    Text(day.toString()),
+                  ],
                 ),
                 Expanded(
                   // flex: 4,
@@ -63,20 +74,60 @@ class AddTodo extends StatelessWidget {
                       ),
                       MaterialButton(
                         onPressed: () {
-                          _todoController.todoList.add(Todo(
-                            time: TimeRange(
-                              startTime:
-                                  _todoController.defaultTime.value.startTime,
-                              endTime:
-                                  _todoController.defaultTime.value.endTime,
-                            ),
-                            title:
-                                _todoController.titleTextController.value.text,
-                          ));
-                          _todoController.sortTodoList();
-                          _todoController.addClassChartData(_todoController.titleTextController.value.text, _todoController.getTime(_todoController.defaultTime.value));
-                          _todoController.setPercent();
+                          // _todoController.todoList.add(Todo(
+                          //   // year: year ?? 0,
+                          //   // month: month ?? 0,
+                          //   // day:  day ?? 0,
+                          //   time: TimeRange(
+                          //     startTime:
+                          //         _todoController.defaultTime.value.startTime,
+                          //     endTime:
+                          //         _todoController.defaultTime.value.endTime,
+                          //   ),
+                          //   title:
+                          //       _todoController.titleTextController.value.text,
+                          // ));
+
+                          _todoController.todoDateList.add(
+                            DateTodo(
+                                year: year ?? 0,
+                                month: month ?? 0,
+                                day: day ?? 0,
+                                todo: [
+                                  Todo(
+                                    title: _todoController
+                                        .titleTextController.value.text,
+                                    time: TimeRange(
+                                      startTime: _todoController
+                                          .defaultTime.value.startTime,
+                                      endTime: _todoController
+                                          .defaultTime.value.endTime,
+                                    ),
+                                  ),
+                                ]),
+                          );
+
+                          // _todoController.sortTodoList();
+                          // _todoController.addClassChartData(
+                          //   YMD(year: year ?? 0, month: month ?? 0, day: day ?? 0),
+                          //     _todoController.titleTextController.value.text,
+                          //     _todoController
+                          //         .getTime(_todoController.defaultTime.value));
+                          // _todoController.setPercent();
                           _todoController.sortChartList();
+                          // _todoController.getEventsForDay(DateTime(year ?? 2021,month ?? 5,day ?? 28));
+                          _todoController.addClassChartData(
+                              YMD(
+                                  year: year ?? 0,
+                                  month: month ?? 0,
+                                  day: day ?? 0),
+                              _todoController.titleTextController.value.text,
+                              _todoController.getTime(_todoController.defaultTime.value));
+                          EventsList.addAll({
+                            DateTime.utc(year ?? 0, month ?? 0, day ?? 0): [
+                              Event('title')
+                            ]
+                          });
                           Get.back();
                         },
                         color: Colors.white,

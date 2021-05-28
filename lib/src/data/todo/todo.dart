@@ -6,3 +6,17 @@ class Todo {
 
   Todo({required this.title, required this.time});
 }
+
+class DateTodo {
+  int year;
+  int month;
+  int day;
+  List<Todo> todo;
+
+  DateTodo({
+    this.year = 2021,
+    this.month = 5,
+    this.day = 23,
+    required this.todo
+  });
+}

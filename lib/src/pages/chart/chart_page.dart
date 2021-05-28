@@ -20,47 +20,47 @@ class _ChartPageState extends State<ChartPage> {
       child: SafeArea(
         child: Column(
           children: [
-            Expanded(
-              child: PieChart(
-                PieChartData(
-                  pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
-                    setState(() {
-                      final desiredTouch =
-                          pieTouchResponse.touchInput is! PointerExitEvent &&
-                              pieTouchResponse.touchInput is! PointerUpEvent;
-                      if (desiredTouch &&
-                          pieTouchResponse.touchedSection != null) {
-                        touchedIndex = pieTouchResponse
-                            .touchedSection!.touchedSectionIndex;
-                      } else {
-                        touchedIndex = -1;
-                      }
-                      print(touchedIndex);
-                    });
-                  }),
-                  startDegreeOffset: 270,
-                  sectionsSpace: 4,
-                  centerSpaceRadius: 60,
-                  sections: List<PieChartSectionData>.generate(
-                      _todoController.chartClassList.length, (index) {
-                    final isTouched = index == touchedIndex;
-                    final radius = isTouched ? 100.0 : 80.0;
-                    final title = isTouched
-                        ? _todoController
-                            .chartClassList[index].chartSectionData.title
-                        : '';
-                    return PieChartSectionData(
-                      title: title,
-                      color: _todoController
-                          .chartClassList[index].chartSectionData.color,
-                      value: _todoController
-                          .chartClassList[index].chartSectionData.value,
-                      radius: radius,
-                    );
-                  }),
-                ),
-              ),
-            ),
+            // Expanded(
+              // child: PieChart(
+              //   PieChartData(
+              //     pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+              //       setState(() {
+              //         final desiredTouch =
+              //             pieTouchResponse.touchInput is! PointerExitEvent &&
+              //                 pieTouchResponse.touchInput is! PointerUpEvent;
+              //         if (desiredTouch &&
+              //             pieTouchResponse.touchedSection != null) {
+              //           touchedIndex = pieTouchResponse
+              //               .touchedSection!.touchedSectionIndex;
+              //         } else {
+              //           touchedIndex = -1;
+              //         }
+              //         print(touchedIndex);
+              //       });
+              //     }),
+              //     startDegreeOffset: 270,
+              //     sectionsSpace: 4,
+              //     centerSpaceRadius: 60,
+              //     sections: List<PieChartSectionData>.generate(
+              //         _todoController.chartClassList.length, (index) {
+              //       final isTouched = index == touchedIndex;
+              //       final radius = isTouched ? 100.0 : 80.0;
+              //       final title = isTouched
+              //           ? _todoController
+              //               .chartClassList[index].chartSectionData.title
+              //           : '';
+              //       return PieChartSectionData(
+              //         title: title,
+              //         color: _todoController
+              //             .chartClassList[index].chartSectionData.data.sections[],
+              //         value: _todoController
+              //             .chartClassList[index].chartSectionData.value,
+              //         radius: radius,
+              //       );
+              //     }),
+              //   ),
+              // ),
+            // ),
             Container(
               padding: EdgeInsets.all(30),
               width: double.infinity,
@@ -84,20 +84,20 @@ class _ChartPageState extends State<ChartPage> {
                         Container(
                           width: 16,
                           height: 16,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _todoController.chartClassList[index]
-                                  .chartSectionData.color),
+                          // decoration: BoxDecoration(
+                          //     shape: BoxShape.circle,
+                              // color: _todoController.chartClassList[index]
+                              //     .chartSectionData.color),
                         ),
                         SizedBox(width: 4),
                         Row(
                           children: [
-                            Text(
-                              _todoController
-                                  .chartClassList[index].chartSectionData.title,
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
+                            // Text(
+                            //   _todoController
+                            //       .chartClassList[index].chartSectionData.title,
+                            //   style: TextStyle(
+                            //       fontSize: 16, fontWeight: FontWeight.bold),
+                            // ),
                             Text(
                               ' ${_todoController.chartClassList[index].percent} %',
                               style: TextStyle(fontSize: 13),
