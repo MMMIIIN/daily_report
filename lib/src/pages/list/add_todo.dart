@@ -114,7 +114,7 @@ class AddTodo extends StatelessWidget {
                           //     _todoController
                           //         .getTime(_todoController.defaultTime.value));
                           // _todoController.setPercent();
-                          _todoController.sortChartList();
+                          // _todoController.sortChartList();
                           // _todoController.getEventsForDay(DateTime(year ?? 2021,month ?? 5,day ?? 28));
                           _todoController.addClassChartData(
                               YMD(
@@ -128,7 +128,9 @@ class AddTodo extends StatelessWidget {
                               Event('title')
                             ]
                           });
-                          Get.back();
+                          _todoController.setDataPercent(_todoController.chartClassList[_todoController.currentIndex.value]);
+                          // Get.back();
+                          Get.toNamed('/');
                         },
                         color: Colors.white,
                         child: Text('ADD'),

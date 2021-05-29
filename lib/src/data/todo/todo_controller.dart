@@ -23,18 +23,28 @@ class YMD {
   YMD({required this.year, required this.month, required this.day});
 }
 
+class ChartDataPercent {
+  PieChartSectionData data;
+  double percent;
+
+  ChartDataPercent({required this.data, this.percent = 100.0});
+}
 
 class ChartDateData {
   YMD ymd;
-  PieChart chartSectionData;
-  double percent;
+  List<ChartDataPercent> data = [];
 
-  ChartDateData(
-      {required this.chartSectionData, required this.ymd, this.percent = 0.0});
+  // PieChart chartSectionData;
+  // double percent;
+
+  // ChartDateData(
+  //     {required this.chartSectionData, required this.ymd, this.percent = 0.0});
+  ChartDateData({required this.ymd, required this.data});
 }
 
 class TodoController extends GetxController {
   RxInt currentIndex = 0.obs;
+  Rx<DateTime> currentDateTime = DateTime.now().obs;
   final todoList = <Todo>[].obs;
 
   final todoDateList = <DateTodo>[
@@ -82,35 +92,71 @@ class TodoController extends GetxController {
       .obs;
   var titleTextController = TextEditingController().obs;
 
+
   var chartClassList = <ChartDateData>[
-    ChartDateData(
-        chartSectionData: PieChart(PieChartData(sections: [])),
-        ymd: YMD(year: 2021, month: 5, day: 1)),
-    ChartDateData(
-        chartSectionData: PieChart(PieChartData(
-            startDegreeOffset: 270,
-            sectionsSpace: 4,
-            centerSpaceRadius: 40,
-            sections: [
-              PieChartSectionData(
-                  title: 'study', value: 300, color: Colors.orangeAccent),
-              PieChartSectionData(
-                  title: 'game', value: 500, color: Colors.redAccent),
-            ])),
-        ymd: YMD(year: 2021, month: 5, day: 16)),
-    ChartDateData(
-        chartSectionData: PieChart(PieChartData(
-            startDegreeOffset: 270,
-            sectionsSpace: 4,
-            centerSpaceRadius: 40,
-            sections: [
-              PieChartSectionData(
-                  title: 'study', value: 200, color: Colors.greenAccent),
-              PieChartSectionData(
-                  title: 'game', value: 500, color: Colors.purpleAccent),
-            ])),
-        ymd: YMD(year: 2021, month: 5, day: 25))
+    ChartDateData(ymd: YMD(year: 2021, month: 5, day: 1), data: [
+      ChartDataPercent(data: PieChartSectionData(
+        title: 'sample',
+        color: Colors.blue
+      ))
+    ]),
+    ChartDateData(ymd: YMD(year: 2021, month: 5, day: 16), data: [
+      ChartDataPercent(data: PieChartSectionData(
+        title: 'study',
+        value: 100,
+        color: Colors.purpleAccent
+      )),
+      ChartDataPercent(data: PieChartSectionData(
+        title: 'game',
+        value: 150,
+        color: Colors.redAccent
+      )),
+    ]),
+    ChartDateData(ymd: YMD(year: 2021, month: 5, day: 25), data: [
+      ChartDataPercent(data: PieChartSectionData(
+        title: 'bible',
+        value: 300,
+        color: Colors.greenAccent
+      )),
+      ChartDataPercent(data: PieChartSectionData(
+          title: 'sleep',
+          value: 150,
+          color: Colors.blue
+      )),
+    ]),
   ].obs;
+
+  // var chartClassList = <ChartDateData>[
+  //   ChartDateData(
+  //       chartSectionData: PieChart(PieChartData(sections: [])),
+  //       ymd: YMD(year: 2021, month: 5, day: 1)),
+  //   ChartDateData(
+  //       chartSectionData: PieChart(PieChartData(
+  //           startDegreeOffset: 270,
+  //           sectionsSpace: 4,
+  //           centerSpaceRadius: 40,
+  //           sections: [
+  //             PieChartSectionData(
+  //                 title: 'study', value: 300, color: Colors.orangeAccent),
+  //             PieChartSectionData(
+  //                 title: 'game', value: 500, color: Colors.redAccent),
+  //           ])),
+  //       ymd: YMD(year: 2021, month: 5, day: 16)),
+  //   ChartDateData(
+  //       chartSectionData: PieChart(PieChartData(
+  //           startDegreeOffset: 270,
+  //           sectionsSpace: 4,
+  //           centerSpaceRadius: 40,
+  //           sections: [
+  //             PieChartSectionData(
+  //                 title: 'study', value: 200, color: Colors.greenAccent),
+  //             PieChartSectionData(
+  //                 title: 'game', value: 500, color: Colors.purpleAccent),
+  //           ])),
+  //       ymd: YMD(year: 2021, month: 5, day: 25))
+  // ].obs;
+
+
   RxInt allSum = 0.obs;
 
   // Rx<DateTime> focusedDay = DateTime.now().obs;
@@ -124,8 +170,9 @@ class TodoController extends GetxController {
 
   void setCurrentIndex(DateTime time) {
     var index =
-        chartClassList.indexWhere((element) => element.ymd.day == time.day);
-    print(index);
+        chartClassList.indexWhere((element) =>element.ymd.year == time.year && element.ymd.month == time.month && element.ymd.day == time.day);
+    print('currentIndex = $currentIndex');
+    print('index = $index');
     if (index == -1) {
       currentIndex(0);
     } else {
@@ -177,29 +224,58 @@ class TodoController extends GetxController {
     var index = getDateIndex(ymd);
     if (index == -1) {
       chartClassList.add(ChartDateData(
-          chartSectionData: PieChart(PieChartData(
-              startDegreeOffset: 270,
-              sectionsSpace: 4,
-              centerSpaceRadius: 40,
-              sections: [
-                PieChartSectionData(
-                    title: title,
-                    value: value,
-                    color: colorList[Random().nextInt(colorList.length)])
-              ])),
-          ymd: ymd));
-    } else {
-      chartClassList[index].chartSectionData.data.sections.add(
-          PieChartSectionData(
+          // chartSectionData: PieChart(PieChartData(
+          //     startDegreeOffset: 270,
+          //     sectionsSpace: 4,
+          //     centerSpaceRadius: 40,
+          //     sections: [
+          //       PieChartSectionData(
+          //           title: title,
+          //           value: value,
+          //           color: colorList[Random().nextInt(colorList.length)])
+          //     ])),
+          ymd: ymd,
+          data: [
+            ChartDataPercent(data: PieChartSectionData(
               title: title,
               value: value,
-              color: colorList[Random().nextInt(colorList.length)]));
+              color: colorList[Random().nextInt(colorList.length)]
+            ))
+          ]));
+    } else {
+      chartClassList[index].data.add(ChartDataPercent(data: PieChartSectionData(
+        title: title,
+        value: value,
+        color: colorList[Random().nextInt(colorList.length)]
+      )));
+      // chartClassList[index].chartSectionData.data.sections.add(
+      //     PieChartSectionData(
+      //         title: title,
+      //         value: value,
+      //         color: colorList[Random().nextInt(colorList.length)]));
+    }
+    update();
+  }
+
+  void initPercent() {
+    for(int i = 0; i < chartClassList.length; i++){
+      setDataPercent(chartClassList[i]);
+    }
+  }
+
+  void setDataPercent(ChartDateData _data){
+    int sum = 0;
+    for(int i = 0; i < _data.data.length; i++){
+      sum += _data.data[i].data.value.toInt();
+    }
+    for(int i = 0; i < _data.data.length; i++){
+      _data.data[i].percent = (_data.data[i].data.value.toInt() / sum * 100).roundToDouble();
     }
   }
 
   // void setPercent() {
   //   for (int i = 0; i < chartClassList.length; i++) {
-  //     chartClassList[i].percent =
+  //     chartClassList[i].data[i].percent =
   //         getPercent(chartClassList[currentIndex.value].chartSectionData.data.sections[i].value.toInt());
   //   }
   // }
@@ -235,9 +311,9 @@ class TodoController extends GetxController {
         .sort((a, b) => a.time.startTime.hour.compareTo(b.time.startTime.hour));
   }
 
-  void sortChartList() {
-    chartClassList.sort((a, b) => b.percent.compareTo(a.percent));
-  }
+  // void sortChartList() {
+  //   chartClassList.sort((a, b) => b.percent.compareTo(a.percent));
+  // }
 
   double getTime(TimeRange time) {
     var time1 = DateTime(DateTime.now().year, DateTime.now().month,
@@ -255,6 +331,7 @@ class TodoController extends GetxController {
     // TODO: implement onInit
     initTodoList();
     initDateTodoList();
+    initPercent();
     // initChartList();
     // ever(todoDateList, (_) => getEventsForDay);
   }

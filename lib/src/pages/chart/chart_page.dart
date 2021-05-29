@@ -98,11 +98,11 @@ class _ChartPageState extends State<ChartPage> {
                             //   style: TextStyle(
                             //       fontSize: 16, fontWeight: FontWeight.bold),
                             // ),
-                            Text(
-                              ' ${_todoController.chartClassList[index].percent} %',
-                              style: TextStyle(fontSize: 13),
-                              overflow: TextOverflow.ellipsis,
-                            )
+                            // Text(
+                            //   ' ${_todoController.chartClassList[index].percent} %',
+                            //   style: TextStyle(fontSize: 13),
+                            //   overflow: TextOverflow.ellipsis,
+                            // )
                           ],
                         ),
                         // Text(_todoController.chartClassList[index].chartSectionData.value.toString()),

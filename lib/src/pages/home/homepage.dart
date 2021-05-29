@@ -23,29 +23,6 @@ final now = DateTime.now();
 final FirstDay = DateTime(2020, 1, 1);
 final LastDay = DateTime(now.year + 5, 12, 31);
 
-// final kEvents = LinkedHashMap<DateTime, List<Event>>(
-//   equals: isSameDay,
-//   hashCode: getHashCode,
-// )..addAll(kMINEventSource);
-// ..addAll(_kEventSource);
-
-// final _kEventSource = {
-//   for (var item
-//       in List.generate(_todoController.todoList.length, (index) => index))
-//     DateTime.utc(
-//             // 2021,5,21)
-//             _todoController.todoDateList[item].year,
-//             _todoController.todoDateList[item].month,
-//             _todoController.todoDateList[item].day):
-//         List.generate(_todoController.todoDateList[item].todo.length,
-//             (index) => Event('Event $item | ${index + 1}'))
-// }..addAll({
-//     DateTime(2021, 5, 25): [
-//       // Event('Today\'s Event 1'),
-//       Event('Today\'s Event 2'),
-//     ],
-//   });
-
 final kMINEventSource = {
   for (var item
       in List.generate(_todoController.todoDateList.length, (index) => index))
@@ -53,23 +30,8 @@ final kMINEventSource = {
             _todoController.todoDateList[item].year,
             _todoController.todoDateList[item].month,
             _todoController.todoDateList[item].day):
-        List.generate(_todoController.todoDateList[item].todo.length,
-            (index) => Event('title'))
+        List.generate(1, (index) => Event('title'))
 };
-
-// final kEventSource = Map.fromIterable(
-//     List.generate(_todoController.todoDateList.length, (index) => index),
-//     key: (item) => DateTime.utc(
-//         _todoController.todoDateList[item].year,
-//         _todoController.todoDateList[item].month,
-//         _todoController.todoDateList[item].day),
-//     value: (item) => List.generate(_todoController.todoDateList[item].todo.length, (index) => Event('title')))
-//   ..addAll({
-//     DateTime.now(): [
-//       Event('Today\'s Event 1'),
-//       Event('Today\'s Event 2'),
-//     ],
-//   });
 
 int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
@@ -84,25 +46,22 @@ class _HomePageState extends State<HomePage> {
   int touchedIndex = -1;
   CalendarFormat _calendarFormat = CalendarFormat.month;
 
-  DateTime _focusedDay = DateTime.now();
+  DateTime _focusedDay = _todoController.currentDateTime.value;
 
-  DateTime _selectedDay = now;
-
-  // int currentIndex = _todoController.chartClassList.indexWhere((element) => element.ymd.day == _selectedDay.day);
-
-  // List<Event> _getEventsForDay(DateTime day) {
-  //   // Implementation example
-  //   return kEvents[day] ?? [];
-  // }
+  // DateTime _selectedDay = now;
+  DateTime _selectedDay = _todoController.currentDateTime.value;
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        print(_selectedDay);
-        print(_focusedDay);
+        _todoController.currentDateTime(selectedDay);
+        print('_selectedDay = $_selectedDay');
+        print('_focusedDay = $_focusedDay');
         _todoController.setCurrentIndex(_selectedDay);
+        _todoController.currentDateTime(_selectedDay);
+        print('todoDateTime ${_todoController.currentDateTime.value}');
       });
     }
   }
@@ -145,7 +104,8 @@ class _HomePageState extends State<HomePage> {
                         _todoController.todoDateList[1].month - 3, 1),
                     // firstDay: FirstDay,
                     lastDay: LastDay,
-                    focusedDay: _focusedDay,
+                    // focusedDay: _focusedDay,
+                    focusedDay: _todoController.currentDateTime.value,
                     selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
                     calendarFormat: _calendarFormat,
                     calendarStyle: CalendarStyle(
@@ -164,129 +124,137 @@ class _HomePageState extends State<HomePage> {
                       }
                     },
                     onPageChanged: (focusedDay) {
-                      _focusedDay = focusedDay;
+                      // _focusedDay = focusedDay;
+                      _todoController.currentDateTime(focusedDay);
                     },
                   ),
                 ),
-                Flexible(
-                  flex: 3,
-                  child: Obx(
-                    () => _todoController.chartClassList.isNotEmpty
-                        ? PieChart(
-                            PieChartData(
-                              pieTouchData: PieTouchData(
-                                  touchCallback: (pieTouchResponse) {
-                                setState(() {
-                                  final desiredTouch = pieTouchResponse
-                                          .touchInput is! PointerExitEvent &&
-                                      pieTouchResponse.touchInput
-                                          is! PointerUpEvent;
-                                  if (desiredTouch &&
-                                      pieTouchResponse.touchedSection != null) {
-                                    touchedIndex = pieTouchResponse
-                                        .touchedSection!.touchedSectionIndex;
-                                  } else {
-                                    touchedIndex = -1;
-                                  }
-                                  print(touchedIndex);
-                                });
-                              }),
-                              startDegreeOffset: 270,
-                              sectionsSpace: 4,
-                              centerSpaceRadius: 40,
-                              sections: List<PieChartSectionData>.generate(
-                                  _todoController
-                                      .chartClassList[
-                                          _todoController.currentIndex.value]
-                                      .chartSectionData
-                                      .data
-                                      .sections
-                                      .length, (index) {
-                                final isTouched = index == touchedIndex;
-                                final radius = isTouched ? 70.0 : 50.0;
-                                final title = isTouched
-                                    ? _todoController
-                                        .chartClassList[
-                                            _todoController.currentIndex.value]
-                                        .chartSectionData
-                                        .data
-                                        .sections[index]
-                                        .title
-                                    : '';
-                                return PieChartSectionData(
-                                  title: title,
-                                  color: _todoController
-                                      .chartClassList[
-                                          _todoController.currentIndex.value]
-                                      .chartSectionData
-                                      .data
-                                      .sections[index]
-                                      .color,
-                                  value: _todoController
-                                      .chartClassList[
-                                          _todoController.currentIndex.value]
-                                      .chartSectionData
-                                      .data
-                                      .sections[index]
-                                      .value,
-                                  radius: radius,
-                                );
-                              }),
-                            ),
-                          )
-                        : Container(),
+                GetBuilder<TodoController>(
+                  builder: (_) => Flexible(
+                    flex: 3,
+                    child:
+                        // _todoController.chartClassList.isNotEmpty
+                        _.currentIndex.value != 0
+                            ? PieChart(
+                                PieChartData(
+                                  pieTouchData: PieTouchData(
+                                      touchCallback: (pieTouchResponse) {
+                                    setState(() {
+                                      final desiredTouch =
+                                          pieTouchResponse.touchInput
+                                                  is! PointerExitEvent &&
+                                              pieTouchResponse.touchInput
+                                                  is! PointerUpEvent;
+                                      if (desiredTouch &&
+                                          pieTouchResponse.touchedSection !=
+                                              null) {
+                                        touchedIndex = pieTouchResponse
+                                            .touchedSection!
+                                            .touchedSectionIndex;
+                                      } else {
+                                        touchedIndex = -1;
+                                      }
+                                      print(touchedIndex);
+                                    });
+                                  }),
+                                  startDegreeOffset: 270,
+                                  sectionsSpace: 4,
+                                  centerSpaceRadius: 40,
+                                  sections: List<PieChartSectionData>.generate(
+                                      _.chartClassList[_.currentIndex.value]
+                                          .data.length, (index) {
+                                    final isTouched = index == touchedIndex;
+                                    final radius = isTouched ? 70.0 : 50.0;
+                                    final title = isTouched
+                                        ? _.chartClassList[_.currentIndex.value]
+                                            .data[index].data.title
+                                        : '';
+                                    return PieChartSectionData(
+                                      title: title,
+                                      color: _
+                                          .chartClassList[_.currentIndex.value]
+                                          .data[index]
+                                          .data
+                                          .color,
+                                      value: _
+                                          .chartClassList[_.currentIndex.value]
+                                          .data[index]
+                                          .data
+                                          .value,
+                                      radius: radius,
+                                    );
+                                  }),
+                                ),
+                              )
+                            : Container(),
                   ),
                 ),
-                Flexible(
-                  flex: 1,
-                  child: GridView.builder(
-                    itemCount: _todoController.chartClassList[_todoController.currentIndex.value].chartSectionData.data.sections.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 50,
-                      mainAxisExtent: 30,
-                      // mainAxisSpacing: 5,
-                    ),
-                    itemBuilder: (context, index) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 16,
-                              height: 16,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                              color: _todoController.chartClassList[_todoController.currentIndex.value]
-                                  .chartSectionData.data.sections[index].color),
-                            ),
-                            SizedBox(width: 4),
-                            Row(
-                              children: [
-                                Text(
-                                  _todoController
-                                      .chartClassList[_todoController.currentIndex.value].chartSectionData.data.sections[index].title,
-                                  style: TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                GetBuilder<TodoController>(
+                  // init: TodoController(),
+                  builder: (_) => Flexible(
+                      flex: 1,
+                      child: _.currentIndex.value != 0
+                          ? GridView.builder(
+                              itemCount: _.chartClassList[_.currentIndex.value]
+                                  .data.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 50,
+                                mainAxisExtent: 30,
+                                // mainAxisSpacing: 5,
+                              ),
+                              itemBuilder: (context, index) => Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 16,
+                                        height: 16,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: _
+                                                .chartClassList[
+                                                    _.currentIndex.value]
+                                                .data[index]
+                                                .data
+                                                .color),
+                                      ),
+                                      SizedBox(width: 4),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            _
+                                                .chartClassList[
+                                                    _.currentIndex.value]
+                                                .data[index]
+                                                .data
+                                                .title,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            ' ${_.chartClassList[_.currentIndex.value].data[index].percent} %',
+                                            style: TextStyle(fontSize: 13),
+                                            overflow: TextOverflow.ellipsis,
+                                          )
+                                        ],
+                                      ),
+                                      // Text(_todoController.chartClassList[index].chartSectionData.value.toString()),
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  ' ${_todoController.chartClassList[index].percent} %',
-                                  style: TextStyle(fontSize: 13),
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              ],
-                            ),
-                            // Text(_todoController.chartClassList[index].chartSectionData.value.toString()),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
+                              ),
+                            )
+                          : Container()),
                 )
-
               ],
             ),
             Positioned(
@@ -294,7 +262,7 @@ class _HomePageState extends State<HomePage> {
               right: 30,
               child: FloatingActionButton(
                 elevation: 2,
-                backgroundColor: Color(0xff686de0),
+                backgroundColor: Color(0xff686de0).withOpacity(0.8),
                 onPressed: () {
                   Get.to(
                       AddTodo(
