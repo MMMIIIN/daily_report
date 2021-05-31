@@ -25,11 +25,11 @@ final LastDay = DateTime(now.year + 5, 12, 31);
 
 final kMINEventSource = {
   for (var item
-      in List.generate(_todoController.todoDateList.length, (index) => index))
+      in List.generate(_todoController.chartClassList.length, (index) => index))
     DateTime.utc(
-            _todoController.todoDateList[item].year,
-            _todoController.todoDateList[item].month,
-            _todoController.todoDateList[item].day):
+            _todoController.chartClassList[item].ymd.year,
+            _todoController.chartClassList[item].ymd.month,
+            _todoController.chartClassList[item].ymd.day):
         List.generate(1, (index) => Event('title'))
 };
 
@@ -130,6 +130,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 GetBuilder<TodoController>(
+                  init: TodoController(),
                   builder: (_) => Flexible(
                     flex: 3,
                     child:
@@ -154,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                                       } else {
                                         touchedIndex = -1;
                                       }
-                                      print(touchedIndex);
+                                      // print(touchedIndex);
                                     });
                                   }),
                                   startDegreeOffset: 270,
@@ -258,7 +259,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             Positioned(
-              bottom: 30,
+              bottom: 110,
               right: 30,
               child: FloatingActionButton(
                 elevation: 2,

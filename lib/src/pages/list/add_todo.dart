@@ -25,9 +25,10 @@ class AddTodo extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15), border: Border.all()),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  // flex: 1,
+                Flexible(
+                  flex: 1,
                   child: Container(
                     padding: EdgeInsets.all(8),
                     child: TextField(
@@ -39,15 +40,19 @@ class AddTodo extends StatelessWidget {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Text(year.toString()),
-                    Text(month.toString()),
-                    Text(day.toString()),
-                  ],
+                Flexible(child: printTodo()),
+                Flexible(
+                  flex: 1,
+                  child: Row(
+                    children: [
+                      Text(year.toString()),
+                      Text(month.toString()),
+                      Text(day.toString()),
+                    ],
+                  ),
                 ),
-                Expanded(
-                  // flex: 4,
+                Flexible(
+                  flex: 1,
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Row(
@@ -74,20 +79,6 @@ class AddTodo extends StatelessWidget {
                       ),
                       MaterialButton(
                         onPressed: () {
-                          // _todoController.todoList.add(Todo(
-                          //   // year: year ?? 0,
-                          //   // month: month ?? 0,
-                          //   // day:  day ?? 0,
-                          //   time: TimeRange(
-                          //     startTime:
-                          //         _todoController.defaultTime.value.startTime,
-                          //     endTime:
-                          //         _todoController.defaultTime.value.endTime,
-                          //   ),
-                          //   title:
-                          //       _todoController.titleTextController.value.text,
-                          // ));
-
                           _todoController.todoDateList.add(
                             DateTodo(
                                 year: year ?? 0,
@@ -106,31 +97,37 @@ class AddTodo extends StatelessWidget {
                                   ),
                                 ]),
                           );
-
-                          // _todoController.sortTodoList();
-                          // _todoController.addClassChartData(
-                          //   YMD(year: year ?? 0, month: month ?? 0, day: day ?? 0),
-                          //     _todoController.titleTextController.value.text,
-                          //     _todoController
-                          //         .getTime(_todoController.defaultTime.value));
-                          // _todoController.setPercent();
-                          // _todoController.sortChartList();
-                          // _todoController.getEventsForDay(DateTime(year ?? 2021,month ?? 5,day ?? 28));
                           _todoController.addClassChartData(
                               YMD(
                                   year: year ?? 0,
                                   month: month ?? 0,
                                   day: day ?? 0),
                               _todoController.titleTextController.value.text,
-                              _todoController.getTime(_todoController.defaultTime.value));
+                              _todoController.getTime(
+                                  _todoController.currentDateTime.value,
+                                  _todoController.defaultTime.value));
                           EventsList.addAll({
                             DateTime.utc(year ?? 0, month ?? 0, day ?? 0): [
                               Event('title')
                             ]
                           });
-                          _todoController.setDataPercent(_todoController.chartClassList[_todoController.currentIndex.value]);
+                          _todoController.setDataPercent(
+                              _todoController.chartClassList[
+                                  _todoController.currentIndex.value]);
                           // Get.back();
+                          _todoController.todoList.add(Todo(
+                              title: _todoController
+                                  .titleTextController.value.text,
+                              time: _todoController.defaultTime.value));
+
+                          _todoController.addTodoTitle(
+                              _todoController.titleTextController.value.text);
+                          _todoController.sortDataPercent(_todoController.chartClassList[_todoController.currentIndex.value]);
+
+                          _todoController.titleTextController.value.clear();
                           Get.toNamed('/');
+                          Get.to(HomePage());
+                          // Get.back();
                         },
                         color: Colors.white,
                         child: Text('ADD'),
@@ -158,6 +155,7 @@ class AddTodo extends StatelessWidget {
             paintingStyle: PaintingStyle.fill,
             // backgroundColor: Colors.grey.withOpacity(0.2),
             backgroundColor: Colors.yellow[100],
+            interval: Duration(minutes: 10),
             labels: ['0', '3', '6', '9', '12', '15', '18', '21']
                 .asMap()
                 .entries
@@ -165,8 +163,12 @@ class AddTodo extends StatelessWidget {
               return ClockLabel.fromIndex(idx: e.key, length: 8, text: e.value);
             }).toList(),
             snap: true,
-            start: TimeOfDay(hour: 10, minute: 0),
-            end: TimeOfDay(hour: 13, minute: 0),
+            start: TimeOfDay(
+                hour: _todoController.defaultTime.value.endTime.hour,
+                minute: _todoController.defaultTime.value.endTime.minute),
+            end: TimeOfDay(
+                hour: _todoController.defaultTime.value.endTime.hour + 2,
+                minute: _todoController.defaultTime.value.endTime.minute),
             ticks: 24,
             handlerRadius: 8,
             strokeColor: Colors.orangeAccent[200],
@@ -205,6 +207,35 @@ class AddTodo extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget printTodo() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 50,
+            mainAxisExtent: 30,
+          ),
+          itemCount: _todoController.todoTitleList.length,
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: () {
+                // _todoController.titleTextController.value.text(_todoController.defaultText);
+                _todoController.titleTextController.value.text =
+                    _todoController.todoTitleList[index].title;
+              },
+              child: Container(
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(15)),
+                child: Text('${_todoController.todoTitleList[index].title}'),
+              ),
+            );
+          }),
     );
   }
 }
