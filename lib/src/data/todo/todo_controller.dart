@@ -23,22 +23,22 @@ class YMD {
   YMD({required this.year, required this.month, required this.day});
 }
 
+// enum CATEGORY {DEFAULT, STUDY, SHOPPING, EXERCISE, SLEEP}
+
 class ChartDataPercent {
   PieChartSectionData data;
   double percent;
+  // TimeRange timeRange;
+  // CATEGORY category;
 
-  ChartDataPercent({required this.data, this.percent = 100.0});
+  ChartDataPercent({required this.data, this.percent = 100.0,
+    // required this.timeRange, this.category = CATEGORY.DEFAULT
+  });
 }
 
 class ChartDateData {
   YMD ymd;
   List<ChartDataPercent> data = [];
-
-  // PieChart chartSectionData;
-  // double percent;
-
-  // ChartDateData(
-  //     {required this.chartSectionData, required this.ymd, this.percent = 0.0});
   ChartDateData({required this.ymd, required this.data});
 }
 
@@ -104,22 +104,22 @@ class TodoController extends GetxController {
   var titleTextController = TextEditingController().obs;
 
   var chartClassList = <ChartDateData>[
-    ChartDateData(ymd: YMD(year: 2021, month: 5, day: 1), data: [
+    ChartDateData(ymd: YMD(year: 2021, month: 6, day: 1), data: [
       ChartDataPercent(
           data: PieChartSectionData(title: 'sample', color: Colors.blue))
     ]),
-    ChartDateData(ymd: YMD(year: 2021, month: 5, day: 16), data: [
+    ChartDateData(ymd: YMD(year: 2021, month: 6, day: 16), data: [
       ChartDataPercent(
           data: PieChartSectionData(
               title: 'study', value: 100, color: Colors.purpleAccent)),
       ChartDataPercent(
           data: PieChartSectionData(
-              title: 'game', value: 150, color: Colors.redAccent)),
+              title: 'exercise', value: 150, color: Colors.redAccent)),
     ]),
-    ChartDateData(ymd: YMD(year: 2021, month: 5, day: 25), data: [
+    ChartDateData(ymd: YMD(year: 2021, month: 6, day: 25), data: [
       ChartDataPercent(
           data: PieChartSectionData(
-              title: 'bible', value: 300, color: Colors.greenAccent)),
+              title: 'work', value: 300, color: Colors.greenAccent)),
       ChartDataPercent(
           data: PieChartSectionData(
               title: 'sleep', value: 150, color: Colors.blue)),
@@ -143,6 +143,8 @@ class TodoController extends GetxController {
     } else {
       currentIndex(index);
     }
+    print('currentIndex = $currentIndex');
+
   }
 
   void initTodoList() {
@@ -188,15 +190,14 @@ class TodoController extends GetxController {
   void addClassChartData(YMD ymd, String title, double value) {
     var index = getDateIndex(ymd);
     if (index == -1) {
-      chartClassList.add(ChartDateData(
-          ymd: ymd,
-          data: [
-            ChartDataPercent(
-                data: PieChartSectionData(
-                    title: title,
-                    value: value,
-                    color: colorList[Random().nextInt(colorList.length)]))
-          ]));
+      chartClassList.add(ChartDateData(ymd: ymd, data: [
+        ChartDataPercent(
+            data: PieChartSectionData(
+                title: title,
+                value: value,
+                color: colorList[Random().nextInt(colorList.length)]))
+      ]));
+      currentDateTime(DateTime.now()); // 첫 추가시 그래프 안뜨는 문제 임시 해결 방
     } else {
       int i = chartClassList[index]
           .data
@@ -253,7 +254,7 @@ class TodoController extends GetxController {
     }
   }
 
-  void sortDataPercent(ChartDateData _data){
+  void sortDataPercent(ChartDateData _data) {
     _data.data.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
@@ -291,13 +292,13 @@ class TodoController extends GetxController {
   //   chartClassList.sort((a, b) => b.percent.compareTo(a.percent));
   // }
 
-  double getTime(DateTime _datetime,TimeRange time) {
-    var time1 = DateTime(_datetime.year, _datetime.month,
-        _datetime.day, time.startTime.hour, time.startTime.minute);
-    var time2 = DateTime(_datetime.year, _datetime.month,
-        _datetime.day, time.endTime.hour, time.endTime.minute);
+  double getTime(DateTime _datetime, TimeRange time) {
+    var time1 = DateTime(_datetime.year, _datetime.month, _datetime.day,
+        time.startTime.hour, time.startTime.minute);
+    var time2 = DateTime(_datetime.year, _datetime.month, _datetime.day,
+        time.endTime.hour, time.endTime.minute);
     var result = time2.difference(time1).inMinutes;
-    if(result < 0 ){
+    if (result < 0) {
       result += 1440;
     }
     print('time1 = $time1');

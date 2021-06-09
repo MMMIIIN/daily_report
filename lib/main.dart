@@ -1,5 +1,6 @@
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/app.dart';
+import 'package:daily_report/src/pages/chart/chart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
       //   Get.put(TodoController());
       // }),
       getPages: [
-        GetPage(name: '/', page: () => App())
+        GetPage(name: '/', page: () => App()),
+        GetPage(name: 'chart', page: () => ChartPage()),
       ],
     );
   }

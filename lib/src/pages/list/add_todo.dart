@@ -1,5 +1,6 @@
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
+import 'package:daily_report/src/pages/app.dart';
 import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -125,8 +126,8 @@ class AddTodo extends StatelessWidget {
                           _todoController.sortDataPercent(_todoController.chartClassList[_todoController.currentIndex.value]);
 
                           _todoController.titleTextController.value.clear();
-                          Get.toNamed('/');
-                          Get.to(HomePage());
+                          // Get.toNamed('/');
+                          Get.to(App());
                           // Get.back();
                         },
                         color: Colors.white,
@@ -167,7 +168,7 @@ class AddTodo extends StatelessWidget {
                 hour: _todoController.defaultTime.value.endTime.hour,
                 minute: _todoController.defaultTime.value.endTime.minute),
             end: TimeOfDay(
-                hour: _todoController.defaultTime.value.endTime.hour + 2,
+                hour: (_todoController.defaultTime.value.endTime.hour + 2) > 24 ? 0 : _todoController.defaultTime.value.endTime.hour + 2,
                 minute: _todoController.defaultTime.value.endTime.minute),
             ticks: 24,
             handlerRadius: 8,
