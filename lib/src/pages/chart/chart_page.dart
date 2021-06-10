@@ -1,6 +1,7 @@
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,8 +24,14 @@ extension SelectDateExtension on SelectDate {
 
 final ChartController _chartController = Get.put(ChartController());
 
-class ChartPage extends StatelessWidget {
+class ChartPage extends StatefulWidget {
+  @override
+  _ChartPageState createState() => _ChartPageState();
+}
+
+class _ChartPageState extends State<ChartPage> {
   var now = DateTime.now();
+  int touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +46,8 @@ class ChartPage extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   print(DateTime.now());
-                  _chartController.setCurrentTodoIndex(DateTime.now());
                   print(_chartController.currentIndex.value);
+                  _chartController.setCurrentTodoIndex(DateTime.now());
                 },
                 child: Container(
                   child: Text('${SelectDate.values[0].name}'),
@@ -49,9 +56,11 @@ class ChartPage extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   var date1 = DateTime(now.year, now.month, now.day - 3);
-                  var date2 = DateTime(now.year, now.month, now.day + 4);
+                  var date2 = DateTime(now.year, now.month, now.day + 3);
                   print(date1);
                   print(date2);
+                  _chartController
+                      .setIndexList(DateTimeRange(start: date1, end: date2));
                 },
                 child: Container(
                   child: Text('${SelectDate.values[1].name}'),
@@ -64,45 +73,125 @@ class ChartPage extends StatelessWidget {
                       now.year, now.month, _chartController.getDay(now.month));
                   print(date1);
                   print(date2);
+                  _chartController
+                      .setIndexList(DateTimeRange(start: date1, end: date2));
                 },
                 child: Container(
                   child: Text('${SelectDate.values[2].name}'),
                 ),
               ),
-              Container(
-                child: Text('${SelectDate.values[3].name}'),
+              GestureDetector(
+                onTap: () {
+                  _chartController.sortChartList();
+                  print(
+                      _chartController.chartPageList.first.data[6].data.title);
+                  print(
+                      _chartController.chartPageList.first.data[6].data.value);
+                },
+                child: Container(
+                  child: Text('${SelectDate.values[3].name}'),
+                ),
               ),
             ],
           ),
-          Obx(() => Expanded(
-            child: _chartController.currentIndex.value != 0 ? PieChart(
-              PieChartData(
-                sections: List<PieChartSectionData>.generate(
-                  _chartController.chartPageList[_chartController.currentIndex.value].data.length,
-                  (index) {
-                    return PieChartSectionData(
-                      title: _chartController
-                          .chartPageList[_chartController.currentIndex.value]
-                          .data[index]
-                          .data
-                          .title,
-                      value: _chartController
-                          .chartPageList[_chartController.currentIndex.value]
-                          .data[index]
-                          .data
-                          .value,
-                      color: _chartController
-                          .chartPageList[_chartController.currentIndex.value]
-                          .data[index]
-                          .data
-                          .color,
-                    );
-                  },
+          Obx(
+            () => Flexible(
+              flex: 3,
+              child: _chartController.chartPageList.isNotEmpty
+                  ? PieChart(
+                      PieChartData(
+                        pieTouchData:
+                            PieTouchData(touchCallback: (pieTouchResponse) {
+                          setState(() {
+                            final desiredTouch = pieTouchResponse.touchInput
+                                    is! PointerExitEvent &&
+                                pieTouchResponse.touchInput
+                                    is! PointerUpEvent;
+                            if (desiredTouch &&
+                                pieTouchResponse.touchedSection != null) {
+                              touchedIndex = pieTouchResponse
+                                  .touchedSection!.touchedSectionIndex;
+                            } else {
+                              touchedIndex = -1;
+                            }
+                            // print(touchedIndex);
+                          });
+                        }),
+                        startDegreeOffset: 270,
+                        sectionsSpace: 4,
+                        centerSpaceRadius: 130,
+                        sections: List<PieChartSectionData>.generate(
+                          _chartController.chartPageList.first.data.length,
+                          (index) {
+                            final isTouched = index == touchedIndex;
+                            final radius = isTouched ? 70.0 : 50.0;
+                            final title = isTouched
+                                ? _chartController.chartPageList.first
+                                    .data[index].data.title
+                                : '';
+                            return PieChartSectionData(
+                              title: title,
+                              radius: radius,
+                              value: _chartController
+                                  .chartPageList.first.data[index].data.value,
+                              color: _chartController
+                                  .chartPageList.first.data[index].data.color,
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ),
+          ),
+          Obx (() => Flexible(
+              flex: 1,
+              child: _chartController.chartPageList.first.data.isNotEmpty
+                  ? GridView.builder(
+                itemCount: _chartController.chartPageList.first.data.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 50,
+                  mainAxisExtent: 30,
+                  // mainAxisSpacing: 5,
                 ),
-              ),
-            ) : Container()
-          ),
-          ),
+                itemBuilder: (context, index) => Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _chartController.chartPageList.first.data[index].data.color),
+                        ),
+                        SizedBox(width: 4),
+                        Row(
+                          children: [
+                            Text(
+                              _chartController.chartPageList.first.data[index].data.title,
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            // Text(
+                            //   ' ${_.chartClassList[_.currentIndex.value].data[index].percent} %',
+                            //   style: TextStyle(fontSize: 13),
+                            //   overflow: TextOverflow.ellipsis,
+                            // )
+                          ],
+                        ),
+                        // Text(_todoController.chartClassList[index].chartSectionData.value.toString()),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+                  : Container())),
         ],
       ),
     ));

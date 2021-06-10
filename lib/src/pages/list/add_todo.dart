@@ -127,6 +127,7 @@ class AddTodo extends StatelessWidget {
 
                           _todoController.titleTextController.value.clear();
                           // Get.toNamed('/');
+                          // print(_todoController.defaultTime.value);
                           Get.to(App());
                           // Get.back();
                         },
@@ -196,12 +197,18 @@ class AddTodo extends StatelessWidget {
                       '${_todoController.defaultTime.value.startTime.hour} : '),
                   Text('${_todoController.defaultTime.value.startTime.minute}'),
                   // Text('${Get.parameters['title']}')
+                  // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.startTime.hour} : '),
+                  // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.startTime.minute}')
+
                 ],
               ),
               Row(
                 children: [
                   Text('${_todoController.defaultTime.value.endTime.hour} : '),
                   Text('${_todoController.defaultTime.value.endTime.minute}'),
+                  // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.endTime.hour} : '),
+                  // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.endTime.minute}')
+
                 ],
               ),
             ],
