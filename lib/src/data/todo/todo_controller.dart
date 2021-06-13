@@ -13,8 +13,7 @@ import 'package:time_range_picker/time_range_picker.dart';
 final EventsList = LinkedHashMap<DateTime, List<Event>>(
   equals: isSameDay,
   hashCode: getHashCode,
-)
-  ..addAll(kMINEventSource);
+)..addAll(kMINEventSource);
 
 class YMD {
   int year;
@@ -22,9 +21,22 @@ class YMD {
   int day;
 
   YMD({required this.year, required this.month, required this.day});
+
+  YMD.fromJson(Map<String, dynamic> json)
+      : year = json['year'],
+        month = json['month'],
+        day = json['day'];
 }
 
 enum CATEGORY { DEFAULT, STUDY, SHOPPING, EXERCISE, SLEEP }
+
+class ChartDateData {
+  YMD ymd;
+  List<ChartDataPercent> data = [];
+
+  ChartDateData({required this.ymd, required this.data});
+  
+}
 
 class ChartDataPercent {
   PieChartSectionData data;
@@ -32,17 +44,11 @@ class ChartDataPercent {
   TimeRange timeRange;
   CATEGORY category;
 
-  ChartDataPercent({required this.data,
-    this.percent = 100.0,
-    required this.timeRange,
-    this.category = CATEGORY.DEFAULT});
-}
-
-class ChartDateData {
-  YMD ymd;
-  List<ChartDataPercent> data = [];
-
-  ChartDateData({required this.ymd, required this.data});
+  ChartDataPercent(
+      {required this.data,
+      this.percent = 100.0,
+      required this.timeRange,
+      this.category = CATEGORY.DEFAULT});
 }
 
 class TodoTitle {
@@ -54,9 +60,7 @@ class TodoTitle {
 
 class TodoController extends GetxController {
   RxInt currentIndex = 0.obs;
-  Rx<DateTime> currentDateTime = DateTime
-      .now()
-      .obs;
+  Rx<DateTime> currentDateTime = DateTime.now().obs;
   final todoList = <Todo>[].obs;
   final todoTitleList = <TodoTitle>[].obs;
 
@@ -100,19 +104,19 @@ class TodoController extends GetxController {
   ].obs;
 
   Rx<TimeRange> defaultTime = TimeRange(
-      startTime: TimeOfDay(hour: 0, minute: 0),
-      endTime: TimeOfDay(hour: 0, minute: 0))
+          startTime: TimeOfDay(hour: 0, minute: 0),
+          endTime: TimeOfDay(hour: 0, minute: 0))
       .obs;
 
   void setDefaultTime() {
-    int startHour = chartClassList[currentIndex.value].data.last.timeRange
-        .startTime.hour;
-    int startMin = chartClassList[currentIndex.value].data.last.timeRange
-        .startTime.minute;
-    int endHour = chartClassList[currentIndex.value].data.last.timeRange.endTime
-        .hour;
-    int endMin = chartClassList[currentIndex.value].data.last.timeRange.endTime
-        .minute;
+    int startHour =
+        chartClassList[currentIndex.value].data.last.timeRange.startTime.hour;
+    int startMin =
+        chartClassList[currentIndex.value].data.last.timeRange.startTime.minute;
+    int endHour =
+        chartClassList[currentIndex.value].data.last.timeRange.endTime.hour;
+    int endMin =
+        chartClassList[currentIndex.value].data.last.timeRange.endTime.minute;
     print('startHour = $startHour');
     print('startMin = $startMin');
     print('endHour = $endHour');
@@ -169,7 +173,7 @@ class TodoController extends GetxController {
       ),
       ChartDataPercent(
         data:
-        PieChartSectionData(title: 'sleep', value: 150, color: Colors.blue),
+            PieChartSectionData(title: 'sleep', value: 150, color: Colors.blue),
         timeRange: TimeRange(
             startTime: TimeOfDay(hour: 0, minute: 0),
             endTime: TimeOfDay(hour: 3, minute: 0)),
@@ -184,7 +188,7 @@ class TodoController extends GetxController {
 
   void setCurrentIndex(DateTime time) {
     var index = chartClassList.indexWhere((element) =>
-    element.ymd.year == time.year &&
+        element.ymd.year == time.year &&
         element.ymd.month == time.month &&
         element.ymd.day == time.day);
     print('currentIndex = $currentIndex');
@@ -210,15 +214,9 @@ class TodoController extends GetxController {
 
   void initDateTodoList() {
     var initData = DateTodo(
-        year: DateTime
-            .now()
-            .year,
-        month: DateTime
-            .now()
-            .month,
-        day: DateTime
-            .now()
-            .day,
+        year: DateTime.now().year,
+        month: DateTime.now().month,
+        day: DateTime.now().day,
         todo: [
           Todo(
             title: 'title',
@@ -233,7 +231,7 @@ class TodoController extends GetxController {
 
   int getDateIndex(YMD dateTime) {
     var index = chartClassList.indexWhere((element) =>
-    element.ymd.year == dateTime.year &&
+        element.ymd.year == dateTime.year &&
         element.ymd.month == dateTime.month &&
         element.ymd.day == dateTime.day);
     print('index = $index');
@@ -250,12 +248,11 @@ class TodoController extends GetxController {
     if (index == -1) {
       chartClassList.add(ChartDateData(ymd: ymd, data: [
         ChartDataPercent(
-          data: PieChartSectionData(
-              title: title,
-              value: value,
-              color: colorList[Random().nextInt(colorList.length)]),
-          timeRange: defaultTime.value
-        ),
+            data: PieChartSectionData(
+                title: title,
+                value: value,
+                color: colorList[Random().nextInt(colorList.length)]),
+            timeRange: defaultTime.value),
       ]));
       currentDateTime(DateTime.now()); // 첫 추가시 그래프 안뜨는 문제 임시 해결 방
     } else {
@@ -270,22 +267,22 @@ class TodoController extends GetxController {
         chartClassList[index].data.removeAt(i);
 
         chartClassList[index].data.add(
-          ChartDataPercent(
-            data: PieChartSectionData(
-              title: title,
-              value: val,
-              color: color,
-            ),
-            timeRange: defaultTime.value
-          ),
-        );
+              ChartDataPercent(
+                  data: PieChartSectionData(
+                    title: title,
+                    value: val,
+                    color: color,
+                  ),
+                  timeRange: defaultTime.value),
+            );
       } else {
         chartClassList[index].data.add(ChartDataPercent(
-          data: PieChartSectionData(
-              title: title,
-              value: value,
-              color: colorList[Random().nextInt(colorList.length)]),
-          timeRange: defaultTime.value,));
+              data: PieChartSectionData(
+                  title: title,
+                  value: value,
+                  color: colorList[Random().nextInt(colorList.length)]),
+              timeRange: defaultTime.value,
+            ));
       }
     }
     update();
@@ -294,8 +291,9 @@ class TodoController extends GetxController {
 
   void checkTitle(ChartDateData dateData, String text, double value) {
     int index =
-    dateData.data.indexWhere((element) => element.data.title == text);
-    if (index == -1) {} else {}
+        dateData.data.indexWhere((element) => element.data.title == text);
+    if (index == -1) {
+    } else {}
   }
 
   void initPercent() {
@@ -358,9 +356,7 @@ class TodoController extends GetxController {
         time.startTime.hour, time.startTime.minute);
     var time2 = DateTime(_datetime.year, _datetime.month, _datetime.day,
         time.endTime.hour, time.endTime.minute);
-    var result = time2
-        .difference(time1)
-        .inMinutes;
+    var result = time2.difference(time1).inMinutes;
     if (result < 0) {
       result += 1440;
     }

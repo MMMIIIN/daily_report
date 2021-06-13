@@ -81,13 +81,7 @@ class _ChartPageState extends State<ChartPage> {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  _chartController.sortChartList();
-                  print(
-                      _chartController.chartPageList.first.data[6].data.title);
-                  print(
-                      _chartController.chartPageList.first.data[6].data.value);
-                },
+                onTap: () {},
                 child: Container(
                   child: Text('${SelectDate.values[3].name}'),
                 ),
@@ -105,8 +99,7 @@ class _ChartPageState extends State<ChartPage> {
                           setState(() {
                             final desiredTouch = pieTouchResponse.touchInput
                                     is! PointerExitEvent &&
-                                pieTouchResponse.touchInput
-                                    is! PointerUpEvent;
+                                pieTouchResponse.touchInput is! PointerUpEvent;
                             if (desiredTouch &&
                                 pieTouchResponse.touchedSection != null) {
                               touchedIndex = pieTouchResponse
@@ -126,8 +119,8 @@ class _ChartPageState extends State<ChartPage> {
                             final isTouched = index == touchedIndex;
                             final radius = isTouched ? 70.0 : 50.0;
                             final title = isTouched
-                                ? _chartController.chartPageList.first
-                                    .data[index].data.title
+                                ? _chartController
+                                    .chartPageList.first.data[index].data.title
                                 : '';
                             return PieChartSectionData(
                               title: title,
@@ -144,54 +137,61 @@ class _ChartPageState extends State<ChartPage> {
                   : Container(),
             ),
           ),
-          Obx (() => Flexible(
+          Obx(
+            () => Flexible(
               flex: 1,
               child: _chartController.chartPageList.first.data.isNotEmpty
                   ? GridView.builder(
-                itemCount: _chartController.chartPageList.first.data.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 50,
-                  mainAxisExtent: 30,
-                  // mainAxisSpacing: 5,
-                ),
-                itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 16,
-                          height: 16,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _chartController.chartPageList.first.data[index].data.color),
+                      itemCount:
+                          _chartController.chartPageList.first.data.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 50,
+                        mainAxisExtent: 30,
+                        // mainAxisSpacing: 5,
+                      ),
+                      itemBuilder: (context, index) => Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            // crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 16,
+                                height: 16,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: _chartController.chartPageList.first
+                                        .data[index].data.color),
+                              ),
+                              SizedBox(width: 4),
+                              Row(
+                                children: [
+                                  Text(
+                                    _chartController.chartPageList.first
+                                        .data[index].data.title,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    ' ${_chartController.chartPageList.first.data[index].percent} %',
+                                    style: TextStyle(fontSize: 13),
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                ],
+                              ),
+                              // Text(_todoController.chartClassList[index].chartSectionData.value.toString()),
+                            ],
+                          ),
                         ),
-                        SizedBox(width: 4),
-                        Row(
-                          children: [
-                            Text(
-                              _chartController.chartPageList.first.data[index].data.title,
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            // Text(
-                            //   ' ${_.chartClassList[_.currentIndex.value].data[index].percent} %',
-                            //   style: TextStyle(fontSize: 13),
-                            //   overflow: TextOverflow.ellipsis,
-                            // )
-                          ],
-                        ),
-                        // Text(_todoController.chartClassList[index].chartSectionData.value.toString()),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-                  : Container())),
+                      ),
+                    )
+                  : Container(),
+            ),
+          ),
         ],
       ),
     ));

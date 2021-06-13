@@ -1,8 +1,6 @@
 import 'package:daily_report/src/data/todo/todo_controller.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:time_range_picker/time_range_picker.dart';
 
 final TodoController _todoController = Get.put(TodoController());
 
@@ -10,6 +8,7 @@ class ChartController extends GetxController {
   RxInt currentTodoIndex = 0.obs;
   RxInt currentIndex = 0.obs;
   var chartPageList = <ChartDateData>[].obs;
+  double totalSum = 0;
 
   void initChartPageList() {
     chartPageList
@@ -44,7 +43,6 @@ class ChartController extends GetxController {
         ymd: YMD(
             year: _dateTime.year, month: _dateTime.month, day: _dateTime.day),
         data: []));
-    // initChartPageList();
     for (int index = 0;
         index <
             _todoController.chartClassList[currentTodoIndex.value].data.length;
@@ -81,14 +79,10 @@ class ChartController extends GetxController {
           element.ymd.year == dateTimeRange.start.year &&
           element.ymd.month == dateTimeRange.start.month &&
           element.ymd.day == dateTimeRange.start.day + index);
-
-      print(dateTimeRange.end.day - dateTimeRange.start.day);
-      print(addIndex);
       if (addIndex != -1) {
         indexList.add(addIndex);
       }
     }
-    print(indexList.value);
     addChartListRange(dateTimeRange);
   }
 
@@ -102,11 +96,9 @@ class ChartController extends GetxController {
         data: []));
 
     for (int index = 0; index < indexList.length; index++) {
-      print('index = $index');
       for (int i = 0;
           i < _todoController.chartClassList[indexList[index]].data.length;
           i++) {
-        print('i =$i');
         chartPageList.first.data.add(ChartDataPercent(
             data: _todoController.chartClassList[indexList[index]].data[i].data,
             timeRange: _todoController
@@ -114,6 +106,17 @@ class ChartController extends GetxController {
       }
     }
     sortChartList();
+    setPercent();
+  }
+
+  void setPercent(){
+    totalSum = 0;
+    for(int i = 0; i < chartPageList.first.data.length; i++){
+      totalSum += chartPageList.first.data[i].data.value;
+    }
+    for(int i = 0; i < chartPageList.first.data.length; i ++){
+      chartPageList.first.data[i].percent = (chartPageList.first.data[i].data.value / totalSum * 100).roundToDouble();
+    }
   }
 
   void sortChartList() {

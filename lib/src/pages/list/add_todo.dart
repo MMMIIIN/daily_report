@@ -128,8 +128,8 @@ class AddTodo extends StatelessWidget {
                           _todoController.titleTextController.value.clear();
                           // Get.toNamed('/');
                           // print(_todoController.defaultTime.value);
-                          Get.to(App());
-                          // Get.back();
+                          // Get.off(App());
+                          Get.back();
                         },
                         color: Colors.white,
                         child: Text('ADD'),
