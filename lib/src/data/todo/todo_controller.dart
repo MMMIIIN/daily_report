@@ -2,11 +2,13 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:daily_report/color.dart';
+import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
@@ -22,10 +24,20 @@ class YMD {
 
   YMD({required this.year, required this.month, required this.day});
 
-  YMD.fromJson(Map<String, dynamic> json)
-      : year = json['year'],
-        month = json['month'],
-        day = json['day'];
+  // factory YMD.fromJson(Map<String, dynamic> json){
+  //   return YMD(year: json['year'], month: json['month'], day: json['day']);
+  // }
+  factory YMD.fromJson(Map<String, dynamic> json) => YMD(
+        year: json["year"],
+        month: json["month"],
+        day: json["day"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "year": year,
+        "month": month,
+        "day": day,
+      };
 }
 
 enum CATEGORY { DEFAULT, STUDY, SHOPPING, EXERCISE, SLEEP }
@@ -35,7 +47,6 @@ class ChartDateData {
   List<ChartDataPercent> data = [];
 
   ChartDateData({required this.ymd, required this.data});
-  
 }
 
 class ChartDataPercent {
@@ -49,6 +60,22 @@ class ChartDataPercent {
       this.percent = 100.0,
       required this.timeRange,
       this.category = CATEGORY.DEFAULT});
+
+// factory ChartDataPercent.fromJson(Map<String, dynamic> json){
+//   var dataFromJson = json['data'];
+//   var chartData = PieChartSectionData(
+//     title: dataFromJson.json['title'],
+//     value: dataFromJson.json['value'],
+//     color: dataFromJson.json['color'],
+//   );
+//
+//   var timeRangeFromJson = json['timeRange'];
+//   var timeRange = TimeRange(startTime: TimeOfDay(
+//     hour: timeRangeFromJson.js
+//   ), endTime: endTime)
+//
+//   return ChartDataPercent(data: chartData, timeRange: timeRange)
+// }
 }
 
 class TodoTitle {
@@ -134,9 +161,65 @@ class TodoController extends GetxController {
     print(defaultTime.value);
   }
 
-  RxString defaultText = ''.obs;
+  // RxString defaultText = ''.obs;
 
   var titleTextController = TextEditingController().obs;
+
+  var testList = <TestChartDateData>[].obs;
+
+  var testChartClassList = <TestChartDateData>[
+    TestChartDateData(ymd: TestYmd(year: 2021, month: 5, day: 16), data: [
+      TestChartDataPercent(
+        percent: 100.0,
+        chartSectionData: TestChartSectionData(
+            title: 'test', value: 150, color: Colors.green),
+        timeRange: TestTimeRange(
+            startTime: TestTime(hour: 0, minute: 0),
+            endTime: TestTime(hour: 3, minute: 30)),
+        // category: 'DEFAULT'
+      )
+    ]),
+    TestChartDateData(ymd: TestYmd(year: 2021, month: 5, day: 17), data: [
+      TestChartDataPercent(
+        percent: 100.0,
+        chartSectionData: TestChartSectionData(
+            title: 'test', value: 150, color: Colors.green),
+        timeRange: TestTimeRange(
+            startTime: TestTime(hour: 0, minute: 0),
+            endTime: TestTime(hour: 3, minute: 30)),
+        // category: 'DEFAULT'
+      )
+    ]),
+  ].obs;
+
+  void makeTestData() {
+    // print('read 내부 = ${GetStorage().read<List>('testList')}');
+    // var emptyCheck = GetStorage().read<List>('testList')!;
+    // if(emptyCheck.isEmpty){
+    //   print('if 실행');
+    //   GetStorage().write('testList', testChartClassList);
+    //   testList(testChartClassList);
+    // } else {
+    //   print('else 실행');
+    //   var storedData = GetStorage().read<List>('testList');
+    //   var jsonData = storedData!.map((e) => TestChartDateData.fromJson(e)).toList();
+    //   testList(jsonData.obs);
+    // }
+
+    // GetStorage().write('testList', testChartClassList.toList());
+
+    var testJsonList = GetStorage().read<List>('testList') ?? testList;
+    if (testJsonList.isEmpty) {
+      print('good');
+    } else {
+      print('result = $testJsonList');
+      testList.clear();
+      for (int index = 0; index < testJsonList.length; index++) {
+        TestChartDateData testChartList = testJsonList[index];
+        testList.add(testChartList);
+      }
+    }
+  }
 
   var chartClassList = <ChartDateData>[
     ChartDateData(ymd: YMD(year: 2021, month: 6, day: 1), data: [
@@ -373,6 +456,7 @@ class TodoController extends GetxController {
     initTodoList();
     initDateTodoList();
     initPercent();
+    makeTestData();
     // ever(chartClassList, (_) => )
   }
 }
