@@ -1,9 +1,6 @@
-import 'dart:collection';
-import 'dart:convert';
-
-import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
+import 'package:daily_report/src/pages/home/controller/home_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -14,6 +11,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final TodoController _todoController = Get.put(TodoController());
+final HomeController _homeController = Get.put(HomeController());
 
 class Event {
   final String title;
@@ -250,6 +248,7 @@ class _HomePageState extends State<HomePage> {
           // _todoController.setDefaultTime(touchedIndex);
           Get.to(
               AddTodo(
+                uid: FirebaseAuth.instance.currentUser!.uid,
                 year: _selectedDay.year,
                 month: _selectedDay.month,
                 day: _selectedDay.day,
@@ -291,7 +290,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 print(FirebaseAuth.instance.currentUser!.email);
                 print(FirebaseAuth.instance.currentUser!.uid);
-
+                _homeController.todoLoad(FirebaseAuth.instance.currentUser!.uid);
               },
             )),
             Positioned(
@@ -301,7 +300,16 @@ class _HomePageState extends State<HomePage> {
                     FirebaseAuth.instance.signOut();
                   },
                   child: Icon(Icons.logout),
-                ))
+                )),
+            Positioned(
+                bottom: 30,
+                right: 30,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    // _homeController.addTodo();
+                  },
+                  child: Icon(Icons.add),
+                )),
           ],
         ),
       ),

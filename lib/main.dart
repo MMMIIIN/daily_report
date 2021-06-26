@@ -1,3 +1,4 @@
+import 'package:daily_report/src/binding/init_binding.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/app.dart';
 import 'package:daily_report/src/pages/chart/chart_page.dart';
@@ -26,9 +27,11 @@ class MyApp extends StatelessWidget {
         )
       ),
       initialRoute: '/',
+      initialBinding: InitBinding(),
       // initialBinding: BindingsBuilder((){
       //   Get.put(TodoController());
       // }),
+
       getPages: [
         GetPage(name: '/', page: () => App()),
         GetPage(name: 'chart', page: () => ChartPage()),

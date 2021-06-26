@@ -153,3 +153,66 @@ class TestYmd {
         "day": day,
       };
 }
+
+class TestTodo {
+  // final List<TestTodoList> todoList;
+
+  TestTodo({
+    required this.uid,
+    required this.year,
+    required this.month,
+    required this.day,
+    required this.title,
+    required this.startHour,
+    required this.startMinute,
+    required this.endHour,
+    required this.endMinute,
+  });
+
+  String uid;
+  int year;
+  int month;
+  int day;
+  String title;
+  int startHour;
+  int startMinute;
+  int endHour;
+  int endMinute;
+
+  factory TestTodo.fromJson(Map<String, dynamic> json) => TestTodo(
+        uid: json["uid"],
+        year: json["year"],
+        month: json["month"],
+        day: json["day"],
+        title: json["title"],
+        startHour: json["startHour"],
+        startMinute: json["startMinute"],
+        endHour: json["endHour"],
+        endMinute: json["endMinute"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "uid": uid,
+        "year": year,
+        "month": month,
+        "day": day,
+        "title": title,
+        "startHour": startHour,
+        "startMinute": startMinute,
+        "endHour": endHour,
+        "endMinute": endMinute,
+      };
+}
+
+class TestTodoList {
+  final List<TestTodo> todoList;
+
+  TestTodoList({required this.todoList});
+
+  factory TestTodoList.fromJson(List<dynamic> json) {
+    List<TestTodo> todoList1;
+    todoList1 = json.map((e) => TestTodo.fromJson(e)).toList();
+
+    return new TestTodoList(todoList: todoList1);
+  }
+}

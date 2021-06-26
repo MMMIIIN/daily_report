@@ -1,6 +1,7 @@
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/app.dart';
+import 'package:daily_report/src/pages/home/controller/home_controller.dart';
 import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,11 +9,14 @@ import 'package:time_range_picker/time_range_picker.dart';
 
 class AddTodo extends StatelessWidget {
   final TodoController _todoController = Get.put(TodoController());
+  final HomeController _homeController = Get.put(HomeController());
+  // var testTitleTextController = TextEditingController();
+  String? uid;
   int? year;
   int? month;
   int? day;
 
-  AddTodo({this.year, this.month, this.day});
+  AddTodo({this.year, this.month, this.day, this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +38,7 @@ class AddTodo extends StatelessWidget {
                     padding: EdgeInsets.all(8),
                     child: TextField(
                       controller: _todoController.titleTextController.value,
+                      // controller: testTitleTextController,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15)),
@@ -49,6 +54,7 @@ class AddTodo extends StatelessWidget {
                       Text(year.toString()),
                       Text(month.toString()),
                       Text(day.toString()),
+                      Text(uid ?? ''),
                     ],
                   ),
                 ),
@@ -87,8 +93,7 @@ class AddTodo extends StatelessWidget {
                                 day: day ?? 0,
                                 todo: [
                                   Todo(
-                                    title: _todoController
-                                        .titleTextController.value.text,
+                                    title: _todoController.titleTextController.value.text,
                                     time: TimeRange(
                                       startTime: _todoController
                                           .defaultTime.value.startTime,
@@ -117,18 +122,29 @@ class AddTodo extends StatelessWidget {
                                   _todoController.currentIndex.value]);
                           // Get.back();
                           _todoController.todoList.add(Todo(
-                              title: _todoController
-                                  .titleTextController.value.text,
+                              title: _todoController.titleTextController.value.text,
                               time: _todoController.defaultTime.value));
 
-                          _todoController.addTodoTitle(
-                              _todoController.titleTextController.value.text);
-                          _todoController.sortDataPercent(_todoController.chartClassList[_todoController.currentIndex.value]);
+                          _todoController
+                              .addTodoTitle(_todoController.titleTextController.value.text);
+                          _todoController.sortDataPercent(
+                              _todoController.chartClassList[
+                                  _todoController.currentIndex.value]);
 
-                          _todoController.titleTextController.value.clear();
+
                           // Get.toNamed('/');
                           // print(_todoController.defaultTime.value);
                           // Get.off(App());
+
+                          _homeController.addTodo(
+                              uid ?? '',
+                              YMD(
+                                  year: year ?? 0,
+                                  month: month ?? 0,
+                                  day: day ?? 0),
+                              _todoController.titleTextController.value.text,
+                              _todoController.defaultTime.value);
+                          _todoController.titleTextController.value.clear();
                           Get.back();
                         },
                         color: Colors.white,
@@ -169,7 +185,9 @@ class AddTodo extends StatelessWidget {
                 hour: _todoController.defaultTime.value.endTime.hour,
                 minute: _todoController.defaultTime.value.endTime.minute),
             end: TimeOfDay(
-                hour: (_todoController.defaultTime.value.endTime.hour + 2) > 24 ? 0 : _todoController.defaultTime.value.endTime.hour + 2,
+                hour: (_todoController.defaultTime.value.endTime.hour + 2) > 24
+                    ? 0
+                    : _todoController.defaultTime.value.endTime.hour + 2,
                 minute: _todoController.defaultTime.value.endTime.minute),
             ticks: 24,
             handlerRadius: 8,
@@ -199,7 +217,6 @@ class AddTodo extends StatelessWidget {
                   // Text('${Get.parameters['title']}')
                   // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.startTime.hour} : '),
                   // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.startTime.minute}')
-
                 ],
               ),
               Row(
@@ -208,7 +225,6 @@ class AddTodo extends StatelessWidget {
                   Text('${_todoController.defaultTime.value.endTime.minute}'),
                   // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.endTime.hour} : '),
                   // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.endTime.minute}')
-
                 ],
               ),
             ],
