@@ -20,6 +20,7 @@ class Home extends StatelessWidget {
       if (user.data == null) {
         return LoginPage();
       } else {
+        _homeController.todoUidLoad(user.data!.uid);
         return Scaffold(
           // backgroundColor: Color(0xffdff9fb),
           body: Obx(() {

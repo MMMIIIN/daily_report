@@ -26,19 +26,19 @@ final now = DateTime.now();
 final FirstDay = DateTime(2020, 1, 1);
 final LastDay = DateTime(now.year + 5, 12, 31);
 
-final kMINEventSource = {
-  for (var item
-      in List.generate(_todoController.chartClassList.length, (index) => index))
-    DateTime.utc(
-            _todoController.chartClassList[item].ymd.year,
-            _todoController.chartClassList[item].ymd.month,
-            _todoController.chartClassList[item].ymd.day):
-        List.generate(1, (index) => Event('title'))
-};
+// final kMINEventSource = {
+//   for (var item in List.generate(
+//       _homeController.testUidList.todoList.length, (index) => index))
+//     DateTime.utc(
+//             _homeController.testUidList.todoList[item].year,
+//             _homeController.testUidList.todoList[item].month,
+//             _homeController.testUidList.todoList[item].day):
+//         List.generate(1, (index) => Event('title'))
+// };
 
-int getHashCode(DateTime key) {
-  return key.day * 1000000 + key.month * 10000 + key.year;
-}
+// int getHashCode(DateTime key) {
+//   return key.day * 1000000 + key.month * 10000 + key.year;
+// }
 
 class HomePage extends StatefulWidget {
   @override
@@ -109,7 +109,19 @@ class _HomePageState extends State<HomePage> {
           weekendTextStyle: TextStyle(color: Colors.red),
           holidayTextStyle: TextStyle(color: Colors.blue),
         ),
-        eventLoader: _todoController.getEventsForDay,
+        // eventLoader: _todoController.getEventsForDay,
+        eventLoader: (day) {
+          for (int i = 0;
+              i < _homeController.testUidList.todoList.length;
+              i++) {
+            if (day.year == _homeController.testUidList.todoList[i].year &&
+                day.month == _homeController.testUidList.todoList[i].month &&
+                day.day == _homeController.testUidList.todoList[i].day) {
+              return [Event('')];
+            }
+          }
+          return [];
+        },
         // locale: 'ko-KR',
         onDaySelected: _onDaySelected,
         onFormatChanged: (format) {
@@ -290,7 +302,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 print(FirebaseAuth.instance.currentUser!.email);
                 print(FirebaseAuth.instance.currentUser!.uid);
-                _homeController.todoLoad(FirebaseAuth.instance.currentUser!.uid);
+                _homeController
+                    .todoUidLoad(FirebaseAuth.instance.currentUser!.uid);
               },
             )),
             Positioned(

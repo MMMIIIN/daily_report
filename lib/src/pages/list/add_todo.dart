@@ -112,11 +112,11 @@ class AddTodo extends StatelessWidget {
                               _todoController.getTime(
                                   _todoController.currentDateTime.value,
                                   _todoController.defaultTime.value));
-                          EventsList.addAll({
-                            DateTime.utc(year ?? 0, month ?? 0, day ?? 0): [
-                              Event('title')
-                            ]
-                          });
+                          // EventsList.addAll({
+                          //   DateTime.utc(year ?? 0, month ?? 0, day ?? 0): [
+                          //     Event('title')
+                          //   ]
+                          // });
                           _todoController.setDataPercent(
                               _todoController.chartClassList[
                                   _todoController.currentIndex.value]);

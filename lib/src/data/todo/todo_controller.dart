@@ -12,10 +12,10 @@ import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
-final EventsList = LinkedHashMap<DateTime, List<Event>>(
-  equals: isSameDay,
-  hashCode: getHashCode,
-)..addAll(kMINEventSource);
+// final EventsList = LinkedHashMap<DateTime, List<Event>>(
+//   equals: isSameDay,
+//   hashCode: getHashCode,
+// )..addAll(kMINEventSource);
 
 class YMD {
   int year;
@@ -264,10 +264,10 @@ class TodoController extends GetxController {
     ]),
   ].obs;
 
-  List<Event> getEventsForDay(DateTime day) {
-    // Implementation example
-    return EventsList[day] ?? [];
-  }
+  // List<Event> getEventsForDay(DateTime day) {
+  //   // Implementation example
+  //   return EventsList[day] ?? [];
+  // }
 
   void setCurrentIndex(DateTime time) {
     var index = chartClassList.indexWhere((element) =>

@@ -18,6 +18,7 @@ class TodoRepository extends GetConnect {
         TestTodoList todoList = TestTodoList.fromJson(response.body);
         print(response.body);
         print(todoList);
+        return todoList;
       }
     }
   }
