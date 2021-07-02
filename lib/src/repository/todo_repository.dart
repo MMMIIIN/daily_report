@@ -15,7 +15,7 @@ class TodoRepository extends GetConnect {
     } else {
       if (response.body != null && response.body.length > 0) {
         print(response.statusCode);
-        TestTodoList todoList = TestTodoList.fromJson(response.body);
+        TodoUidList todoList = TodoUidList.fromJson(response.body);
         print(response.body);
         print(todoList);
         return todoList;
@@ -23,7 +23,7 @@ class TodoRepository extends GetConnect {
     }
   }
 
-  Future addTodo(String uid,YMD ymd, String title, TimeRange timeRange) async {
+  Future addTodo(String uid,YMD ymd, String title, TimeRange timeRange, double value, int colorIndex) async {
     httpClient.baseUrl = 'http://localhost:3000';
     String url = '/todo/save';
     final response = await post(url, {
@@ -35,7 +35,9 @@ class TodoRepository extends GetConnect {
       "startHour": timeRange.startTime.hour,
       "startMinute": timeRange.startTime.minute,
       "endHour": timeRange.endTime.hour,
-      "endMinute": timeRange.endTime.minute
+      "endMinute": timeRange.endTime.minute,
+      "value": value,
+      "color": colorIndex,
     });
     print(response);
     if (response.status.hasError) {

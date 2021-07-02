@@ -1,8 +1,8 @@
-import 'package:daily_report/src/data/todo/todo.dart';
+import 'dart:math';
+
+import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
-import 'package:daily_report/src/pages/app.dart';
 import 'package:daily_report/src/pages/home/controller/home_controller.dart';
-import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_range_picker/time_range_picker.dart';
@@ -10,6 +10,7 @@ import 'package:time_range_picker/time_range_picker.dart';
 class AddTodo extends StatelessWidget {
   final TodoController _todoController = Get.put(TodoController());
   final HomeController _homeController = Get.put(HomeController());
+
   // var testTitleTextController = TextEditingController();
   String? uid;
   int? year;
@@ -46,7 +47,7 @@ class AddTodo extends StatelessWidget {
                     ),
                   ),
                 ),
-                Flexible(child: printTodo()),
+                // Flexible(child: printTodo()),
                 Flexible(
                   flex: 1,
                   child: Row(
@@ -86,64 +87,16 @@ class AddTodo extends StatelessWidget {
                       ),
                       MaterialButton(
                         onPressed: () {
-                          _todoController.todoDateList.add(
-                            DateTodo(
-                                year: year ?? 0,
-                                month: month ?? 0,
-                                day: day ?? 0,
-                                todo: [
-                                  Todo(
-                                    title: _todoController.titleTextController.value.text,
-                                    time: TimeRange(
-                                      startTime: _todoController
-                                          .defaultTime.value.startTime,
-                                      endTime: _todoController
-                                          .defaultTime.value.endTime,
-                                    ),
-                                  ),
-                                ]),
-                          );
-                          _todoController.addClassChartData(
-                              YMD(
-                                  year: year ?? 0,
-                                  month: month ?? 0,
-                                  day: day ?? 0),
-                              _todoController.titleTextController.value.text,
-                              _todoController.getTime(
-                                  _todoController.currentDateTime.value,
-                                  _todoController.defaultTime.value));
-                          // EventsList.addAll({
-                          //   DateTime.utc(year ?? 0, month ?? 0, day ?? 0): [
-                          //     Event('title')
-                          //   ]
-                          // });
-                          _todoController.setDataPercent(
-                              _todoController.chartClassList[
-                                  _todoController.currentIndex.value]);
-                          // Get.back();
-                          _todoController.todoList.add(Todo(
-                              title: _todoController.titleTextController.value.text,
-                              time: _todoController.defaultTime.value));
-
-                          _todoController
-                              .addTodoTitle(_todoController.titleTextController.value.text);
-                          _todoController.sortDataPercent(
-                              _todoController.chartClassList[
-                                  _todoController.currentIndex.value]);
-
-
-                          // Get.toNamed('/');
-                          // print(_todoController.defaultTime.value);
-                          // Get.off(App());
-
-                          _homeController.addTodo(
+                          _todoController.addTodo(
                               uid ?? '',
                               YMD(
                                   year: year ?? 0,
                                   month: month ?? 0,
                                   day: day ?? 0),
                               _todoController.titleTextController.value.text,
-                              _todoController.defaultTime.value);
+                              _todoController.defaultTime.value,
+                              _todoController.defaultValue.value,
+                              Random().nextInt(colorList.length));
                           _todoController.titleTextController.value.clear();
                           Get.back();
                         },
@@ -198,6 +151,9 @@ class AddTodo extends StatelessWidget {
             padding: 60,
           );
           _todoController.setTime(result);
+          _todoController.defaultValue(_todoController.getValue(
+              _todoController.currentDateTime.value, result));
+          print(_todoController.defaultValue.value);
           // controller.listeners;
           // controller.change(result);
         },
@@ -234,32 +190,32 @@ class AddTodo extends StatelessWidget {
     );
   }
 
-  Widget printTodo() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 50,
-            mainAxisExtent: 30,
-          ),
-          itemCount: _todoController.todoTitleList.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () {
-                // _todoController.titleTextController.value.text(_todoController.defaultText);
-                _todoController.titleTextController.value.text =
-                    _todoController.todoTitleList[index].title;
-              },
-              child: Container(
-                padding: EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(15)),
-                child: Text('${_todoController.todoTitleList[index].title}'),
-              ),
-            );
-          }),
-    );
-  }
+// Widget printTodo() {
+//   return Padding(
+//     padding: const EdgeInsets.symmetric(horizontal: 20),
+//     child: GridView.builder(
+//         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//           crossAxisCount: 2,
+//           crossAxisSpacing: 50,
+//           mainAxisExtent: 30,
+//         ),
+//         itemCount: _todoController.todoTitleList.length,
+//         itemBuilder: (context, index) {
+//           return InkWell(
+//             onTap: () {
+//               // _todoController.titleTextController.value.text(_todoController.defaultText);
+//               _todoController.titleTextController.value.text =
+//                   _todoController.todoTitleList[index].title;
+//             },
+//             child: Container(
+//               padding: EdgeInsets.all(2),
+//               decoration: BoxDecoration(
+//                   border: Border.all(),
+//                   borderRadius: BorderRadius.circular(15)),
+//               child: Text('${_todoController.todoTitleList[index].title}'),
+//             ),
+//           );
+//         }),
+//   );
+// }
 }

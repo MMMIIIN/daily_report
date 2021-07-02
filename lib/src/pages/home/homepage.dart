@@ -1,17 +1,14 @@
+import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
-import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
-import 'package:daily_report/src/pages/home/controller/home_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final TodoController _todoController = Get.put(TodoController());
-final HomeController _homeController = Get.put(HomeController());
 
 class Event {
   final String title;
@@ -63,6 +60,7 @@ class _HomePageState extends State<HomePage> {
         print('_selectedDay = $_selectedDay');
         print('_focusedDay = $_focusedDay');
         _todoController.setCurrentIndex(_selectedDay);
+        _todoController.setCurrentIndex1(_selectedDay);
         _todoController.currentDateTime(_selectedDay);
         print('todoDateTime ${_todoController.currentDateTime.value}');
       });
@@ -96,9 +94,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 )),
 
-        firstDay: DateTime(_todoController.todoDateList[1].year,
-            _todoController.todoDateList[1].month - 3, 1),
-        // firstDay: FirstDay,
+        firstDay: FirstDay,
         lastDay: LastDay,
         // focusedDay: _focusedDay,
         focusedDay: _todoController.currentDateTime.value,
@@ -112,11 +108,11 @@ class _HomePageState extends State<HomePage> {
         // eventLoader: _todoController.getEventsForDay,
         eventLoader: (day) {
           for (int i = 0;
-              i < _homeController.testUidList.todoList.length;
+              i < _todoController.todoUidList.todoList.length;
               i++) {
-            if (day.year == _homeController.testUidList.todoList[i].year &&
-                day.month == _homeController.testUidList.todoList[i].month &&
-                day.day == _homeController.testUidList.todoList[i].day) {
+            if (day.year == _todoController.todoUidList.todoList[i].year &&
+                day.month == _todoController.todoUidList.todoList[i].month &&
+                day.day == _todoController.todoUidList.todoList[i].day) {
               return [Event('')];
             }
           }
@@ -145,8 +141,7 @@ class _HomePageState extends State<HomePage> {
       builder: (_) => Flexible(
         flex: 3,
         child:
-            // _todoController.chartClassList.isNotEmpty
-            _.currentIndex.value != 0
+        _todoController.currentIndexList.isNotEmpty
                 ? PieChart(
                     PieChartData(
                       pieTouchData:
@@ -169,20 +164,17 @@ class _HomePageState extends State<HomePage> {
                       sectionsSpace: 4,
                       centerSpaceRadius: 40,
                       sections: List<PieChartSectionData>.generate(
-                          _.chartClassList[_.currentIndex.value].data.length,
+                          _todoController.currentIndexList.length,
                           (index) {
                         final isTouched = index == touchedIndex;
                         final radius = isTouched ? 70.0 : 50.0;
                         final title = isTouched
-                            ? _.chartClassList[_.currentIndex.value].data[index]
-                                .data.title
+                            ? _todoController.todoUidList.todoList[_todoController.currentIndexList[index]].title
                             : '';
                         return PieChartSectionData(
                           title: title,
-                          color: _.chartClassList[_.currentIndex.value]
-                              .data[index].data.color,
-                          value: _.chartClassList[_.currentIndex.value]
-                              .data[index].data.value,
+                          color: colorList[_todoController.todoUidList.todoList[_todoController.currentIndexList[index]].colorIndex],
+                          value: _todoController.todoUidList.todoList[_todoController.currentIndexList[index]].value.toDouble(),
                           radius: radius,
                         );
                       }),
@@ -200,7 +192,7 @@ class _HomePageState extends State<HomePage> {
           flex: 1,
           child: _.currentIndex.value != 0
               ? GridView.builder(
-                  itemCount: _.chartClassList[_.currentIndex.value].data.length,
+                  itemCount: _todoController.todoUidList.todoList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 50,
@@ -220,23 +212,24 @@ class _HomePageState extends State<HomePage> {
                             height: 16,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: _.chartClassList[_.currentIndex.value]
-                                    .data[index].data.color),
+                                // color: _.chartClassList[_.currentIndex.value]
+                                //     .data[index].data.color
+                            ),
                           ),
                           SizedBox(width: 4),
                           Row(
                             children: [
-                              Text(
-                                _.chartClassList[_.currentIndex.value]
-                                    .data[index].data.title,
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                ' ${_.chartClassList[_.currentIndex.value].data[index].percent} %',
-                                style: TextStyle(fontSize: 13),
-                                overflow: TextOverflow.ellipsis,
-                              )
+                              // Text(
+                              //   _.chartClassList[_.currentIndex.value]
+                              //       .data[index].data.title,
+                              //   style: TextStyle(
+                              //       fontSize: 16, fontWeight: FontWeight.bold),
+                              // ),
+                              // Text(
+                              //   ' ${_.chartClassList[_.currentIndex.value].data[index].percent} %',
+                              //   style: TextStyle(fontSize: 13),
+                              //   overflow: TextOverflow.ellipsis,
+                              // )
                             ],
                           ),
                           // Text(_todoController.chartClassList[index].chartSectionData.value.toString()),
@@ -272,17 +265,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget testStorageIcon() {
-    return Positioned(
-        bottom: 30,
-        child: FloatingActionButton(
-          onPressed: () {
-            GetStorage()
-                .write('testList', _todoController.testChartClassList.toJson());
-          },
-          child: Icon(Icons.title),
-        ));
-  }
+  // Widget testStorageIcon() {
+  //   return Positioned(
+  //       bottom: 30,
+  //       child: FloatingActionButton(
+  //         onPressed: () {
+  //           GetStorage()
+  //               .write('testList', _todoController.testChartClassList.toJson());
+  //         },
+  //         child: Icon(Icons.title),
+  //       ));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -302,8 +295,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 print(FirebaseAuth.instance.currentUser!.email);
                 print(FirebaseAuth.instance.currentUser!.uid);
-                _homeController
-                    .todoUidLoad(FirebaseAuth.instance.currentUser!.uid);
+                // _homeController
+                //     .todoUidLoad(FirebaseAuth.instance.currentUser!.uid);
               },
             )),
             Positioned(
@@ -314,15 +307,15 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Icon(Icons.logout),
                 )),
-            Positioned(
-                bottom: 30,
-                right: 30,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    // _homeController.addTodo();
-                  },
-                  child: Icon(Icons.add),
-                )),
+            // Positioned(
+            //     bottom: 30,
+            //     right: 30,
+            //     child: FloatingActionButton(
+            //       onPressed: () {
+            //         // _homeController.addTodo();
+            //       },
+            //       child: Icon(Icons.add),
+            //     )),
           ],
         ),
       ),

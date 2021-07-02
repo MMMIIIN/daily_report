@@ -1,3 +1,4 @@
+import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/chart_page.dart';
 import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:daily_report/src/pages/list/list_page.dart';
@@ -11,6 +12,7 @@ import 'home/controller/home_controller.dart';
 
 class Home extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
+  final TodoController _todoController = Get.put(TodoController());
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class Home extends StatelessWidget {
       if (user.data == null) {
         return LoginPage();
       } else {
-        _homeController.todoUidLoad(user.data!.uid);
+        _todoController.todoUidLoad(user.data!.uid);
         return Scaffold(
           // backgroundColor: Color(0xffdff9fb),
           body: Obx(() {

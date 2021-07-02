@@ -18,20 +18,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Daily Report',
       theme: ThemeData(
-        // primarySwatch: Colors.blue,
         primaryColor: Color(0xff686de0),
         textTheme: TextTheme(
-          // bodyText1: TextStyle(color: Colors.white),
-          // bodyText2: TextStyle(color: Colors.white),
-
         )
       ),
       initialRoute: '/',
       initialBinding: InitBinding(),
-      // initialBinding: BindingsBuilder((){
-      //   Get.put(TodoController());
-      // }),
-
       getPages: [
         GetPage(name: '/', page: () => App()),
         GetPage(name: 'chart', page: () => ChartPage()),
