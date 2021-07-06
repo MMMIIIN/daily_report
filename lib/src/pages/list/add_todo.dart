@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
+import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/home/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,7 +28,7 @@ class AddTodo extends StatelessWidget {
         child: Center(
           child: Container(
             height: Get.mediaQuery.size.height * 0.8,
-            width: double.infinity,
+            width: Get.mediaQuery.size.width * 0.99,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15), border: Border.all()),
             child: Column(
@@ -98,7 +99,8 @@ class AddTodo extends StatelessWidget {
                               _todoController.defaultValue.value,
                               Random().nextInt(colorList.length));
                           _todoController.titleTextController.value.clear();
-                          Get.back();
+                          // Get.back();
+                          Get.off(Home());
                         },
                         color: Colors.white,
                         child: Text('ADD'),

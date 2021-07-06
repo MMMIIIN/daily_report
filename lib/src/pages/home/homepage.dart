@@ -190,9 +190,9 @@ class _HomePageState extends State<HomePage> {
       // init: TodoController(),
       builder: (_) => Flexible(
           flex: 1,
-          child: _.currentIndex.value != 0
+          child: _todoController.currentIndexList.isNotEmpty
               ? GridView.builder(
-                  itemCount: _todoController.todoUidList.todoList.length,
+                  itemCount: _todoController.currentIndexList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 50,
@@ -212,19 +212,17 @@ class _HomePageState extends State<HomePage> {
                             height: 16,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                // color: _.chartClassList[_.currentIndex.value]
-                                //     .data[index].data.color
+                                color: colorList[_todoController.todoUidList.todoList[_todoController.currentIndexList[index]].colorIndex]
                             ),
                           ),
                           SizedBox(width: 4),
                           Row(
                             children: [
-                              // Text(
-                              //   _.chartClassList[_.currentIndex.value]
-                              //       .data[index].data.title,
-                              //   style: TextStyle(
-                              //       fontSize: 16, fontWeight: FontWeight.bold),
-                              // ),
+                              Text(
+                                _todoController.todoUidList.todoList[_todoController.currentIndexList[index]].title,
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
                               // Text(
                               //   ' ${_.chartClassList[_.currentIndex.value].data[index].percent} %',
                               //   style: TextStyle(fontSize: 13),
@@ -291,22 +289,22 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             showAddIcon(),
-            Positioned(child: FloatingActionButton(
-              onPressed: () {
-                print(FirebaseAuth.instance.currentUser!.email);
-                print(FirebaseAuth.instance.currentUser!.uid);
-                // _homeController
-                //     .todoUidLoad(FirebaseAuth.instance.currentUser!.uid);
-              },
-            )),
-            Positioned(
-                bottom: 30,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    FirebaseAuth.instance.signOut();
-                  },
-                  child: Icon(Icons.logout),
-                )),
+            // Positioned(child: FloatingActionButton(
+            //   onPressed: () {
+            //     print(FirebaseAuth.instance.currentUser!.email);
+            //     print(FirebaseAuth.instance.currentUser!.uid);
+            //     // _homeController
+            //     //     .todoUidLoad(FirebaseAuth.instance.currentUser!.uid);
+            //   },
+            // )),
+            // Positioned(
+            //     bottom: 30,
+            //     child: FloatingActionButton(
+            //       onPressed: () {
+            //         FirebaseAuth.instance.signOut();
+            //       },
+            //       child: Icon(Icons.logout),
+            //     )),
             // Positioned(
             //     bottom: 30,
             //     right: 30,
