@@ -95,11 +95,11 @@ class _HomePageState extends State<HomePage> {
         // eventLoader: _todoController.getEventsForDay,
         eventLoader: (day) {
           for (int i = 0;
-              i < _todoController.todoUidList.todoList.length;
+              i < _todoController.todoUidList.value.todoList.length;
               i++) {
-            if (day.year == _todoController.todoUidList.todoList[i].year &&
-                day.month == _todoController.todoUidList.todoList[i].month &&
-                day.day == _todoController.todoUidList.todoList[i].day) {
+            if (day.year == _todoController.todoUidList.value.todoList[i].year &&
+                day.month == _todoController.todoUidList.value.todoList[i].month &&
+                day.day == _todoController.todoUidList.value.todoList[i].day) {
               return [Event('')];
             }
           }
@@ -156,12 +156,12 @@ class _HomePageState extends State<HomePage> {
                         final isTouched = index == touchedIndex;
                         final radius = isTouched ? 70.0 : 50.0;
                         final title = isTouched
-                            ? _todoController.todoUidList.todoList[_todoController.currentIndexList[index]].title
+                            ? _todoController.todoUidList.value.todoList[_todoController.currentIndexList[index]].title
                             : '';
                         return PieChartSectionData(
                           title: title,
-                          color: colorList[_todoController.todoUidList.todoList[_todoController.currentIndexList[index]].colorIndex],
-                          value: _todoController.todoUidList.todoList[_todoController.currentIndexList[index]].value.toDouble(),
+                          color: colorList[_todoController.todoUidList.value.todoList[_todoController.currentIndexList[index]].colorIndex],
+                          value: _todoController.todoUidList.value.todoList[_todoController.currentIndexList[index]].value.toDouble(),
                           radius: radius,
                         );
                       }),
@@ -199,19 +199,19 @@ class _HomePageState extends State<HomePage> {
                             height: 16,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: colorList[_todoController.todoUidList.todoList[_todoController.currentIndexList[index]].colorIndex]
+                                color: colorList[_todoController.todoUidList.value.todoList[_todoController.currentIndexList[index]].colorIndex]
                             ),
                           ),
                           SizedBox(width: 4),
                           Row(
                             children: [
                               Text(
-                                _todoController.todoUidList.todoList[_todoController.currentIndexList[index]].title,
+                                _todoController.todoUidList.value.todoList[_todoController.currentIndexList[index]].title,
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                ' ${_todoController.todoUidList.todoList[_todoController.currentIndexList[index]].percent.roundToDouble()} %',
+                                ' ${_todoController.todoUidList.value.todoList[_todoController.currentIndexList[index]].percent.roundToDouble()} %',
                                 style: TextStyle(fontSize: 13),
                                 overflow: TextOverflow.ellipsis,
                               )
