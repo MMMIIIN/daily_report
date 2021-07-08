@@ -23,19 +23,6 @@ final now = DateTime.now();
 final FirstDay = DateTime(2020, 1, 1);
 final LastDay = DateTime(now.year + 5, 12, 31);
 
-// final kMINEventSource = {
-//   for (var item in List.generate(
-//       _homeController.testUidList.todoList.length, (index) => index))
-//     DateTime.utc(
-//             _homeController.testUidList.todoList[item].year,
-//             _homeController.testUidList.todoList[item].month,
-//             _homeController.testUidList.todoList[item].day):
-//         List.generate(1, (index) => Event('title'))
-// };
-
-// int getHashCode(DateTime key) {
-//   return key.day * 1000000 + key.month * 10000 + key.year;
-// }
 
 class HomePage extends StatefulWidget {
   @override
@@ -59,8 +46,8 @@ class _HomePageState extends State<HomePage> {
         _todoController.currentDateTime(selectedDay);
         print('_selectedDay = $_selectedDay');
         print('_focusedDay = $_focusedDay');
+        // _todoController.setCurrentIndex(_selectedDay);
         _todoController.setCurrentIndex(_selectedDay);
-        _todoController.setCurrentIndex1(_selectedDay);
         _todoController.currentDateTime(_selectedDay);
         print('todoDateTime ${_todoController.currentDateTime.value}');
       });
@@ -223,11 +210,11 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
-                              // Text(
-                              //   ' ${_.chartClassList[_.currentIndex.value].data[index].percent} %',
-                              //   style: TextStyle(fontSize: 13),
-                              //   overflow: TextOverflow.ellipsis,
-                              // )
+                              Text(
+                                ' ${_todoController.todoUidList.todoList[_todoController.currentIndexList[index]].percent.roundToDouble()} %',
+                                style: TextStyle(fontSize: 13),
+                                overflow: TextOverflow.ellipsis,
+                              )
                             ],
                           ),
                           // Text(_todoController.chartClassList[index].chartSectionData.value.toString()),
