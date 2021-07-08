@@ -25,7 +25,7 @@ class TodoController extends GetxController {
   Rx<TodoUidList> todoUidList = TodoUidList(todoList: []).obs;
   int valueSum = 0;
   var titleTextController = TextEditingController().obs;
-
+  Rx<TodoUidList> currentUidList = TodoUidList(todoList: []).obs;
 
   Rx<TimeRange> defaultTime = TimeRange(
           startTime: TimeOfDay(hour: 0, minute: 0),
@@ -44,13 +44,16 @@ class TodoController extends GetxController {
         .addTodo(uid, ymd, title, timeRange, value, colorIndex);
   }
 
-  void setPercent(){
+  void setPercent() {
     valueSum = 0;
-    for(int i = 0; i < currentIndexList.length; i++){
-      valueSum += todoUidList.value.todoList[currentIndexList[i]].value;
+    for (int i = 0; i < currentIndexList.length; i++) {
+      valueSum += currentUidList.value.todoList[i].value;
     }
-    for(int j = 0; j < currentIndexList.length; j++){
-      todoUidList.value.todoList[currentIndexList[j]].percent = todoUidList.value.todoList[currentIndexList[j]].value / valueSum * 100;
+    for (int j = 0; j < currentIndexList.length; j++) {
+      currentUidList.value.todoList[j].percent =
+          currentUidList.value.todoList[j].value /
+              valueSum *
+              100;
     }
   }
 
@@ -63,8 +66,21 @@ class TodoController extends GetxController {
         currentIndexList.add(i);
       }
     }
+    setCurrentList();
     setPercent();
+    sortCurrentList();
     print(currentIndexList.value);
+  }
+
+  void setCurrentList() {
+    currentUidList.value.todoList.clear();
+    for (int i = 0; i < currentIndexList.length; i++) {
+      currentUidList.value.todoList.add(todoUidList.value.todoList[currentIndexList[i]]);
+    }
+  }
+
+  void sortCurrentList() {
+    currentUidList.value.todoList.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
   void setTime(TimeRange time) {
