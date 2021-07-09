@@ -26,6 +26,7 @@ class TodoController extends GetxController {
   int valueSum = 0;
   var titleTextController = TextEditingController().obs;
   Rx<TodoUidList> currentUidList = TodoUidList(todoList: []).obs;
+  final todoTitleList = <TodoTitle>[].obs;
 
   Rx<TimeRange> defaultTime = TimeRange(
           startTime: TimeOfDay(hour: 0, minute: 0),
@@ -37,6 +38,7 @@ class TodoController extends GetxController {
   void todoUidLoad(String uid) async {
     print('uidLoad실행');
     todoUidList(await TodoRepository.to.loadUidTodo(uid));
+    initTodoTitleList();
   }
 
   void addTodo(String uid, YMD ymd, String title, TimeRange timeRange,
@@ -52,9 +54,7 @@ class TodoController extends GetxController {
     }
     for (int j = 0; j < currentIndexList.length; j++) {
       currentUidList.value.todoList[j].percent =
-          currentUidList.value.todoList[j].value /
-              valueSum *
-              100;
+          currentUidList.value.todoList[j].value / valueSum * 100;
     }
   }
 
@@ -76,12 +76,14 @@ class TodoController extends GetxController {
   void setCurrentList() {
     currentUidList.value.todoList.clear();
     for (int i = 0; i < currentIndexList.length; i++) {
-      currentUidList.value.todoList.add(todoUidList.value.todoList[currentIndexList[i]]);
+      currentUidList.value.todoList
+          .add(todoUidList.value.todoList[currentIndexList[i]]);
     }
   }
 
   void sortCurrentList() {
-    currentUidList.value.todoList.sort((a, b) => b.percent.compareTo(a.percent));
+    currentUidList.value.todoList
+        .sort((a, b) => b.percent.compareTo(a.percent));
   }
 
   void setTime(TimeRange time) {
@@ -114,6 +116,20 @@ class TodoController extends GetxController {
     print('time2 = $time2');
     print('result = $result');
     return result.toDouble();
+  }
+
+  void initTodoTitleList() {
+    print('initTitle실행 ');
+    for (int i = 0; i < todoUidList.value.todoList.length; i++) {
+      addTodoTitle(todoUidList.value.todoList[i].title);
+    }
+  }
+
+  void addTodoTitle(String text) {
+    var index = todoTitleList.indexWhere((element) => element.title == text);
+    if(index == -1){
+      todoTitleList.add(TodoTitle(title: text));
+    }
   }
 
   @override

@@ -83,18 +83,18 @@ class AddTodo extends StatelessWidget {
                   flex: 1,
                   child: titleField(),
                 ),
-                // Flexible(child: printTodo()),
-                Flexible(
-                  flex: 1,
-                  child: Row(
-                    children: [
-                      Text(year.toString()),
-                      Text(month.toString()),
-                      Text(day.toString()),
-                      Text(uid ?? ''),
-                    ],
-                  ),
-                ),
+                Flexible(child: printTodo()),
+                // Flexible(
+                //   flex: 1,
+                //   child: Row(
+                //     children: [
+                //       Text(year.toString()),
+                //       Text(month.toString()),
+                //       Text(day.toString()),
+                //       Text(uid ?? ''),
+                //     ],
+                //   ),
+                // ),
                 Flexible(
                   flex: 1,
                   child: Padding(
@@ -231,32 +231,32 @@ class AddTodo extends StatelessWidget {
     );
   }
 
-// Widget printTodo() {
-//   return Padding(
-//     padding: const EdgeInsets.symmetric(horizontal: 20),
-//     child: GridView.builder(
-//         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//           crossAxisCount: 2,
-//           crossAxisSpacing: 50,
-//           mainAxisExtent: 30,
-//         ),
-//         itemCount: _todoController.todoTitleList.length,
-//         itemBuilder: (context, index) {
-//           return InkWell(
-//             onTap: () {
-//               // _todoController.titleTextController.value.text(_todoController.defaultText);
-//               _todoController.titleTextController.value.text =
-//                   _todoController.todoTitleList[index].title;
-//             },
-//             child: Container(
-//               padding: EdgeInsets.all(2),
-//               decoration: BoxDecoration(
-//                   border: Border.all(),
-//                   borderRadius: BorderRadius.circular(15)),
-//               child: Text('${_todoController.todoTitleList[index].title}'),
-//             ),
-//           );
-//         }),
-//   );
-// }
+Widget printTodo() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 50,
+          mainAxisExtent: 30,
+        ),
+        itemCount: _todoController.todoTitleList.length,
+        itemBuilder: (context, index) {
+          return InkWell(
+            onTap: () {
+              // _todoController.titleTextController.value.text(_todoController.defaultText);
+              _todoController.titleTextController.value.text =
+                  _todoController.todoTitleList[index].title;
+            },
+            child: Container(
+              padding: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(15)),
+              child: Text('${_todoController.todoTitleList[index].title}'),
+            ),
+          );
+        }),
+  );
+}
 }
