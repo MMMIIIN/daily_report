@@ -1,3 +1,4 @@
+import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
@@ -10,43 +11,19 @@ class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Stack(
-      children: [
-        Container(
-          padding: EdgeInsets.all(15),
-          width: double.infinity,
-          height: Get.mediaQuery.size.height * 0.85,
-          color: Colors.transparent,
-          child: showListView(),
-        ),
-        Positioned(
-            bottom: 30,
-            right: 30,
-            child: FloatingActionButton(
-              elevation: 2,
-              backgroundColor: Color(0xff686de0),
-              onPressed: () {
-                Get.to(AddTodo(), transition: Transition.fadeIn);
-                // final date1 = DateTime(DateTime.now().year,DateTime.now().month, DateTime.now().day, _todoController.todoList[1].time.startTime.hour, _todoController.todoList[1].time.startTime.minute);
-                // final date2 = DateTime(DateTime.now().year,DateTime.now().month, DateTime.now().day, _todoController.todoList[1].time.endTime.hour, _todoController.todoList[1].time.endTime.minute);
-                // print(date1);
-                // print(date2);
-                // final date3 = DateTime(2021,5,21,20,35);
-                // print(date3);
-                //
-                // print(date2.difference(date1).inMinutes);
-                // print(double.parse(date2.difference(date1).inMinutes.toString()));
-              },
-              child: Icon(Icons.add),
-            ),
-        ),
-      ],
-    ));
+      child: Container(
+        padding: EdgeInsets.all(15),
+        width: double.infinity,
+        height: Get.mediaQuery.size.height * 0.85,
+        color: Colors.transparent,
+        child: showListView(),
+      ),
+    );
   }
 
   Widget showListView() {
     return ListView.builder(
-      itemCount: _todoController.todoList.length,
+      itemCount: _todoController.todoUidList.value.todoList.length,
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: InkWell(
@@ -57,20 +34,28 @@ class ListPage extends StatelessWidget {
             padding: EdgeInsets.all(10),
             height: Get.mediaQuery.size.height * 0.08,
             decoration: BoxDecoration(
+                color: colorList[_todoController
+                    .todoUidList.value.todoList[index].colorIndex],
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all()),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(_todoController.todoList[index].title),
+                Text(
+                    '${_todoController.todoUidList.value.todoList[index].year}.'
+                    '${_todoController.todoUidList.value.todoList[index].month}.'
+                    '${_todoController.todoUidList.value.todoList[index].day}'),
+                Text(_todoController.todoUidList.value.todoList[index].title),
                 SizedBox(width: 10),
                 Row(
                   children: [
-                    Text('${_todoController.todoList[index].time.startTime.hour} : '),
-                    Text(_todoController.todoList[index].time.startTime.minute.toString()),
+                    Text(
+                        '${_todoController.todoUidList.value.todoList[index].startHour} : '
+                        '${_todoController.todoUidList.value.todoList[index].startMinute}'),
                     SizedBox(width: 20),
-                    Text('${_todoController.todoList[index].time.endTime.hour} : '),
-                    Text(_todoController.todoList[index].time.endTime.minute.toString())
+                    Text(
+                        '${_todoController.todoUidList.value.todoList[index].endHour} : '
+                        '${_todoController.todoUidList.value.todoList[index].endMinute}')
                   ],
                 )
               ],
