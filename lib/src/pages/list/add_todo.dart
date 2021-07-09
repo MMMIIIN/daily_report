@@ -20,6 +20,51 @@ class AddTodo extends StatelessWidget {
 
   AddTodo({this.year, this.month, this.day, this.uid});
 
+  Widget titleField() {
+    return Container(
+      padding: EdgeInsets.all(8),
+      child: TextField(
+        controller: _todoController.titleTextController.value,
+        // controller: testTitleTextController,
+        decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+            hintText: 'Title'),
+      ),
+    );
+  }
+
+  Widget colorSelect() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: colorList.length,
+          itemBuilder: (context, index) {
+            return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Obx(() =>  GestureDetector(
+                  onTap: () {
+                    _todoController.selectColorIndex(index);
+                  },
+                  child: Container(
+                      width: 25,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        // border: Border.all(width: 2, color: Colors.grey),
+                        border: _todoController.selectColorIndex.value == index
+                          ? Border.all(width: 2, color: Colors.black)
+                            : null,
+                        shape: BoxShape.circle,
+                        color: colorList[index],
+                      ),
+                    ),
+                  ),
+                ),
+                );
+          }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -36,17 +81,7 @@ class AddTodo extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 1,
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    child: TextField(
-                      controller: _todoController.titleTextController.value,
-                      // controller: testTitleTextController,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          hintText: 'Title'),
-                    ),
-                  ),
+                  child: titleField(),
                 ),
                 // Flexible(child: printTodo()),
                 Flexible(
@@ -74,6 +109,10 @@ class AddTodo extends StatelessWidget {
                     ),
                   ),
                 ),
+                Flexible(
+                  flex: 1,
+                  child: colorSelect(),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Row(
@@ -97,7 +136,7 @@ class AddTodo extends StatelessWidget {
                               _todoController.titleTextController.value.text,
                               _todoController.defaultTime.value,
                               _todoController.defaultValue.value,
-                              Random().nextInt(colorList.length));
+                              _todoController.selectColorIndex.value);
                           _todoController.titleTextController.value.clear();
                           // Get.back();
                           Get.off(Home());

@@ -18,7 +18,7 @@ class YMD {
 }
 
 class TodoController extends GetxController {
-  RxInt currentIndex = 0.obs;
+  // RxInt currentIndex = 0.obs;
   final currentIndexList = [].obs;
   Rx<DateTime> currentDateTime = DateTime.now().obs;
   final todoList = <Todo>[].obs;
@@ -32,6 +32,7 @@ class TodoController extends GetxController {
           endTime: TimeOfDay(hour: 0, minute: 0))
       .obs;
   RxDouble defaultValue = 0.0.obs;
+  RxInt selectColorIndex = 0.obs;
 
   void todoUidLoad(String uid) async {
     print('uidLoad실행');
