@@ -98,9 +98,9 @@ class ListPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text('${searchResult[index].year}.'
-                      '${searchResult[index].month}.'
-                      '${searchResult[index].day}'),
+                  Text('${searchResult[index].ymd.year}.'
+                      '${searchResult[index].ymd.month}.'
+                      '${searchResult[index].ymd.day}'),
                   Text(searchResult[index].title),
                   SizedBox(width: 10),
                   Row(

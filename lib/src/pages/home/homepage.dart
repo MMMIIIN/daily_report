@@ -97,9 +97,9 @@ class _HomePageState extends State<HomePage> {
           for (int i = 0;
               i < _todoController.todoUidList.value.todoList.length;
               i++) {
-            if (day.year == _todoController.todoUidList.value.todoList[i].year &&
-                day.month == _todoController.todoUidList.value.todoList[i].month &&
-                day.day == _todoController.todoUidList.value.todoList[i].day) {
+            if (day.year == _todoController.todoUidList.value.todoList[i].ymd.year &&
+                day.month == _todoController.todoUidList.value.todoList[i].ymd.month &&
+                day.day == _todoController.todoUidList.value.todoList[i].ymd.day) {
               return [Event('')];
             }
           }
@@ -235,7 +235,6 @@ class _HomePageState extends State<HomePage> {
         elevation: 2,
         backgroundColor: Color(0xff686de0).withOpacity(0.8),
         onPressed: () {
-          // _todoController.setDefaultTime(touchedIndex);
           Get.to(
               AddTodo(
                 uid: FirebaseAuth.instance.currentUser!.uid,
@@ -249,18 +248,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  // Widget testStorageIcon() {
-  //   return Positioned(
-  //       bottom: 30,
-  //       child: FloatingActionButton(
-  //         onPressed: () {
-  //           GetStorage()
-  //               .write('testList', _todoController.testChartClassList.toJson());
-  //         },
-  //         child: Icon(Icons.title),
-  //       ));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -276,31 +263,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             showAddIcon(),
-            // Positioned(child: FloatingActionButton(
-            //   onPressed: () {
-            //     print(FirebaseAuth.instance.currentUser!.email);
-            //     print(FirebaseAuth.instance.currentUser!.uid);
-            //     // _homeController
-            //     //     .todoUidLoad(FirebaseAuth.instance.currentUser!.uid);
-            //   },
-            // )),
-            // Positioned(
-            //     bottom: 30,
-            //     child: FloatingActionButton(
-            //       onPressed: () {
-            //         FirebaseAuth.instance.signOut();
-            //       },
-            //       child: Icon(Icons.logout),
-            //     )),
-            // Positioned(
-            //     bottom: 30,
-            //     right: 30,
-            //     child: FloatingActionButton(
-            //       onPressed: () {
-            //         // _homeController.addTodo();
-            //       },
-            //       child: Icon(Icons.add),
-            //     )),
           ],
         ),
       ),

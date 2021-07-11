@@ -64,9 +64,9 @@ class TodoController extends GetxController {
   void setCurrentIndex(DateTime time) {
     currentIndexList.clear();
     for (int i = 0; i < todoUidList.value.todoList.length; i++) {
-      if (todoUidList.value.todoList[i].year == time.year &&
-          todoUidList.value.todoList[i].month == time.month &&
-          todoUidList.value.todoList[i].day == time.day) {
+      if (todoUidList.value.todoList[i].ymd.year == time.year &&
+          todoUidList.value.todoList[i].ymd.month == time.month &&
+          todoUidList.value.todoList[i].ymd.day == time.day) {
         currentIndexList.add(i);
       }
     }
@@ -136,7 +136,9 @@ class TodoController extends GetxController {
   }
 
   List<TestTodo> searchTitle(String text){
-    return todoUidList.value.todoList.where((element) => element.title.contains(text)).toList();
+     var result = todoUidList.value.todoList.where((element) => element.title.contains(text)).toList();
+     result.sort((a, b) => a.ymd.compareTo(b.ymd));
+     return result;
   }
 
   @override

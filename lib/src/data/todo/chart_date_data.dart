@@ -1,10 +1,7 @@
 class TestTodo {
-  // final List<TestTodoList> todoList;
 
   TestTodo({required this.uid,
-    required this.year,
-    required this.month,
-    required this.day,
+    required this.ymd,
     required this.title,
     required this.startHour,
     required this.startMinute,
@@ -15,9 +12,7 @@ class TestTodo {
     this.percent = 0.0});
 
   String uid;
-  int year;
-  int month;
-  int day;
+  DateTime ymd;
   String title;
   int startHour;
   int startMinute;
@@ -30,9 +25,7 @@ class TestTodo {
   factory TestTodo.fromJson(Map<String, dynamic> json) =>
       TestTodo(
           uid: json["uid"],
-          year: json["year"],
-          month: json["month"],
-          day: json["day"],
+          ymd: DateTime.utc(json["year"], json["month"], json["day"]),
           title: json["title"],
           startHour: json["startHour"],
           startMinute: json["startMinute"],
@@ -44,9 +37,9 @@ class TestTodo {
   Map<String, dynamic> toJson() =>
       {
         "uid": uid,
-        "year": year,
-        "month": month,
-        "day": day,
+        "year" : ymd.year,
+        "month" :ymd.month,
+        "day" : ymd.day,
         "title": title,
         "startHour": startHour,
         "startMinute": startMinute,
