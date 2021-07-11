@@ -1,31 +1,25 @@
-import 'dart:math';
-
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
-import 'package:daily_report/src/pages/home/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 class AddTodo extends StatelessWidget {
   final TodoController _todoController = Get.put(TodoController());
-  final HomeController _homeController = Get.put(HomeController());
-
-  // var testTitleTextController = TextEditingController();
   String? uid;
   int? year;
   int? month;
   int? day;
+  bool? editMode;
 
-  AddTodo({this.year, this.month, this.day, this.uid});
+  AddTodo({this.year, this.month, this.day, this.uid, this.editMode = false});
 
   Widget titleField() {
     return Container(
       padding: EdgeInsets.all(8),
       child: TextField(
         controller: _todoController.titleTextController.value,
-        // controller: testTitleTextController,
         decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
             hintText: 'Title'),
@@ -41,26 +35,27 @@ class AddTodo extends StatelessWidget {
           itemCount: colorList.length,
           itemBuilder: (context, index) {
             return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Obx(() =>  GestureDetector(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Obx(
+                () => GestureDetector(
                   onTap: () {
                     _todoController.selectColorIndex(index);
                   },
                   child: Container(
-                      width: 25,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        // border: Border.all(width: 2, color: Colors.grey),
-                        border: _todoController.selectColorIndex.value == index
+                    width: 25,
+                    height: 25,
+                    decoration: BoxDecoration(
+                      // border: Border.all(width: 2, color: Colors.grey),
+                      border: _todoController.selectColorIndex.value == index
                           ? Border.all(width: 2, color: Colors.black)
-                            : null,
-                        shape: BoxShape.circle,
-                        color: colorList[index],
-                      ),
+                          : null,
+                      shape: BoxShape.circle,
+                      color: colorList[index],
                     ),
                   ),
                 ),
-                );
+              ),
+            );
           }),
     );
   }
@@ -84,17 +79,6 @@ class AddTodo extends StatelessWidget {
                   child: titleField(),
                 ),
                 Flexible(child: printTodo()),
-                // Flexible(
-                //   flex: 1,
-                //   child: Row(
-                //     children: [
-                //       Text(year.toString()),
-                //       Text(month.toString()),
-                //       Text(day.toString()),
-                //       Text(uid ?? ''),
-                //     ],
-                //   ),
-                // ),
                 Flexible(
                   flex: 1,
                   child: Padding(
@@ -120,6 +104,7 @@ class AddTodo extends StatelessWidget {
                     children: [
                       MaterialButton(
                         onPressed: () {
+                          _todoController.titleTextController.value.clear();
                           Get.back();
                         },
                         color: Colors.white,
@@ -140,6 +125,7 @@ class AddTodo extends StatelessWidget {
                           _todoController.titleTextController.value.clear();
                           // Get.back();
                           Get.off(Home());
+
                         },
                         color: Colors.white,
                         child: Text('ADD'),
@@ -156,107 +142,113 @@ class AddTodo extends StatelessWidget {
   }
 
   Widget setTime(BuildContext context) {
-    return Obx(
-      () => InkWell(
-        customBorder:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        onTap: () async {
-          TimeRange result = await showTimeRangePicker(
-            context: context,
-            clockRotation: 180,
-            paintingStyle: PaintingStyle.fill,
-            // backgroundColor: Colors.grey.withOpacity(0.2),
-            backgroundColor: Colors.yellow[100],
-            interval: Duration(minutes: 10),
-            labels: ['0', '3', '6', '9', '12', '15', '18', '21']
-                .asMap()
-                .entries
-                .map((e) {
-              return ClockLabel.fromIndex(idx: e.key, length: 8, text: e.value);
-            }).toList(),
-            snap: true,
-            start: TimeOfDay(
-                hour: _todoController.defaultTime.value.endTime.hour,
-                minute: _todoController.defaultTime.value.endTime.minute),
-            end: TimeOfDay(
-                hour: (_todoController.defaultTime.value.endTime.hour + 2) > 24
-                    ? 0
-                    : _todoController.defaultTime.value.endTime.hour + 2,
-                minute: _todoController.defaultTime.value.endTime.minute),
-            ticks: 24,
-            handlerRadius: 8,
-            strokeColor: Colors.orangeAccent[200],
-            ticksColor: Theme.of(context).primaryColor,
-            labelOffset: 30,
-            rotateLabels: false,
-            padding: 60,
-          );
-          _todoController.setTime(result);
-          _todoController.defaultValue(_todoController.getValue(
-              _todoController.currentDateTime.value, result));
-          print(_todoController.defaultValue.value);
-          // controller.listeners;
-          // controller.change(result);
-        },
-        child: Container(
-          height: Get.mediaQuery.size.height * 0.1,
-          decoration: BoxDecoration(
-              border: Border.all(), borderRadius: BorderRadius.circular(15)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Row(
-                children: [
-                  SizedBox(width: 20),
-                  Text(
-                      '${_todoController.defaultTime.value.startTime.hour} : '),
-                  Text('${_todoController.defaultTime.value.startTime.minute}'),
-                  // Text('${Get.parameters['title']}')
-                  // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.startTime.hour} : '),
-                  // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.startTime.minute}')
-                ],
-              ),
-              Row(
-                children: [
-                  Text('${_todoController.defaultTime.value.endTime.hour} : '),
-                  Text('${_todoController.defaultTime.value.endTime.minute}'),
-                  // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.endTime.hour} : '),
-                  // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.endTime.minute}')
-                ],
-              ),
-            ],
-          ),
+    return InkWell(
+      customBorder:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      onTap: () async {
+        TimeRange result = await showTimeRangePicker(
+          context: context,
+          clockRotation: 180,
+          paintingStyle: PaintingStyle.fill,
+          // backgroundColor: Colors.grey.withOpacity(0.2),
+          backgroundColor: Colors.yellow[100],
+          interval: Duration(minutes: 10),
+          labels: ['0', '3', '6', '9', '12', '15', '18', '21']
+              .asMap()
+              .entries
+              .map((e) {
+            return ClockLabel.fromIndex(idx: e.key, length: 8, text: e.value);
+          }).toList(),
+          snap: true,
+          start: TimeOfDay(
+              hour: editMode == true
+                  ? _todoController.defaultTime.value.startTime.hour
+                  : _todoController.defaultTime.value.endTime.hour,
+              minute: editMode == true
+                  ? _todoController.defaultTime.value.startTime.minute
+                  : _todoController.defaultTime.value.endTime.minute),
+          end: TimeOfDay(
+              hour: editMode == true
+                  ? _todoController.defaultTime.value.endTime.hour
+                  : (_todoController.defaultTime.value.endTime.hour + 2) > 24
+                      ? 0
+                      : _todoController.defaultTime.value.endTime.hour + 2,
+              minute: editMode == true
+                  ? _todoController.defaultTime.value.endTime.minute
+                  : _todoController.defaultTime.value.endTime.minute),
+          ticks: 24,
+          handlerRadius: 8,
+          strokeColor: Colors.orangeAccent[200],
+          ticksColor: Theme.of(context).primaryColor,
+          labelOffset: 30,
+          rotateLabels: false,
+          padding: 60,
+        );
+        _todoController.setTime(result);
+        _todoController.defaultValue(_todoController.getValue(
+            _todoController.currentDateTime.value, result));
+        print(_todoController.defaultValue.value);
+        // controller.listeners;
+        // controller.change(result);
+      },
+      child: Container(
+        height: Get.mediaQuery.size.height * 0.1,
+        decoration: BoxDecoration(
+            border: Border.all(), borderRadius: BorderRadius.circular(15)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Row(
+              children: [
+                // Text('${timeRange?.startTime.hour}'),
+                SizedBox(width: 20),
+                Text('${_todoController.defaultTime.value.startTime.hour} : '),
+                Text('${_todoController.defaultTime.value.startTime.minute}'),
+                // Text('${Get.parameters['title']}')
+                // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.startTime.hour} : '),
+                // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.startTime.minute}')
+              ],
+            ),
+            Row(
+              children: [
+                Text('${_todoController.defaultTime.value.endTime.hour} : '),
+                Text('${_todoController.defaultTime.value.endTime.minute}'),
+                // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.endTime.hour} : '),
+                // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.endTime.minute}')
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
 
-Widget printTodo() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 50,
-          mainAxisExtent: 30,
-        ),
-        itemCount: _todoController.todoTitleList.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              // _todoController.titleTextController.value.text(_todoController.defaultText);
-              _todoController.titleTextController.value.text =
-                  _todoController.todoTitleList[index].title;
-            },
-            child: Container(
-              padding: EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(15)),
-              child: Text('${_todoController.todoTitleList[index].title}'),
-            ),
-          );
-        }),
-  );
-}
+  Widget printTodo() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 50,
+            mainAxisExtent: 30,
+          ),
+          itemCount: _todoController.todoTitleList.length,
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: () {
+                // _todoController.titleTextController.value.text(_todoController.defaultText);
+                _todoController.titleTextController.value.text =
+                    _todoController.todoTitleList[index].title;
+              },
+              child: Container(
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(15)),
+                child: Text('${_todoController.todoTitleList[index].title}'),
+              ),
+            );
+          }),
+    );
+  }
 }

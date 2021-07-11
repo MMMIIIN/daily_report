@@ -1,7 +1,9 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
+import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:time_range_picker/time_range_picker.dart';
 
 class ListPage extends StatelessWidget {
   final TodoController _todoController = Get.put(TodoController());
@@ -49,6 +51,7 @@ class ListPage extends StatelessWidget {
                         size: 20,
                       ),
                       onPressed: () {
+                        _todoController.searchTerm('');
                         _todoController.searchTitleController.value.clear();
                       },
                     )
@@ -62,7 +65,6 @@ class ListPage extends StatelessWidget {
   Widget showListView() {
     final searchResult =
         _todoController.searchTitle(_todoController.searchTerm.value);
-
     return Expanded(
       child: ListView.builder(
         itemCount: searchResult.length,
@@ -71,7 +73,21 @@ class ListPage extends StatelessWidget {
           child: InkWell(
             customBorder:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            onTap: () {},
+            onTap: () {
+              _todoController.titleTextController.value.text =
+                  searchResult[index].title;
+              _todoController.setTime(
+                TimeRange(
+                  startTime: TimeOfDay(
+                      hour: searchResult[index].startHour,
+                      minute: searchResult[index].startMinute),
+                  endTime: TimeOfDay(
+                      hour: searchResult[index].endHour,
+                      minute: searchResult[index].endMinute),
+                ),
+              );
+              Get.to(AddTodo(editMode: true,));
+            },
             child: Container(
               padding: EdgeInsets.all(10),
               height: Get.mediaQuery.size.height * 0.08,
