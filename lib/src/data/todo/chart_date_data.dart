@@ -1,15 +1,16 @@
 class TestTodo {
-
-  TestTodo({required this.uid,
-    required this.ymd,
-    required this.title,
-    required this.startHour,
-    required this.startMinute,
-    required this.endHour,
-    required this.endMinute,
-    required this.value,
-    required this.colorIndex,
-    this.percent = 0.0});
+  TestTodo(
+      {required this.uid,
+      required this.ymd,
+      required this.title,
+      required this.startHour,
+      required this.startMinute,
+      required this.endHour,
+      required this.endMinute,
+      required this.value,
+      required this.colorIndex,
+      this.percent = 0.0,
+      this.hourMinute = ''});
 
   String uid;
   DateTime ymd;
@@ -21,25 +22,24 @@ class TestTodo {
   int value;
   int colorIndex;
   double percent;
+  String hourMinute;
 
-  factory TestTodo.fromJson(Map<String, dynamic> json) =>
-      TestTodo(
-          uid: json["uid"],
-          ymd: DateTime.utc(json["year"], json["month"], json["day"]),
-          title: json["title"],
-          startHour: json["startHour"],
-          startMinute: json["startMinute"],
-          endHour: json["endHour"],
-          endMinute: json["endMinute"],
-          value: json["value"],
-          colorIndex: json["color"]);
+  factory TestTodo.fromJson(Map<String, dynamic> json) => TestTodo(
+      uid: json["uid"],
+      ymd: DateTime.utc(json["year"], json["month"], json["day"]),
+      title: json["title"],
+      startHour: json["startHour"],
+      startMinute: json["startMinute"],
+      endHour: json["endHour"],
+      endMinute: json["endMinute"],
+      value: json["value"],
+      colorIndex: json["color"]);
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "uid": uid,
-        "year" : ymd.year,
-        "month" :ymd.month,
-        "day" : ymd.day,
+        "year": ymd.year,
+        "month": ymd.month,
+        "day": ymd.day,
         "title": title,
         "startHour": startHour,
         "startMinute": startMinute,
