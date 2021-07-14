@@ -18,10 +18,10 @@ class YMD {
 }
 
 class TodoController extends GetxController {
-  // RxInt currentIndex = 0.obs;
   final currentIndexList = [].obs;
   Rx<DateTime> currentDateTime = DateTime.now().obs;
   final todoList = <Todo>[].obs;
+  Rx<TodoUidList> loadTodoUidList = TodoUidList(todoList: []).obs;
   Rx<TodoUidList> todoUidList = TodoUidList(todoList: []).obs;
   int valueSum = 0;
   var titleTextController = TextEditingController().obs;
@@ -40,8 +40,22 @@ class TodoController extends GetxController {
 
   void todoUidLoad(String uid) async {
     print('uidLoad실행');
-    todoUidList(await TodoRepository.to.loadUidTodo(uid));
+    loadTodoUidList(await TodoRepository.to.loadUidTodo(uid));
     initTodoTitleList();
+    for(int i = 0; i < loadTodoUidList.value.todoList.length; i++){
+      todoUidCheckAdd(loadTodoUidList.value.todoList[i]);
+    }
+    print(todoUidList.value.todoList);
+  }
+
+  void todoUidCheckAdd(TestTodo data) {
+    var addIndex = todoUidList.value.todoList.indexWhere(
+        (element) => element.ymd == data.ymd && element.title == data.title);
+    if(addIndex != -1){
+      todoUidList.value.todoList[addIndex].value += data.value;
+    } else{
+      todoUidList.value.todoList.add(data);
+    }
   }
 
   void addTodo(String uid, YMD ymd, String title, TimeRange timeRange,
@@ -63,10 +77,8 @@ class TodoController extends GetxController {
 
   void setCurrentIndex(DateTime time) {
     currentIndexList.clear();
-    for (int i = 0; i < todoUidList.value.todoList.length; i++) {
-      if (todoUidList.value.todoList[i].ymd.year == time.year &&
-          todoUidList.value.todoList[i].ymd.month == time.month &&
-          todoUidList.value.todoList[i].ymd.day == time.day) {
+    for(int i =0; i < todoUidList.value.todoList.length; i++){
+      if(todoUidList.value.todoList[i].ymd == time){
         currentIndexList.add(i);
       }
     }
@@ -123,22 +135,24 @@ class TodoController extends GetxController {
 
   void initTodoTitleList() {
     print('initTitle실행 ');
-    for (int i = 0; i < todoUidList.value.todoList.length; i++) {
-      addTodoTitle(todoUidList.value.todoList[i].title);
+    for (int i = 0; i < loadTodoUidList.value.todoList.length; i++) {
+      addTodoTitle(loadTodoUidList.value.todoList[i].title);
     }
   }
 
   void addTodoTitle(String text) {
     var index = todoTitleList.indexWhere((element) => element.title == text);
-    if(index == -1){
+    if (index == -1) {
       todoTitleList.add(TodoTitle(title: text));
     }
   }
 
-  List<TestTodo> searchTitle(String text){
-     var result = todoUidList.value.todoList.where((element) => element.title.contains(text)).toList();
-     result.sort((a, b) => a.ymd.compareTo(b.ymd));
-     return result;
+  List<TestTodo> searchTitle(String text) {
+    var result = loadTodoUidList.value.todoList
+        .where((element) => element.title.contains(text))
+        .toList();
+    result.sort((a, b) => a.ymd.compareTo(b.ymd));
+    return result;
   }
 
   @override

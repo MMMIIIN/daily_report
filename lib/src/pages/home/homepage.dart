@@ -95,11 +95,11 @@ class _HomePageState extends State<HomePage> {
         // eventLoader: _todoController.getEventsForDay,
         eventLoader: (day) {
           for (int i = 0;
-              i < _todoController.todoUidList.value.todoList.length;
+              i < _todoController.loadTodoUidList.value.todoList.length;
               i++) {
-            if (day.year == _todoController.todoUidList.value.todoList[i].ymd.year &&
-                day.month == _todoController.todoUidList.value.todoList[i].ymd.month &&
-                day.day == _todoController.todoUidList.value.todoList[i].ymd.day) {
+            if (day.year == _todoController.loadTodoUidList.value.todoList[i].ymd.year &&
+                day.month == _todoController.loadTodoUidList.value.todoList[i].ymd.month &&
+                day.day == _todoController.loadTodoUidList.value.todoList[i].ymd.day) {
               return [Event('')];
             }
           }
@@ -144,7 +144,6 @@ class _HomePageState extends State<HomePage> {
                           } else {
                             touchedIndex = -1;
                           }
-                          // print(touchedIndex);
                         });
                       }),
                       startDegreeOffset: 270,
