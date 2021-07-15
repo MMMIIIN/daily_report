@@ -41,64 +41,15 @@ class _ChartPageState extends State<ChartPage> {
       child: Obx(
         () => Column(
           children: [
-            //   Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //     children: [
-            //       GestureDetector(
-            //         onTap: () {
-            //           print(DateTime.now());
-            //           print(_chartController.currentIndex.value);
-            //           _chartController.setCurrentTodoIndex(DateTime.now());
-            //         },
-            //         child: Container(
-            //           child: Text('${SelectDate.values[0].name}'),
-            //         ),
-            //       ),
-            //       GestureDetector(
-            //         onTap: () {
-            //           var date1 = DateTime(now.year, now.month, now.day - 3);
-            //           var date2 = DateTime(now.year, now.month, now.day + 3);
-            //           print(date1);
-            //           print(date2);
-            //           _chartController
-            //               .setIndexList(DateTimeRange(start: date1, end: date2));
-            //         },
-            //         child: Container(
-            //           child: Text('${SelectDate.values[1].name}'),
-            //         ),
-            //       ),
-            //       GestureDetector(
-            //         onTap: () {
-            //           var date1 = DateTime(now.year, now.month, 1);
-            //           var date2 = DateTime(
-            //               now.year, now.month, _chartController.getDay(now.month));
-            //           print(date1);
-            //           print(date2);
-            //           _chartController
-            //               .setIndexList(DateTimeRange(start: date1, end: date2));
-            //         },
-            //         child: Container(
-            //           child: Text('${SelectDate.values[2].name}'),
-            //         ),
-            //       ),
-            //       GestureDetector(
-            //         onTap: () {},
-            //         child: Container(
-            //           child: Text('${SelectDate.values[3].name}'),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
             MaterialButton(
               onPressed: () {
                 _chartController.setMode();
-                // _chartController.setHourMinute();
               },
               child: Icon(Icons.add),
             ),
             Flexible(
               flex: 3,
-              child: _chartController.chartPageList.value.todoList.isNotEmpty
+              child: _chartController.checkChartPageList.value.todoList.isNotEmpty
                   ? PieChart(
                       PieChartData(
                         pieTouchData:
@@ -121,21 +72,21 @@ class _ChartPageState extends State<ChartPage> {
                         sectionsSpace: 4,
                         centerSpaceRadius: 130,
                         sections: List<PieChartSectionData>.generate(
-                          _chartController.chartPageList.value.todoList.length,
+                          _chartController.checkChartPageList.value.todoList.length,
                           (index) {
                             final isTouched = index == touchedIndex;
                             final radius = isTouched ? 70.0 : 50.0;
                             final title = isTouched
                                 ? _chartController
-                                    .chartPageList.value.todoList[index].title
+                                    .checkChartPageList.value.todoList[index].title
                                 : '';
                             return PieChartSectionData(
                               title: title,
                               radius: radius,
                               value: _chartController
-                                  .chartPageList.value.todoList[index].value
+                                  .checkChartPageList.value.todoList[index].value
                                   .toDouble(),
-                              color: colorList[_chartController.chartPageList
+                              color: colorList[_chartController.checkChartPageList
                                   .value.todoList[index].colorIndex],
                             );
                           },
@@ -148,10 +99,10 @@ class _ChartPageState extends State<ChartPage> {
             Obx(
               () => Flexible(
                 flex: 1,
-                child: _chartController.chartPageList.value.todoList.isNotEmpty
+                child: _chartController.checkChartPageList.value.todoList.isNotEmpty
                     ? GridView.builder(
                         itemCount: _chartController
-                            .chartPageList.value.todoList.length,
+                            .checkChartPageList.value.todoList.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 50,
@@ -172,7 +123,7 @@ class _ChartPageState extends State<ChartPage> {
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: colorList[_chartController
-                                          .chartPageList
+                                          .checkChartPageList
                                           .value
                                           .todoList[index]
                                           .colorIndex]),
@@ -181,19 +132,19 @@ class _ChartPageState extends State<ChartPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      '${_chartController.chartPageList.value.todoList[index].title}',
+                                      '${_chartController.checkChartPageList.value.todoList[index].title}',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     _chartController.mode.value
                                         ? Text(
-                                            ' ${_chartController.chartPageList.value.todoList[index].percent} %',
+                                            ' ${_chartController.checkChartPageList.value.todoList[index].percent} %',
                                             style: TextStyle(fontSize: 13),
                                             overflow: TextOverflow.ellipsis,
                                           )
                                         : Text(
-                                            ' ${_chartController.chartPageList.value.todoList[index].hourMinute}')
+                                            ' ${_chartController.checkChartPageList.value.todoList[index].hourMinute}')
                                   ],
                                 ),
                                 // Text(_todoController.chartClassList[index].chartSectionData.value.toString()),

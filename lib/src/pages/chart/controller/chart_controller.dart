@@ -8,23 +8,46 @@ class ChartController extends GetxController {
   RxInt currentTodoIndex = 0.obs;
   RxInt currentIndex = 0.obs;
   Rx<TodoUidList> chartPageList = TodoUidList(todoList: []).obs;
+  Rx<TodoUidList> checkChartPageList = TodoUidList(todoList: []).obs;
+
   double totalSum = 0;
   RxBool mode = false.obs;
 
-  void makeMonthChart(int month) {
+  void makeMonthChart(DateTime dateTime) {
     chartPageList.value.todoList.clear();
-    chartPageList.value.todoList.addAll(_todoController
-        .loadTodoUidList.value.todoList
-        .where((element) => element.ymd.month == month));
+    chartPageList.value.todoList.addAll(
+        _todoController.loadTodoUidList.value.todoList.where((element) =>
+            element.ymd.year == dateTime.year &&
+            element.ymd.month == dateTime.month));
+    // setPercent();
+    // setHourMinute();
+    initChart();
+  }
+
+  void initChart() {
+    for (int i = 0; i < chartPageList.value.todoList.length; i++) {
+      makeChart(chartPageList.value.todoList[i]);
+    }
     sortChartList();
     setPercent();
     setHourMinute();
   }
 
+  void makeChart(TestTodo data) {
+    var index = checkChartPageList.value.todoList
+        .indexWhere((element) => element.title == data.title);
+    if (index != -1) {
+      checkChartPageList.value.todoList[index].value += data.value;
+    } else {
+      checkChartPageList.value.todoList.add(data);
+    }
+  }
+
   void setHourMinute() {
-    for(int i = 0; i < chartPageList.value.todoList.length; i++){
-      chartPageList.value.todoList[i].hourMinute = '${(chartPageList.value.todoList[i].value / 60).toInt()}h '
-      '${chartPageList.value.todoList[i].value % 60}m';
+    for (int i = 0; i < checkChartPageList.value.todoList.length; i++) {
+      checkChartPageList.value.todoList[i].hourMinute =
+          '${(checkChartPageList.value.todoList[i].value / 60).toInt()}h '
+          '${checkChartPageList.value.todoList[i].value % 60}m';
     }
   }
 
@@ -35,23 +58,24 @@ class ChartController extends GetxController {
 
   void setPercent() {
     totalSum = 0;
-    for (int i = 0; i < chartPageList.value.todoList.length; i++) {
-      totalSum += chartPageList.value.todoList[i].value;
+    for (int i = 0; i < checkChartPageList.value.todoList.length; i++) {
+      totalSum += checkChartPageList.value.todoList[i].value;
     }
-    for (int i = 0; i < chartPageList.value.todoList.length; i++) {
-      chartPageList.value.todoList[i].percent =
-          (chartPageList.value.todoList[i].value / totalSum * 100)
+    for (int i = 0; i < checkChartPageList.value.todoList.length; i++) {
+      checkChartPageList.value.todoList[i].percent =
+          (checkChartPageList.value.todoList[i].value / totalSum * 100)
               .roundToDouble();
     }
   }
 
   void sortChartList() {
-    chartPageList.value.todoList.sort((a, b) => b.value.compareTo(a.value));
+    checkChartPageList.value.todoList
+        .sort((a, b) => b.value.compareTo(a.value));
   }
 
   @override
   void onInit() {
     super.onInit();
-    makeMonthChart(DateTime.now().month);
+    makeMonthChart(DateTime.now());
   }
 }
