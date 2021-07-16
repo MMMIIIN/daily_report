@@ -1,0 +1,159 @@
+import 'package:daily_report/src/pages/home/homepage.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+class SelectDatePage extends StatefulWidget {
+  @override
+  _SelectDatePageState createState() => _SelectDatePageState();
+}
+
+class _SelectDatePageState extends State<SelectDatePage> {
+  DateTime? _rangeStart = DateTime.now();
+
+  DateTime? _rangeEnd = DateTime.now();
+
+  DateTime _focusedDay = DateTime.now();
+
+  DateTime? _selectedDay;
+
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+
+  var rangeSelectionMode = RangeSelectionMode.toggledOn;
+
+  bool rangeBool = false;
+
+  Widget tableCalendar() {
+    return TableCalendar(
+      calendarBuilders: CalendarBuilders(
+          selectedBuilder: (context, date, _) => Container(
+                margin: const EdgeInsets.all(4),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  date.day.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+          todayBuilder: (context, date, _) => Container(
+                margin: const EdgeInsets.all(4),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Color(0xff95afc0),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  date.day.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+          rangeStartBuilder: (context, date, _) => Container(
+                margin: const EdgeInsets.all(4),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Color(0xff34495e),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  date.day.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+          rangeEndBuilder: (context, date, _) => Container(
+                margin: const EdgeInsets.all(4),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Color(0xff34495e),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  date.day.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+          rangeHighlightBuilder: (context, date, _) => Container(
+                decoration: BoxDecoration(
+                  color: _ ? Color(0xff95afc0) : null,
+                ),
+              )),
+      firstDay: FirstDay,
+      lastDay: LastDay,
+      focusedDay: _focusedDay,
+      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+      rangeStartDay: _rangeStart,
+      rangeEndDay: _rangeEnd,
+      calendarFormat: _calendarFormat,
+      rangeSelectionMode: rangeSelectionMode,
+      onDaySelected: (selectedDay, focusedDay) {
+        if (!isSameDay(_selectedDay, selectedDay)) {
+          setState(() {
+            _selectedDay = selectedDay;
+            _focusedDay = focusedDay;
+            _rangeStart = null; // Important to clean those
+            _rangeEnd = null;
+            rangeSelectionMode = RangeSelectionMode.toggledOff;
+          });
+        }
+      },
+      onRangeSelected: (start, end, focusedDay) {
+        setState(() {
+          _selectedDay = null;
+          _focusedDay = focusedDay;
+          _rangeStart = start;
+          _rangeEnd = end;
+          rangeSelectionMode = RangeSelectionMode.toggledOn;
+        });
+      },
+      onFormatChanged: (format) {
+        if (_calendarFormat != format) {
+          setState(() {
+            _calendarFormat = format;
+          });
+        }
+      },
+      onPageChanged: (focusedDay) {
+        _focusedDay = focusedDay;
+      },
+    );
+  }
+
+  Widget twoButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        MaterialButton(
+            onPressed: () {
+              Get.back();
+            },
+            color: Color(0xff95afc0),
+            child: Text(
+              '취소',
+              style: TextStyle(color: Colors.white),
+            )),
+        MaterialButton(
+          onPressed: () {
+            Get.back();
+          },
+          color: rangeBool ? Color(0xff34495e) : Color(0xffecf0f1),
+          child: Text(
+            '확인',
+            style: TextStyle(color: Colors.white),
+          ),
+        )
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: SafeArea(
+        child: Column(
+          children: [
+            tableCalendar(),
+            twoButton(),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
+import 'package:daily_report/src/pages/chart/select_date_page.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,19 @@ class _ChartPageState extends State<ChartPage> {
     );
   }
 
+  Widget selectCondition() {
+    return InkWell(
+      onTap: (){
+        Get.to(SelectDatePage());
+      },
+      child: Container(
+        width: Get.mediaQuery.size.width * 0.6,
+        height: 50,
+        color: Colors.greenAccent,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -58,8 +72,9 @@ class _ChartPageState extends State<ChartPage> {
         () => Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                selectCondition(),
                 toggleButton(),
               ],
             ),

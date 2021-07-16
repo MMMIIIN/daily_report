@@ -23,7 +23,6 @@ final now = DateTime.now();
 final FirstDay = DateTime(2020, 1, 1);
 final LastDay = DateTime(now.year + 5, 12, 31);
 
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -58,29 +57,29 @@ class _HomePageState extends State<HomePage> {
     return Obx(
       () => TableCalendar(
         calendarBuilders: CalendarBuilders(
-            selectedBuilder: (context, date, events) => Container(
-                  margin: const EdgeInsets.all(4),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Text(
-                    date.day.toString(),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-            todayBuilder: (context, date, events) => Container(
-                  margin: const EdgeInsets.all(4),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Color(0xff95afc0),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Text(
-                    date.day.toString(),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )),
-
+          selectedBuilder: (context, date, events) => Container(
+            margin: const EdgeInsets.all(4),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(10)),
+            child: Text(
+              date.day.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          todayBuilder: (context, date, events) => Container(
+            margin: const EdgeInsets.all(4),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Color(0xff95afc0),
+                borderRadius: BorderRadius.circular(10)),
+            child: Text(
+              date.day.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
         firstDay: FirstDay,
         lastDay: LastDay,
         // focusedDay: _focusedDay,
@@ -97,9 +96,14 @@ class _HomePageState extends State<HomePage> {
           for (int i = 0;
               i < _todoController.loadTodoUidList.value.todoList.length;
               i++) {
-            if (day.year == _todoController.loadTodoUidList.value.todoList[i].ymd.year &&
-                day.month == _todoController.loadTodoUidList.value.todoList[i].ymd.month &&
-                day.day == _todoController.loadTodoUidList.value.todoList[i].ymd.day) {
+            if (day.year ==
+                    _todoController
+                        .loadTodoUidList.value.todoList[i].ymd.year &&
+                day.month ==
+                    _todoController
+                        .loadTodoUidList.value.todoList[i].ymd.month &&
+                day.day ==
+                    _todoController.loadTodoUidList.value.todoList[i].ymd.day) {
               return [Event('')];
             }
           }
@@ -127,46 +131,47 @@ class _HomePageState extends State<HomePage> {
       init: TodoController(),
       builder: (_) => Flexible(
         flex: 3,
-        child:
-        _todoController.currentIndexList.isNotEmpty
-                ? PieChart(
-                    PieChartData(
-                      pieTouchData:
-                          PieTouchData(touchCallback: (pieTouchResponse) {
-                        setState(() {
-                          final desiredTouch = pieTouchResponse.touchInput
-                                  is! PointerExitEvent &&
+        child: _todoController.currentIndexList.isNotEmpty
+            ? PieChart(
+                PieChartData(
+                  pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+                    setState(() {
+                      final desiredTouch =
+                          pieTouchResponse.touchInput is! PointerExitEvent &&
                               pieTouchResponse.touchInput is! PointerUpEvent;
-                          if (desiredTouch &&
-                              pieTouchResponse.touchedSection != null) {
-                            touchedIndex = pieTouchResponse
-                                .touchedSection!.touchedSectionIndex;
-                          } else {
-                            touchedIndex = -1;
-                          }
-                        });
-                      }),
-                      startDegreeOffset: 270,
-                      sectionsSpace: 4,
-                      centerSpaceRadius: 40,
-                      sections: List<PieChartSectionData>.generate(
-                          _todoController.currentIndexList.length,
-                          (index) {
-                        final isTouched = index == touchedIndex;
-                        final radius = isTouched ? 70.0 : 50.0;
-                        final title = isTouched
-                            ? _todoController.currentUidList.value.todoList[index].title
-                            : '';
-                        return PieChartSectionData(
-                          title: title,
-                          color: colorList[_todoController.currentUidList.value.todoList[index].colorIndex],
-                          value: _todoController.currentUidList.value.todoList[index].value.toDouble(),
-                          radius: radius,
-                        );
-                      }),
-                    ),
-                  )
-                : Container(),
+                      if (desiredTouch &&
+                          pieTouchResponse.touchedSection != null) {
+                        touchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                      } else {
+                        touchedIndex = -1;
+                      }
+                    });
+                  }),
+                  startDegreeOffset: 270,
+                  sectionsSpace: 4,
+                  centerSpaceRadius: 40,
+                  sections: List<PieChartSectionData>.generate(
+                      _todoController.currentIndexList.length, (index) {
+                    final isTouched = index == touchedIndex;
+                    final radius = isTouched ? 70.0 : 50.0;
+                    final title = isTouched
+                        ? _todoController
+                            .currentUidList.value.todoList[index].title
+                        : '';
+                    return PieChartSectionData(
+                      title: title,
+                      color: colorList[_todoController
+                          .currentUidList.value.todoList[index].colorIndex],
+                      value: _todoController
+                          .currentUidList.value.todoList[index].value
+                          .toDouble(),
+                      radius: radius,
+                    );
+                  }),
+                ),
+              )
+            : Container(),
       ),
     );
   }
@@ -198,14 +203,15 @@ class _HomePageState extends State<HomePage> {
                             height: 16,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: colorList[_todoController.currentUidList.value.todoList[index].colorIndex]
-                            ),
+                                color: colorList[_todoController.currentUidList
+                                    .value.todoList[index].colorIndex]),
                           ),
                           SizedBox(width: 4),
                           Row(
                             children: [
                               Text(
-                                _todoController.currentUidList.value.todoList[index].title,
+                                _todoController
+                                    .currentUidList.value.todoList[index].title,
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -232,7 +238,7 @@ class _HomePageState extends State<HomePage> {
       right: 30,
       child: FloatingActionButton(
         elevation: 2,
-        backgroundColor: Color(0xff686de0).withOpacity(0.8),
+        backgroundColor: Color(0xff34495e),
         onPressed: () {
           Get.to(
               AddTodo(
