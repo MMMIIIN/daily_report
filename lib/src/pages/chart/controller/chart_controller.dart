@@ -11,7 +11,7 @@ class ChartController extends GetxController {
   Rx<TodoUidList> checkChartPageList = TodoUidList(todoList: []).obs;
 
   double totalSum = 0;
-  RxBool mode = false.obs;
+  RxInt modeIndex = 0.obs;
 
   void makeMonthChart(DateTime dateTime) {
     chartPageList.value.todoList.clear();
@@ -51,9 +51,8 @@ class ChartController extends GetxController {
     }
   }
 
-  void setMode() {
-    mode(!mode.value);
-    print(mode.value);
+  void setMode(int index) {
+    modeIndex(index);
   }
 
   void setPercent() {

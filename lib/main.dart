@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Daily Report',
       theme: ThemeData(
-        primaryColor: Color(0xff686de0),
+        primaryColor: Color(0xff34495e),
         textTheme: TextTheme(
         )
       ),

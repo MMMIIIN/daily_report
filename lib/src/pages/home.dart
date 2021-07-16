@@ -44,14 +44,14 @@ class Home extends StatelessWidget {
               onTap: _homeController.changeTapMenu,
               showSelectedLabels: false,
               type: BottomNavigationBarType.shifting,
-              unselectedItemColor: Color(0xff686de0),
+              unselectedItemColor: Color(0xff34495e),
               selectedItemColor: Color(0xff95afc0),
               items: [
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.storage), label: 'list'),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.favorite), label: 'favorite'),
+                    icon: Icon(Icons.pie_chart), label: 'favorite'),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.settings), label: '설정'),
               ],

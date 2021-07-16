@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 enum SelectDate { TODAY, WEEK, MONTH, CUSTOM }
 
@@ -33,6 +34,21 @@ class _ChartPageState extends State<ChartPage> {
   var now = DateTime.now();
   int touchedIndex = -1;
 
+  Widget toggleButton() {
+    return ToggleSwitch(
+      minWidth: 40,
+      minHeight: 30,
+      totalSwitches: 2,
+      initialLabelIndex: _chartController.modeIndex.value,
+      labels: ['%', 'h'],
+      inactiveBgColor: Color(0xffecf0f1),
+      activeBgColor: [Color(0xff34495e)],
+      onToggle: (index) {
+        _chartController.setMode(index);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,15 +57,16 @@ class _ChartPageState extends State<ChartPage> {
       child: Obx(
         () => Column(
           children: [
-            MaterialButton(
-              onPressed: () {
-                _chartController.setMode();
-              },
-              child: Icon(Icons.add),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                toggleButton(),
+              ],
             ),
             Flexible(
               flex: 3,
-              child: _chartController.checkChartPageList.value.todoList.isNotEmpty
+              child: _chartController
+                      .checkChartPageList.value.todoList.isNotEmpty
                   ? PieChart(
                       PieChartData(
                         pieTouchData:
@@ -72,22 +89,26 @@ class _ChartPageState extends State<ChartPage> {
                         sectionsSpace: 4,
                         centerSpaceRadius: 130,
                         sections: List<PieChartSectionData>.generate(
-                          _chartController.checkChartPageList.value.todoList.length,
+                          _chartController
+                              .checkChartPageList.value.todoList.length,
                           (index) {
                             final isTouched = index == touchedIndex;
                             final radius = isTouched ? 70.0 : 50.0;
                             final title = isTouched
-                                ? _chartController
-                                    .checkChartPageList.value.todoList[index].title
+                                ? _chartController.checkChartPageList.value
+                                    .todoList[index].title
                                 : '';
                             return PieChartSectionData(
                               title: title,
                               radius: radius,
-                              value: _chartController
-                                  .checkChartPageList.value.todoList[index].value
+                              value: _chartController.checkChartPageList.value
+                                  .todoList[index].value
                                   .toDouble(),
-                              color: colorList[_chartController.checkChartPageList
-                                  .value.todoList[index].colorIndex],
+                              color: colorList[_chartController
+                                  .checkChartPageList
+                                  .value
+                                  .todoList[index]
+                                  .colorIndex],
                             );
                           },
                         ),
@@ -95,11 +116,11 @@ class _ChartPageState extends State<ChartPage> {
                     )
                   : Container(),
             ),
-
             Obx(
               () => Flexible(
                 flex: 1,
-                child: _chartController.checkChartPageList.value.todoList.isNotEmpty
+                child: _chartController
+                        .checkChartPageList.value.todoList.isNotEmpty
                     ? GridView.builder(
                         itemCount: _chartController
                             .checkChartPageList.value.todoList.length,
@@ -137,7 +158,7 @@ class _ChartPageState extends State<ChartPage> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    _chartController.mode.value
+                                    _chartController.modeIndex.value == 0
                                         ? Text(
                                             ' ${_chartController.checkChartPageList.value.todoList[index].percent} %',
                                             style: TextStyle(fontSize: 13),
