@@ -1,7 +1,11 @@
+import 'package:daily_report/src/pages/chart/controller/select_date_controller.dart';
 import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+final SelectDateController _selectDateController =
+    Get.put(SelectDateController());
 
 class SelectDatePage extends StatefulWidget {
   @override
@@ -10,18 +14,11 @@ class SelectDatePage extends StatefulWidget {
 
 class _SelectDatePageState extends State<SelectDatePage> {
   DateTime? _rangeStart = DateTime.now();
-
   DateTime? _rangeEnd = DateTime.now();
-
   DateTime _focusedDay = DateTime.now();
-
   DateTime? _selectedDay;
-
   CalendarFormat _calendarFormat = CalendarFormat.month;
-
   var rangeSelectionMode = RangeSelectionMode.toggledOn;
-
-  bool rangeBool = false;
 
   Widget tableCalendar() {
     return TableCalendar(
@@ -102,6 +99,8 @@ class _SelectDatePageState extends State<SelectDatePage> {
           _rangeEnd = end;
           rangeSelectionMode = RangeSelectionMode.toggledOn;
         });
+        _selectDateController.setRangeTime(
+            _rangeStart ?? DateTime.now(), _rangeEnd ?? DateTime.now());
       },
       onFormatChanged: (format) {
         if (_calendarFormat != format) {
@@ -131,9 +130,13 @@ class _SelectDatePageState extends State<SelectDatePage> {
             )),
         MaterialButton(
           onPressed: () {
-            Get.back();
+            if (_selectDateController.rangeBool.value) {
+              Get.back();
+            }
           },
-          color: rangeBool ? Color(0xff34495e) : Color(0xffecf0f1),
+          color: _selectDateController.rangeBool.value
+              ? Color(0xff34495e)
+              : Color(0xffecf0f1),
           child: Text(
             '확인',
             style: TextStyle(color: Colors.white),
@@ -147,11 +150,13 @@ class _SelectDatePageState extends State<SelectDatePage> {
   Widget build(BuildContext context) {
     return Material(
       child: SafeArea(
-        child: Column(
-          children: [
-            tableCalendar(),
-            twoButton(),
-          ],
+        child: Obx(
+          () => Column(
+            children: [
+              tableCalendar(),
+              twoButton(),
+            ],
+          ),
         ),
       ),
     );
