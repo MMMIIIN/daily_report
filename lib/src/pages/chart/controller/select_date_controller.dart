@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 
 class SelectDateController extends GetxController{
   RxBool rangeBool = false.obs;
-  Rx<DateTime> rangeStart = DateTime.now().obs;
-  Rx<DateTime> rangeEnd = DateTime.now().obs;
+  Rx<DateTime> rangeStart = DateTime(DateTime.now().year, DateTime.now().month, 1).obs;
+  Rx<DateTime> rangeEnd = DateTime(DateTime.now().year, DateTime.now().month + 1, 0).obs;
 
   void setRangeTime(DateTime startTime, DateTime endTime){
     rangeStart(startTime);

@@ -19,8 +19,6 @@ class ChartController extends GetxController {
         _todoController.loadTodoUidList.value.todoList.where((element) =>
             element.ymd.year == dateTime.year &&
             element.ymd.month == dateTime.month));
-    // setPercent();
-    // setHourMinute();
     initChart();
   }
 
@@ -62,14 +60,30 @@ class ChartController extends GetxController {
     }
     for (int i = 0; i < checkChartPageList.value.todoList.length; i++) {
       checkChartPageList.value.todoList[i].percent =
-          (checkChartPageList.value.todoList[i].value / totalSum * 100)
-              .roundToDouble();
+          (checkChartPageList.value.todoList[i].value / totalSum * 100);
     }
   }
 
   void sortChartList() {
     checkChartPageList.value.todoList
         .sort((a, b) => b.value.compareTo(a.value));
+  }
+
+  void makeDateRange(DateTime startTime, DateTime endTime) {
+    chartPageList.value.todoList.clear();
+    var range = endTime.difference(startTime).inDays + 1;
+    for (int i = 0; i < range; i++) {
+      chartPageList.value.todoList.addAll(
+      _todoController.todoUidList.value.todoList
+          .where((element) => element.ymd == startTime.add(Duration(days: i))));
+    }
+    print(chartPageList.value.todoList);
+    checkChartPageList.value.todoList.clear();
+    for(int i = 0; i < chartPageList.value.todoList.length; i++){
+      makeChart(chartPageList.value.todoList[i]);
+    }
+    setPercent();
+    sortChartList();
   }
 
   @override

@@ -145,7 +145,7 @@ class _ChartPageState extends State<ChartPage> {
                         ),
                         _chartController.modeIndex.value == 0
                             ? Text(
-                                ' ${_chartController.checkChartPageList.value.todoList[index].percent} %',
+                                ' ${_chartController.checkChartPageList.value.todoList[index].percent.toStringAsFixed(1)} %',
                                 style: TextStyle(fontSize: 13),
                                 overflow: TextOverflow.ellipsis,
                               )

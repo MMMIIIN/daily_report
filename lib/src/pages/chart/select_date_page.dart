@@ -1,4 +1,6 @@
+import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/select_date_controller.dart';
+import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 final SelectDateController _selectDateController =
     Get.put(SelectDateController());
+final ChartController _chartController = Get.put(ChartController());
 
 class SelectDatePage extends StatefulWidget {
   @override
@@ -131,7 +134,10 @@ class _SelectDatePageState extends State<SelectDatePage> {
         MaterialButton(
           onPressed: () {
             if (_selectDateController.rangeBool.value) {
-              Get.back();
+              _chartController.makeDateRange(
+                  _selectDateController.rangeStart.value,
+                  _selectDateController.rangeEnd.value);
+              Get.off(Home());
             }
           },
           color: _selectDateController.rangeBool.value
