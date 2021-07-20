@@ -123,9 +123,7 @@ class AddTodo extends StatelessWidget {
                               _todoController.defaultValue.value,
                               _todoController.selectColorIndex.value);
                           _todoController.titleTextController.value.clear();
-                          // Get.back();
-                          Get.off(Home());
-
+                          Get.off(() => Home());
                         },
                         color: Colors.white,
                         child: Text('ADD'),

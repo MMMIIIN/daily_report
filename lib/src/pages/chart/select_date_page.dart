@@ -1,3 +1,4 @@
+import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/select_date_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
@@ -137,7 +138,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
               _chartController.makeDateRange(
                   _selectDateController.rangeStart.value,
                   _selectDateController.rangeEnd.value);
-              Get.off(Home());
+              Get.off(() => Home());
             }
           },
           color: _selectDateController.rangeBool.value

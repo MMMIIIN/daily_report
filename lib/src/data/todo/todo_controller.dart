@@ -21,11 +21,11 @@ class TodoController extends GetxController {
   final currentIndexList = [].obs;
   Rx<DateTime> currentDateTime = DateTime.now().obs;
   final todoList = <Todo>[].obs;
-  Rx<TodoUidList> loadTodoUidList = TodoUidList(todoList: []).obs;
-  Rx<TodoUidList> todoUidList = TodoUidList(todoList: []).obs;
+  final Rx<TodoUidList> loadTodoUidList = TodoUidList(todoList: []).obs;
+  final Rx<TodoUidList> todoUidList = TodoUidList(todoList: []).obs;
+  Rx<TodoUidList> currentUidList = TodoUidList(todoList: []).obs;
   int valueSum = 0;
   var titleTextController = TextEditingController().obs;
-  Rx<TodoUidList> currentUidList = TodoUidList(todoList: []).obs;
   final todoTitleList = <TodoTitle>[].obs;
 
   var searchTitleController = TextEditingController().obs;
@@ -39,21 +39,22 @@ class TodoController extends GetxController {
   RxInt selectColorIndex = 0.obs;
 
   void todoUidLoad(String uid) async {
-    print('uidLoad실행');
-    loadTodoUidList(await TodoRepository.to.loadUidTodo(uid));
-    initTodoTitleList();
-    for(int i = 0; i < loadTodoUidList.value.todoList.length; i++){
-      todoUidCheckAdd(loadTodoUidList.value.todoList[i]);
+    if (loadTodoUidList.value.todoList.isEmpty) {
+      print('uidLoad실행');
+      loadTodoUidList(await TodoRepository.to.loadUidTodo(uid));
+      initTodoTitleList();
+      for (int i = 0; i < loadTodoUidList.value.todoList.length; i++) {
+        todoUidCheckAdd(loadTodoUidList.value.todoList[i]);
+      }
     }
-    print(todoUidList.value.todoList);
   }
 
   void todoUidCheckAdd(TestTodo data) {
     var addIndex = todoUidList.value.todoList.indexWhere(
         (element) => element.ymd == data.ymd && element.title == data.title);
-    if(addIndex != -1){
+    if (addIndex != -1) {
       todoUidList.value.todoList[addIndex].value += data.value;
-    } else{
+    } else {
       todoUidList.value.todoList.add(data);
     }
   }
@@ -77,8 +78,8 @@ class TodoController extends GetxController {
 
   void setCurrentIndex(DateTime time) {
     currentIndexList.clear();
-    for(int i =0; i < todoUidList.value.todoList.length; i++){
-      if(todoUidList.value.todoList[i].ymd == time){
+    for (int i = 0; i < todoUidList.value.todoList.length; i++) {
+      if (todoUidList.value.todoList[i].ymd == time) {
         currentIndexList.add(i);
       }
     }
@@ -114,10 +115,6 @@ class TodoController extends GetxController {
         .sort((a, b) => a.time.startTime.hour.compareTo(b.time.startTime.hour));
   }
 
-  // void sortChartList() {
-  //   chartClassList.sort((a, b) => b.percent.compareTo(a.percent));
-  // }
-
   double getValue(DateTime _datetime, TimeRange time) {
     var time1 = DateTime(_datetime.year, _datetime.month, _datetime.day,
         time.startTime.hour, time.startTime.minute);
@@ -127,9 +124,6 @@ class TodoController extends GetxController {
     if (result < 0) {
       result += 1440;
     }
-    print('time1 = $time1');
-    print('time2 = $time2');
-    print('result = $result');
     return result.toDouble();
   }
 
@@ -153,11 +147,5 @@ class TodoController extends GetxController {
         .toList();
     result.sort((a, b) => a.ymd.compareTo(b.ymd));
     return result;
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    // TODO: implement onInit
   }
 }

@@ -39,7 +39,7 @@ class _ChartPageState extends State<ChartPage> {
   Widget selectCondition() {
     return InkWell(
       onTap: () {
-        Get.to(SelectDatePage());
+        Get.to(() => SelectDatePage());
       },
       child: Container(
         width: Get.mediaQuery.size.width * 0.6,
@@ -77,7 +77,6 @@ class _ChartPageState extends State<ChartPage> {
                   } else {
                     touchedIndex = -1;
                   }
-                  // print(touchedIndex);
                 });
               }),
               startDegreeOffset: 270,
@@ -117,15 +116,12 @@ class _ChartPageState extends State<ChartPage> {
               crossAxisCount: 2,
               crossAxisSpacing: 50,
               mainAxisExtent: 30,
-              // mainAxisSpacing: 5,
             ),
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       width: 16,
@@ -153,7 +149,6 @@ class _ChartPageState extends State<ChartPage> {
                                 ' ${_chartController.checkChartPageList.value.todoList[index].hourMinute}')
                       ],
                     ),
-                    // Text(_todoController.chartClassList[index].chartSectionData.value.toString()),
                   ],
                 ),
               ),
