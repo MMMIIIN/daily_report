@@ -17,6 +17,10 @@ class YMD {
   YMD({required this.year, required this.month, required this.day});
 }
 
+final now = DateTime.now();
+final FirstDay = DateTime(2020, 1, 1);
+final LastDay = DateTime(now.year + 5, 12, 31);
+
 class TodoController extends GetxController {
   final currentIndexList = [].obs;
   Rx<DateTime> currentDateTime = DateTime.now().obs;
@@ -141,11 +145,21 @@ class TodoController extends GetxController {
     }
   }
 
+  Rx<TodoUidList> searchTodoList = TodoUidList(todoList: []).obs;
+
   List<TestTodo> searchTitle(String text) {
+    searchTodoList.value.todoList.clear();
     var result = loadTodoUidList.value.todoList
         .where((element) => element.title.contains(text))
         .toList();
     result.sort((a, b) => a.ymd.compareTo(b.ymd));
+    searchTodoList.value.todoList.addAll(result);
     return result;
+  }
+
+  void setSearchList() {
+    searchTodoList.value.todoList.clear();
+    searchTodoList.value.todoList.addAll(loadTodoUidList.value.todoList
+        .where((element) => element.ymd == currentDateTime.value));
   }
 }

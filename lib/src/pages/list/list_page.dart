@@ -3,10 +3,21 @@ import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
-class ListPage extends StatelessWidget {
-  final TodoController _todoController = Get.put(TodoController());
+class ListPage extends StatefulWidget {
+  @override
+  _ListPageState createState() => _ListPageState();
+}
+
+final TodoController _todoController = Get.put(TodoController());
+
+class _ListPageState extends State<ListPage> {
+  int touchedIndex = -1;
+  DateTime _focusedDay = _todoController.currentDateTime.value;
+  DateTime _selectedDay = _todoController.currentDateTime.value;
+  CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +31,10 @@ class ListPage extends StatelessWidget {
           () => Column(
             children: [
               searchWidget(),
+              showCalendar(),
+              Divider(
+                height: 30.0,
+              ),
               showListView(),
             ],
           ),
@@ -62,12 +77,69 @@ class ListPage extends StatelessWidget {
     );
   }
 
+  Widget showCalendar() {
+    return TableCalendar(
+      calendarBuilders: CalendarBuilders(
+        selectedBuilder: (context, date, events) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        todayBuilder: (context, date, events) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Color(0xff95afc0),
+              borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+      firstDay: FirstDay,
+      lastDay: LastDay,
+      focusedDay: _todoController.currentDateTime.value,
+      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+      calendarFormat: _calendarFormat,
+      calendarStyle: CalendarStyle(
+        weekendTextStyle: TextStyle(color: Colors.red),
+        holidayTextStyle: TextStyle(color: Colors.blue),
+      ),
+      eventLoader: (day) {
+        for (var todo in _todoController.searchTodoList.value.todoList) {
+          if(day == todo.ymd){
+            return [Container()];
+          }
+        }
+        return [];
+      },
+      onDaySelected: _onDaySelected,
+      onFormatChanged: (format) {
+        if (_calendarFormat != format) {
+          setState(() {
+            _calendarFormat = format;
+          });
+        }
+      },
+      onPageChanged: (focusedDay) {
+        _todoController.currentDateTime(focusedDay);
+      },
+    );
+  }
+
   Widget showListView() {
     final searchResult =
         _todoController.searchTitle(_todoController.searchTerm.value);
     return Expanded(
       child: ListView.builder(
-        itemCount: searchResult.length,
+        itemCount: _todoController.searchTodoList.value.todoList.length,
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: InkWell(
@@ -86,7 +158,9 @@ class ListPage extends StatelessWidget {
                       minute: searchResult[index].endMinute),
                 ),
               );
-              Get.to(AddTodo(editMode: true,));
+              Get.to(AddTodo(
+                editMode: true,
+              ));
             },
             child: Container(
               padding: EdgeInsets.all(10),
@@ -119,5 +193,18 @@ class ListPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_selectedDay, selectedDay)) {
+      setState(() {
+        _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
+        _todoController.currentDateTime(selectedDay);
+        _todoController.setCurrentIndex(_selectedDay);
+        _todoController.currentDateTime(_selectedDay);
+        _todoController.setSearchList();
+      });
+    }
   }
 }

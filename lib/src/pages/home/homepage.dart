@@ -19,10 +19,6 @@ class Event {
   String toString() => title;
 }
 
-final now = DateTime.now();
-final FirstDay = DateTime(2020, 1, 1);
-final LastDay = DateTime(now.year + 5, 12, 31);
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -31,10 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int touchedIndex = -1;
   CalendarFormat _calendarFormat = CalendarFormat.month;
-
   DateTime _focusedDay = _todoController.currentDateTime.value;
-
-  // DateTime _selectedDay = now;
   DateTime _selectedDay = _todoController.currentDateTime.value;
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
