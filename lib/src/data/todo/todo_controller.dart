@@ -32,9 +32,6 @@ class TodoController extends GetxController {
   var titleTextController = TextEditingController().obs;
   final todoTitleList = <TodoTitle>[].obs;
 
-  var searchTitleController = TextEditingController().obs;
-  RxString searchTerm = ''.obs;
-
   Rx<TimeRange> defaultTime = TimeRange(
           startTime: TimeOfDay(hour: 0, minute: 0),
           endTime: TimeOfDay(hour: 0, minute: 0))
@@ -143,23 +140,5 @@ class TodoController extends GetxController {
     if (index == -1) {
       todoTitleList.add(TodoTitle(title: text));
     }
-  }
-
-  Rx<TodoUidList> searchTodoList = TodoUidList(todoList: []).obs;
-
-  List<TestTodo> searchTitle(String text) {
-    searchTodoList.value.todoList.clear();
-    var result = loadTodoUidList.value.todoList
-        .where((element) => element.title.contains(text))
-        .toList();
-    result.sort((a, b) => a.ymd.compareTo(b.ymd));
-    searchTodoList.value.todoList.addAll(result);
-    return result;
-  }
-
-  void setSearchList() {
-    searchTodoList.value.todoList.clear();
-    searchTodoList.value.todoList.addAll(loadTodoUidList.value.todoList
-        .where((element) => element.ymd == currentDateTime.value));
   }
 }

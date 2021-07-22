@@ -10,15 +10,6 @@ import 'package:table_calendar/table_calendar.dart';
 
 final TodoController _todoController = Get.put(TodoController());
 
-class Event {
-  final String title;
-
-  const Event(this.title);
-
-  @override
-  String toString() => title;
-}
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -75,34 +66,21 @@ class _HomePageState extends State<HomePage> {
         ),
         firstDay: FirstDay,
         lastDay: LastDay,
-        // focusedDay: _focusedDay,
         focusedDay: _todoController.currentDateTime.value,
         selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
         calendarFormat: _calendarFormat,
         calendarStyle: CalendarStyle(
-          // outsideDaysVisible: false,
           weekendTextStyle: TextStyle(color: Colors.red),
           holidayTextStyle: TextStyle(color: Colors.blue),
         ),
-        // eventLoader: _todoController.getEventsForDay,
         eventLoader: (day) {
-          for (int i = 0;
-              i < _todoController.loadTodoUidList.value.todoList.length;
-              i++) {
-            if (day.year ==
-                    _todoController
-                        .loadTodoUidList.value.todoList[i].ymd.year &&
-                day.month ==
-                    _todoController
-                        .loadTodoUidList.value.todoList[i].ymd.month &&
-                day.day ==
-                    _todoController.loadTodoUidList.value.todoList[i].ymd.day) {
-              return [Event('')];
+          for (var todo in _todoController.loadTodoUidList.value.todoList) {
+            if(day == todo.ymd){
+              return [Container()];
             }
           }
           return [];
         },
-        // locale: 'ko-KR',
         onDaySelected: _onDaySelected,
         onFormatChanged: (format) {
           if (_calendarFormat != format) {

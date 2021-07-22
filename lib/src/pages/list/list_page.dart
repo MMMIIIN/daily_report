@@ -1,6 +1,7 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
+import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -12,11 +13,11 @@ class ListPage extends StatefulWidget {
 }
 
 final TodoController _todoController = Get.put(TodoController());
+final ListController _listController = Get.put(ListController());
 
 class _ListPageState extends State<ListPage> {
   int touchedIndex = -1;
   DateTime _focusedDay = _todoController.currentDateTime.value;
-  DateTime _selectedDay = _todoController.currentDateTime.value;
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
 
   @override
@@ -49,25 +50,27 @@ class _ListPageState extends State<ListPage> {
       child: Container(
         padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            // border: Border.all()
-            color: Colors.black12),
+            borderRadius: BorderRadius.circular(15), color: Colors.black12),
         child: TextField(
           onChanged: (text) {
-            _todoController.searchTerm(text);
+            _listController.searchTerm(text);
+            _listController.searchTitle(text);
+            if(text.isNotEmpty){
+              _listController.selectedDays.clear();
+            }
           },
-          controller: _todoController.searchTitleController.value,
+          controller: _listController.searchTitleController.value,
           decoration: InputDecoration(
               prefixIcon: Icon(Icons.search),
-              suffixIcon: _todoController.searchTerm.value != ''
+              suffixIcon: _listController.searchTerm.value != ''
                   ? IconButton(
                       icon: Icon(
                         Icons.cancel_outlined,
                         size: 20,
                       ),
                       onPressed: () {
-                        _todoController.searchTerm('');
-                        _todoController.searchTitleController.value.clear();
+                        _listController.searchTerm('');
+                        _listController.searchTitleController.value.clear();
                       },
                     )
                   : null,
@@ -106,20 +109,31 @@ class _ListPageState extends State<ListPage> {
       firstDay: FirstDay,
       lastDay: LastDay,
       focusedDay: _todoController.currentDateTime.value,
-      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+      selectedDayPredicate: (day) {
+        return _listController.selectedDays.contains(day);
+      },
       calendarFormat: _calendarFormat,
       calendarStyle: CalendarStyle(
         weekendTextStyle: TextStyle(color: Colors.red),
         holidayTextStyle: TextStyle(color: Colors.blue),
       ),
-      eventLoader: (day) {
-        for (var todo in _todoController.searchTodoList.value.todoList) {
-          if(day == todo.ymd){
-            return [Container()];
-          }
-        }
-        return [];
-      },
+      eventLoader: _listController.searchTerm.isEmpty
+          ? (day) {
+              for (var todo in _todoController.loadTodoUidList.value.todoList) {
+                if (day == todo.ymd) {
+                  return [Container()];
+                }
+              }
+              return [];
+            }
+          : (day) {
+              for (var todo in _listController.searchTodoList.value.todoList) {
+                if (day == todo.ymd) {
+                  return [Container()];
+                }
+              }
+              return [];
+            },
       onDaySelected: _onDaySelected,
       onFormatChanged: (format) {
         if (_calendarFormat != format) {
@@ -135,11 +149,11 @@ class _ListPageState extends State<ListPage> {
   }
 
   Widget showListView() {
-    final searchResult =
-        _todoController.searchTitle(_todoController.searchTerm.value);
     return Expanded(
       child: ListView.builder(
-        itemCount: _todoController.searchTodoList.value.todoList.length,
+        itemCount: _listController.searchTodoList.value.todoList.isEmpty
+            ? _listController.searchResult.length
+            : _listController.searchTodoList.value.todoList.length,
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: InkWell(
@@ -147,15 +161,31 @@ class _ListPageState extends State<ListPage> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             onTap: () {
               _todoController.titleTextController.value.text =
-                  searchResult[index].title;
+                  _listController.searchResult[index].title;
               _todoController.setTime(
                 TimeRange(
                   startTime: TimeOfDay(
-                      hour: searchResult[index].startHour,
-                      minute: searchResult[index].startMinute),
+                      hour:
+                          _listController.searchTodoList.value.todoList.isEmpty
+                              ? _listController.searchResult[index].startHour
+                              : _listController.searchTodoList.value
+                                  .todoList[index].startHour,
+                      minute:
+                          _listController.searchTodoList.value.todoList.isEmpty
+                              ? _listController.searchResult[index].startMinute
+                              : _listController.searchTodoList.value
+                                  .todoList[index].startMinute),
                   endTime: TimeOfDay(
-                      hour: searchResult[index].endHour,
-                      minute: searchResult[index].endMinute),
+                      hour:
+                          _listController.searchTodoList.value.todoList.isEmpty
+                              ? _listController.searchResult[index].endHour
+                              : _listController
+                                  .searchTodoList.value.todoList[index].endHour,
+                      minute:
+                          _listController.searchTodoList.value.todoList.isEmpty
+                              ? _listController.searchResult[index].endMinute
+                              : _listController.searchTodoList.value
+                                  .todoList[index].endMinute),
                 ),
               );
               Get.to(AddTodo(
@@ -166,24 +196,34 @@ class _ListPageState extends State<ListPage> {
               padding: EdgeInsets.all(10),
               height: Get.mediaQuery.size.height * 0.08,
               decoration: BoxDecoration(
-                  color: colorList[searchResult[index].colorIndex],
+                  color: _listController.searchTodoList.value.todoList.isEmpty
+                      ? colorList[
+                          _listController.searchResult[index].colorIndex]
+                      : colorList[_listController
+                          .searchTodoList.value.todoList[index].colorIndex],
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all()),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text('${searchResult[index].ymd.year}.'
-                      '${searchResult[index].ymd.month}.'
-                      '${searchResult[index].ymd.day}'),
-                  Text(searchResult[index].title),
+                  Text(
+                      '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].ymd.year : _listController.searchTodoList.value.todoList[index].ymd.year}.'
+                      '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].ymd.month : _listController.searchTodoList.value.todoList[index].ymd.month}.'
+                      '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].ymd.day : _listController.searchTodoList.value.todoList[index].ymd.day}'),
+                  Text(_listController.searchTodoList.value.todoList.isEmpty
+                      ? _listController.searchResult[index].title
+                      : _listController
+                          .searchTodoList.value.todoList[index].title),
                   SizedBox(width: 10),
                   Row(
                     children: [
-                      Text('${searchResult[index].startHour} : '
-                          '${searchResult[index].startMinute}'),
+                      Text(
+                          '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].startHour : _listController.searchTodoList.value.todoList[index].startHour} : '
+                          '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].startMinute : _listController.searchTodoList.value.todoList[index].startMinute}'),
                       SizedBox(width: 20),
-                      Text('${searchResult[index].endHour} : '
-                          '${searchResult[index].endMinute}')
+                      Text(
+                          '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].endHour : _listController.searchTodoList.value.todoList[index].endHour} : '
+                          '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].endMinute : _listController.searchTodoList.value.todoList[index].endMinute}')
                     ],
                   )
                 ],
@@ -196,15 +236,18 @@ class _ListPageState extends State<ListPage> {
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    if (!isSameDay(_selectedDay, selectedDay)) {
-      setState(() {
-        _selectedDay = selectedDay;
-        _focusedDay = focusedDay;
-        _todoController.currentDateTime(selectedDay);
-        _todoController.setCurrentIndex(_selectedDay);
-        _todoController.currentDateTime(_selectedDay);
-        _todoController.setSearchList();
-      });
-    }
+    setState(() {
+      _focusedDay = focusedDay;
+      if (_listController.selectedDays.contains(selectedDay)) {
+        _listController.selectedDays.remove(selectedDay);
+      } else {
+        _listController.selectedDays.add(selectedDay);
+      }
+      _listController.setSearchTodoList(_listController.selectedDays);
+      _listController.searchTitleController.value.clear();
+      if(_listController.selectedDays.isEmpty){
+        _listController.searchTitle('');
+      }
+    });
   }
 }
