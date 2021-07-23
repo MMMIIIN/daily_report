@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final TodoController _todoController = Get.put(TodoController());
@@ -20,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = _todoController.currentDateTime.value;
   DateTime _selectedDay = _todoController.currentDateTime.value;
+  bool isDarkMode = GetStorage().read('isDarkMode');
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
@@ -41,29 +43,41 @@ class _HomePageState extends State<HomePage> {
     return Obx(
       () => TableCalendar(
         calendarBuilders: CalendarBuilders(
-          selectedBuilder: (context, date, events) => Container(
-            margin: const EdgeInsets.all(4),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(10)),
-            child: Text(
-              date.day.toString(),
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          todayBuilder: (context, date, events) => Container(
-            margin: const EdgeInsets.all(4),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: Color(0xff95afc0),
-                borderRadius: BorderRadius.circular(10)),
-            child: Text(
-              date.day.toString(),
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
+            selectedBuilder: (context, date, events) => Container(
+                  margin: const EdgeInsets.all(4),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: isDarkMode
+                          ? Colors.grey
+                          : Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Text(
+                    date.day.toString(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+            todayBuilder: (context, date, events) => Container(
+                  margin: const EdgeInsets.all(4),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Color(0xff95afc0),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Text(
+                    date.day.toString(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+            markerBuilder: (context, date, _) {
+              if (isDarkMode && _.isNotEmpty) {
+                return Container(
+                  width: 7,
+                  height: 7,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                );
+              }
+            }),
         firstDay: FirstDay,
         lastDay: LastDay,
         focusedDay: _todoController.currentDateTime.value,
@@ -75,7 +89,7 @@ class _HomePageState extends State<HomePage> {
         ),
         eventLoader: (day) {
           for (var todo in _todoController.loadTodoUidList.value.todoList) {
-            if(day == todo.ymd){
+            if (day == todo.ymd) {
               return [Container()];
             }
           }
@@ -203,27 +217,30 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget showAddIcon() {
-    return Positioned(
-      bottom: 110,
-      right: 30,
-      child: FloatingActionButton(
-        elevation: 2,
-        backgroundColor: Color(0xff34495e),
-        onPressed: () {
-          Get.to(
-              AddTodo(
-                uid: FirebaseAuth.instance.currentUser!.uid,
-                year: _selectedDay.year,
-                month: _selectedDay.month,
-                day: _selectedDay.day,
-              ),
-              transition: Transition.fadeIn);
-        },
-        child: Icon(Icons.add),
-      ),
-    );
-  }
+  // Widget showAddIcon() {
+  //   return Positioned(
+  //     bottom: 110,
+  //     right: 30,
+  //     child: FloatingActionButton(
+  //       elevation: 2,
+  //       backgroundColor: Color(0xff34495e),
+  //       onPressed: () {
+  //         Get.to(
+  //             AddTodo(
+  //               uid: FirebaseAuth.instance.currentUser!.uid,
+  //               year: _selectedDay.year,
+  //               month: _selectedDay.month,
+  //               day: _selectedDay.day,
+  //             ),
+  //             transition: Transition.fadeIn);
+  //       },
+  //       child: Icon(
+  //         Icons.add,
+  //         color: isDarkMode ? Colors.white : Theme.of(context).primaryColor,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                 showChartList(),
               ],
             ),
-            showAddIcon(),
+            // showAddIcon(),
           ],
         ),
       ),
