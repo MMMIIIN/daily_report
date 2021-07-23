@@ -39,7 +39,7 @@ class _ChartPageState extends State<ChartPage> {
   Widget selectCondition() {
     return InkWell(
       onTap: () {
-        Get.to(() => SelectDatePage());
+        Get.off(() => SelectDatePage());
       },
       child: Container(
         width: Get.mediaQuery.size.width * 0.6,

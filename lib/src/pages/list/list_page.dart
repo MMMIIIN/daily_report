@@ -55,7 +55,7 @@ class _ListPageState extends State<ListPage> {
           onChanged: (text) {
             _listController.searchTerm(text);
             _listController.searchTitle(text);
-            if(text.isNotEmpty){
+            if (text.isNotEmpty) {
               _listController.selectedDays.clear();
             }
           },
@@ -160,8 +160,10 @@ class _ListPageState extends State<ListPage> {
             customBorder:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             onTap: () {
-              _todoController.titleTextController.value.text =
-                  _listController.searchResult[index].title;
+              _todoController.titleTextController.value.text = _listController
+                      .searchTodoList.value.todoList.isEmpty
+                  ? _listController.searchResult[index].title
+                  : _listController.searchTodoList.value.todoList[index].title;
               _todoController.setTime(
                 TimeRange(
                   startTime: TimeOfDay(
@@ -245,7 +247,7 @@ class _ListPageState extends State<ListPage> {
       }
       _listController.setSearchTodoList(_listController.selectedDays);
       _listController.searchTitleController.value.clear();
-      if(_listController.selectedDays.isEmpty){
+      if (_listController.selectedDays.isEmpty) {
         _listController.searchTitle('');
       }
     });

@@ -27,122 +27,39 @@ class AddTodo extends StatelessWidget {
     );
   }
 
-  Widget colorSelect() {
+  Widget printTodo() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: colorList.length,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 50,
+            mainAxisExtent: 30,
+          ),
+          itemCount: _todoController.todoTitleList.length,
           itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Obx(
-                () => GestureDetector(
-                  onTap: () {
-                    _todoController.selectColorIndex(index);
-                  },
-                  child: Container(
-                    width: 25,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      // border: Border.all(width: 2, color: Colors.grey),
-                      border: _todoController.selectColorIndex.value == index
-                          ? Border.all(width: 2, color: Colors.black)
-                          : null,
-                      shape: BoxShape.circle,
-                      color: colorList[index],
-                    ),
-                  ),
-                ),
+            return InkWell(
+              onTap: () {
+                // _todoController.titleTextController.value.text(_todoController.defaultText);
+                _todoController.titleTextController.value.text =
+                    _todoController.todoTitleList[index].title;
+              },
+              child: Container(
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(15)),
+                child: Text('${_todoController.todoTitleList[index].title}'),
               ),
             );
           }),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Center(
-          child: Container(
-            height: Get.mediaQuery.size.height * 0.8,
-            width: Get.mediaQuery.size.width * 0.99,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), border: Border.all()),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: titleField(),
-                ),
-                Flexible(child: printTodo()),
-                Flexible(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: setTime(context),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: colorSelect(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      MaterialButton(
-                        onPressed: () {
-                          _todoController.titleTextController.value.clear();
-                          Get.back();
-                        },
-                        color: Colors.white,
-                        child: Text('CANCLE'),
-                      ),
-                      MaterialButton(
-                        onPressed: () {
-                          _todoController.addTodo(
-                              uid ?? '',
-                              YMD(
-                                  year: year ?? 0,
-                                  month: month ?? 0,
-                                  day: day ?? 0),
-                              _todoController.titleTextController.value.text,
-                              _todoController.defaultTime.value,
-                              _todoController.defaultValue.value,
-                              _todoController.selectColorIndex.value);
-                          _todoController.titleTextController.value.clear();
-                          Get.off(() => Home());
-                        },
-                        color: Colors.white,
-                        child: Text('ADD'),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget setTime(BuildContext context) {
     return InkWell(
       customBorder:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       onTap: () async {
         TimeRange result = await showTimeRangePicker(
           context: context,
@@ -169,8 +86,8 @@ class AddTodo extends StatelessWidget {
               hour: editMode == true
                   ? _todoController.defaultTime.value.endTime.hour
                   : (_todoController.defaultTime.value.endTime.hour + 2) > 24
-                      ? 0
-                      : _todoController.defaultTime.value.endTime.hour + 2,
+                  ? 0
+                  : _todoController.defaultTime.value.endTime.hour + 2,
               minute: editMode == true
                   ? _todoController.defaultTime.value.endTime.minute
                   : _todoController.defaultTime.value.endTime.minute),
@@ -221,32 +138,124 @@ class AddTodo extends StatelessWidget {
     );
   }
 
-  Widget printTodo() {
+  Widget colorSelect() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 50,
-            mainAxisExtent: 30,
-          ),
-          itemCount: _todoController.todoTitleList.length,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: colorList.length,
           itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () {
-                // _todoController.titleTextController.value.text(_todoController.defaultText);
-                _todoController.titleTextController.value.text =
-                    _todoController.todoTitleList[index].title;
-              },
-              child: Container(
-                padding: EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(15)),
-                child: Text('${_todoController.todoTitleList[index].title}'),
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Obx(
+                () => GestureDetector(
+                  onTap: () {
+                    _todoController.selectColorIndex(index);
+                  },
+                  child: Container(
+                    width: 25,
+                    height: 25,
+                    decoration: BoxDecoration(
+                      // border: Border.all(width: 2, color: Colors.grey),
+                      border: _todoController.selectColorIndex.value == index
+                          ? Border.all(width: 2, color: Colors.black)
+                          : null,
+                      shape: BoxShape.circle,
+                      color: colorList[index],
+                    ),
+                  ),
+                ),
               ),
             );
           }),
     );
   }
+
+  Widget actionButton() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          MaterialButton(
+            onPressed: () {
+              _todoController.titleTextController.value.clear();
+              Get.back();
+            },
+            color: Colors.white,
+            child: Text('CANCLE'),
+          ),
+          MaterialButton(
+            onPressed: () {
+              _todoController.addTodo(
+                  uid ?? '',
+                  YMD(
+                      year: year ?? 0,
+                      month: month ?? 0,
+                      day: day ?? 0),
+                  _todoController.titleTextController.value.text,
+                  _todoController.defaultTime.value,
+                  _todoController.defaultValue.value,
+                  _todoController.selectColorIndex.value);
+              _todoController.titleTextController.value.clear();
+              Get.off(() => Home());
+            },
+            color: Colors.white,
+            child: Text('ADD'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Center(
+          child: Container(
+            height: Get.mediaQuery.size.height * 0.8,
+            width: Get.mediaQuery.size.width * 0.99,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15), border: Border.all()),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: titleField(),
+                ),
+                Flexible(child: printTodo()),
+                Flexible(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: setTime(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: colorSelect(),
+                ),
+                actionButton()
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
+
+
+
 }
