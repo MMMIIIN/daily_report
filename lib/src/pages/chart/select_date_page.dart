@@ -1,3 +1,4 @@
+import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/select_date_controller.dart';
@@ -53,7 +54,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
                 margin: const EdgeInsets.all(4),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    color: Color(0xff34495e),
+                    color: primaryColor,
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
                   date.day.toString(),
@@ -64,7 +65,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
                 margin: const EdgeInsets.all(4),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    color: Color(0xff34495e),
+                    color: primaryColor,
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
                   date.day.toString(),
@@ -142,7 +143,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
             }
           },
           color: _selectDateController.rangeBool.value
-              ? Color(0xff34495e)
+              ? primaryColor
               : Color(0xffecf0f1),
           child: Text(
             '확인',

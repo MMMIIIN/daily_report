@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+Color primaryColor = Color(0xff34495e);
 List<Color> colorList = [
   Color(0xffffbe76),
   Color(0xffff7979),

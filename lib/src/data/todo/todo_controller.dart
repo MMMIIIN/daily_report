@@ -1,10 +1,8 @@
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/repository/todo_repository.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 enum CATEGORY { DEFAULT, STUDY, SHOPPING, EXERCISE, SLEEP }

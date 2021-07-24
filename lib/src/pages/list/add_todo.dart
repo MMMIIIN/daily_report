@@ -3,10 +3,11 @@ import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
-class AddTodo extends StatelessWidget {
-  final TodoController _todoController = Get.put(TodoController());
+class AddTodo extends StatefulWidget {
   String? uid;
   int? year;
   int? month;
@@ -14,6 +15,119 @@ class AddTodo extends StatelessWidget {
   bool? editMode;
 
   AddTodo({this.year, this.month, this.day, this.uid, this.editMode = false});
+
+  @override
+  _AddTodoState createState() => _AddTodoState();
+}
+
+class _AddTodoState extends State<AddTodo> {
+  bool isDarkMode = GetStorage().read('isDarkMode');
+
+  final TodoController _todoController = Get.put(TodoController());
+
+  Widget selectOfDate() {
+    DateTime _selectedDay = _todoController.currentDateTime.value;
+    // void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    //   if (!isSameDay(_selectedDay, selectedDay)) {
+    //     setState(() {
+    //       _selectedDay = selectedDay;
+    //       _focusedDay = focusedDay;
+    //       _todoController.currentDateTime(selectedDay);
+    //       print('_selectedDay = $_selectedDay');
+    //       print('_focusedDay = $_focusedDay');
+    //       // _todoController.setCurrentIndex(_selectedDay);
+    //       _todoController.setCurrentIndex(_selectedDay);
+    //       _todoController.currentDateTime(_selectedDay);
+    //       print('todoDateTime ${_todoController.currentDateTime.value}');
+    //     });
+    //   }
+    // }
+    return InkWell(
+      onTap: () {
+        Get.dialog(
+          Dialog(
+            child: Obx(
+              () => TableCalendar(
+                  calendarBuilders: CalendarBuilders(
+                      selectedBuilder: (context, date, events) => Container(
+                            margin: const EdgeInsets.all(4),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: isDarkMode ? Colors.grey : primaryColor,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Text(
+                              date.day.toString(),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                      todayBuilder: (context, date, events) => Container(
+                            margin: const EdgeInsets.all(4),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Color(0xff95afc0),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Text(
+                              date.day.toString(),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                      markerBuilder: (context, date, _) {
+                        if (isDarkMode && _.isNotEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 5.0),
+                            child: Container(
+                              width: 7,
+                              height: 7,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white),
+                            ),
+                          );
+                        }
+                      }),
+                  firstDay: FirstDay,
+                  lastDay: LastDay,
+                  focusedDay: _todoController.currentDateTime.value,
+                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                  // calendarFormat: CalendarFormat.month,
+                  calendarStyle: CalendarStyle(
+                    weekendTextStyle: TextStyle(color: Colors.red),
+                    holidayTextStyle: TextStyle(color: Colors.blue),
+                  ),
+                  eventLoader: (day) {
+                    for (var todo
+                        in _todoController.loadTodoUidList.value.todoList) {
+                      if (day == todo.ymd) {
+                        return [Container()];
+                      }
+                    }
+                    return [];
+                  },
+                  onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+                    setState(() {
+                      if (!isSameDay(_selectedDay, selectedDay)) {
+                        _selectedDay = selectedDay;
+                        _todoController.currentDateTime(_selectedDay);
+                      }
+                    });
+                  }),
+            ),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(border: Border.all()),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('${_todoController.currentDateTime.value.year} '
+                '${_todoController.currentDateTime.value.month} '
+                '${_todoController.currentDateTime.value.day}')
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget titleField() {
     return Container(
@@ -59,7 +173,7 @@ class AddTodo extends StatelessWidget {
   Widget setTime(BuildContext context) {
     return InkWell(
       customBorder:
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       onTap: () async {
         TimeRange result = await showTimeRangePicker(
           context: context,
@@ -76,19 +190,19 @@ class AddTodo extends StatelessWidget {
           }).toList(),
           snap: true,
           start: TimeOfDay(
-              hour: editMode == true
+              hour: widget.editMode == true
                   ? _todoController.defaultTime.value.startTime.hour
                   : _todoController.defaultTime.value.endTime.hour,
-              minute: editMode == true
+              minute: widget.editMode == true
                   ? _todoController.defaultTime.value.startTime.minute
                   : _todoController.defaultTime.value.endTime.minute),
           end: TimeOfDay(
-              hour: editMode == true
+              hour: widget.editMode == true
                   ? _todoController.defaultTime.value.endTime.hour
                   : (_todoController.defaultTime.value.endTime.hour + 2) > 24
-                  ? 0
-                  : _todoController.defaultTime.value.endTime.hour + 2,
-              minute: editMode == true
+                      ? 0
+                      : _todoController.defaultTime.value.endTime.hour + 2,
+              minute: widget.editMode == true
                   ? _todoController.defaultTime.value.endTime.minute
                   : _todoController.defaultTime.value.endTime.minute),
           ticks: 24,
@@ -156,9 +270,10 @@ class AddTodo extends StatelessWidget {
                     width: 25,
                     height: 25,
                     decoration: BoxDecoration(
-                      // border: Border.all(width: 2, color: Colors.grey),
                       border: _todoController.selectColorIndex.value == index
-                          ? Border.all(width: 2, color: Colors.black)
+                          ? Border.all(
+                              width: 3,
+                              color: isDarkMode ? Colors.white : Colors.black)
                           : null,
                       shape: BoxShape.circle,
                       color: colorList[index],
@@ -188,11 +303,11 @@ class AddTodo extends StatelessWidget {
           MaterialButton(
             onPressed: () {
               _todoController.addTodo(
-                  uid ?? '',
+                  widget.uid ?? '',
                   YMD(
-                      year: year ?? 0,
-                      month: month ?? 0,
-                      day: day ?? 0),
+                      year: widget.year ?? 0,
+                      month: widget.month ?? 0,
+                      day: widget.day ?? 0),
                   _todoController.titleTextController.value.text,
                   _todoController.defaultTime.value,
                   _todoController.defaultValue.value,
@@ -215,13 +330,14 @@ class AddTodo extends StatelessWidget {
         padding: const EdgeInsets.all(15.0),
         child: Center(
           child: Container(
-            height: Get.mediaQuery.size.height * 0.8,
+            height: Get.mediaQuery.size.height * 0.85,
             width: Get.mediaQuery.size.width * 0.99,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15), border: Border.all()),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                selectOfDate(),
                 Flexible(
                   flex: 1,
                   child: titleField(),
@@ -253,9 +369,4 @@ class AddTodo extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-
 }

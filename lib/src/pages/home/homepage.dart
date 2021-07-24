@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: BoxDecoration(
                       color: isDarkMode
                           ? Colors.grey
-                          : Theme.of(context).primaryColor,
+                          : primaryColor,
                       borderRadius: BorderRadius.circular(10)),
                   child: Text(
                     date.day.toString(),
@@ -69,12 +69,15 @@ class _HomePageState extends State<HomePage> {
                 ),
             markerBuilder: (context, date, _) {
               if (isDarkMode && _.isNotEmpty) {
-                return Container(
-                  width: 7,
-                  height: 7,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 5.0),
+                  child: Container(
+                    width: 7,
+                    height: 7,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white),
+                  ),
                 );
               }
             }),
