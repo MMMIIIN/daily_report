@@ -1,6 +1,7 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -26,147 +27,201 @@ class _AddTodoState extends State<AddTodo> {
   final TodoController _todoController = Get.put(TodoController());
 
   Widget selectOfDate() {
-    DateTime _selectedDay = _todoController.currentDateTime.value;
-    // void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    //   if (!isSameDay(_selectedDay, selectedDay)) {
-    //     setState(() {
-    //       _selectedDay = selectedDay;
-    //       _focusedDay = focusedDay;
-    //       _todoController.currentDateTime(selectedDay);
-    //       print('_selectedDay = $_selectedDay');
-    //       print('_focusedDay = $_focusedDay');
-    //       // _todoController.setCurrentIndex(_selectedDay);
-    //       _todoController.setCurrentIndex(_selectedDay);
-    //       _todoController.currentDateTime(_selectedDay);
-    //       print('todoDateTime ${_todoController.currentDateTime.value}');
-    //     });
-    //   }
-    // }
-    return InkWell(
+    var _selectedDay = _todoController.currentDateTime.value;
+    return GestureDetector(
       onTap: () {
-        Get.dialog(
-          Dialog(
-            child: Obx(
-              () => TableCalendar(
-                  calendarBuilders: CalendarBuilders(
-                      selectedBuilder: (context, date, events) => Container(
-                            margin: const EdgeInsets.all(4),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: isDarkMode ? Colors.grey : primaryColor,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Text(
-                              date.day.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
+        showDialog(
+          context: context,
+          builder: (_) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 120),
+            child: Dialog(
+              child: Obx(
+                () => Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TableCalendar(
+                        calendarBuilders: CalendarBuilders(
+                            selectedBuilder: (context, date, events) =>
+                                Container(
+                                  margin: const EdgeInsets.all(4),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: isDarkMode
+                                          ? Colors.grey
+                                          : primaryColor,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Text(
+                                    date.day.toString(),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                            todayBuilder: (context, date, events) => Container(
+                                  margin: const EdgeInsets.all(4),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xff95afc0),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Text(
+                                    date.day.toString(),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                            markerBuilder: (context, date, _) {
+                              if (isDarkMode && _.isNotEmpty) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 5.0),
+                                  child: Container(
+                                    width: 7,
+                                    height: 7,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white),
+                                  ),
+                                );
+                              }
+                            }),
+                        firstDay: FirstDay,
+                        lastDay: LastDay,
+                        focusedDay: _todoController.currentDateTime.value,
+                        selectedDayPredicate: (day) =>
+                            isSameDay(_selectedDay, day),
+                        calendarStyle: CalendarStyle(
+                          weekendTextStyle: TextStyle(color: Colors.red),
+                          holidayTextStyle: TextStyle(color: Colors.blue),
+                        ),
+                        eventLoader: (day) {
+                          for (var todo in _todoController
+                              .loadTodoUidList.value.todoList) {
+                            if (day == todo.ymd) {
+                              return [Container()];
+                            }
+                          }
+                          return [];
+                        },
+                        onDaySelected:
+                            (DateTime selectedDay, DateTime focusedDay) {
+                          setState(() {
+                            if (!isSameDay(_selectedDay, selectedDay)) {
+                              _selectedDay = selectedDay;
+                              _todoController.currentDateTime(selectedDay);
+                            }
+                          });
+                        }),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        MaterialButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          color: primaryColor,
+                          child: Text(
+                            '취 소',
+                            style: TextStyle(color: Colors.white),
                           ),
-                      todayBuilder: (context, date, events) => Container(
-                            margin: const EdgeInsets.all(4),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Color(0xff95afc0),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Text(
-                              date.day.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
+                        ),
+                        MaterialButton(
+                          onPressed: () {},
+                          color: primaryColor,
+                          child: Text(
+                            '확 인',
+                            style: TextStyle(color: Colors.white),
                           ),
-                      markerBuilder: (context, date, _) {
-                        if (isDarkMode && _.isNotEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 5.0),
-                            child: Container(
-                              width: 7,
-                              height: 7,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white),
-                            ),
-                          );
-                        }
-                      }),
-                  firstDay: FirstDay,
-                  lastDay: LastDay,
-                  focusedDay: _todoController.currentDateTime.value,
-                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                  // calendarFormat: CalendarFormat.month,
-                  calendarStyle: CalendarStyle(
-                    weekendTextStyle: TextStyle(color: Colors.red),
-                    holidayTextStyle: TextStyle(color: Colors.blue),
-                  ),
-                  eventLoader: (day) {
-                    for (var todo
-                        in _todoController.loadTodoUidList.value.todoList) {
-                      if (day == todo.ymd) {
-                        return [Container()];
-                      }
-                    }
-                    return [];
-                  },
-                  onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-                    setState(() {
-                      if (!isSameDay(_selectedDay, selectedDay)) {
-                        _selectedDay = selectedDay;
-                        _todoController.currentDateTime(_selectedDay);
-                      }
-                    });
-                  }),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
         );
       },
-      child: Container(
-        decoration: BoxDecoration(border: Border.all()),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('${_todoController.currentDateTime.value.year} '
-                '${_todoController.currentDateTime.value.month} '
-                '${_todoController.currentDateTime.value.day}')
-          ],
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Container(
+          width: Get.mediaQuery.size.width * 0.4,
+          height: 30,
+          decoration: BoxDecoration(
+            color: primaryColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${_todoController.currentDateTime.value.year} .'
+                '${_todoController.currentDateTime.value.month} .'
+                '${_todoController.currentDateTime.value.day}',
+                style: TextStyle(fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.w300),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget titleField() {
-    return Container(
-      padding: EdgeInsets.all(8),
-      child: TextField(
-        controller: _todoController.titleTextController.value,
-        decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-            hintText: 'Title'),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: primaryColor.withOpacity(0.3)),
+        child: TextField(
+          controller: _todoController.titleTextController.value,
+          decoration: InputDecoration(
+            focusColor: primaryColor,
+            prefixIcon: Icon(Icons.title, color: primaryColor),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+            ),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: primaryColor)),
+            hintText: 'Title',
+            hintStyle: TextStyle(
+              color: primaryColor,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ),
       ),
     );
   }
 
   Widget printTodo() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 50,
-            mainAxisExtent: 30,
-          ),
-          itemCount: _todoController.todoTitleList.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () {
-                // _todoController.titleTextController.value.text(_todoController.defaultText);
-                _todoController.titleTextController.value.text =
-                    _todoController.todoTitleList[index].title;
-              },
-              child: Container(
-                padding: EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(15)),
-                child: Text('${_todoController.todoTitleList[index].title}'),
-              ),
-            );
-          }),
+    return Container(
+      height: Get.mediaQuery.size.height * 0.15,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 50,
+              mainAxisExtent: 30,
+            ),
+            itemCount: _todoController.todoTitleList.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  _todoController.titleTextController.value.text =
+                      _todoController.todoTitleList[index].title;
+                },
+                child: Card(
+                    color: primaryColor,
+                    child: Text(
+                      '${_todoController.todoTitleList[index].title}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w200),
+                    )),
+              );
+            }),
+      ),
     );
   }
 
@@ -179,7 +234,6 @@ class _AddTodoState extends State<AddTodo> {
           context: context,
           clockRotation: 180,
           paintingStyle: PaintingStyle.fill,
-          // backgroundColor: Colors.grey.withOpacity(0.2),
           backgroundColor: Colors.yellow[100],
           interval: Duration(minutes: 10),
           labels: ['0', '3', '6', '9', '12', '15', '18', '21']
@@ -217,33 +271,38 @@ class _AddTodoState extends State<AddTodo> {
         _todoController.defaultValue(_todoController.getValue(
             _todoController.currentDateTime.value, result));
         print(_todoController.defaultValue.value);
-        // controller.listeners;
-        // controller.change(result);
       },
       child: Container(
         height: Get.mediaQuery.size.height * 0.1,
         decoration: BoxDecoration(
-            border: Border.all(), borderRadius: BorderRadius.circular(15)),
+            color: primaryColor.withOpacity(1),
+            borderRadius: BorderRadius.circular(15)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Row(
               children: [
-                // Text('${timeRange?.startTime.hour}'),
                 SizedBox(width: 20),
-                Text('${_todoController.defaultTime.value.startTime.hour} : '),
-                Text('${_todoController.defaultTime.value.startTime.minute}'),
-                // Text('${Get.parameters['title']}')
-                // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.startTime.hour} : '),
-                // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.startTime.minute}')
+                Text(
+                  '${_todoController.defaultTime.value.startTime.hour} : '
+                  '${_todoController.defaultTime.value.startTime.minute}',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w200),
+                ),
               ],
             ),
             Row(
               children: [
-                Text('${_todoController.defaultTime.value.endTime.hour} : '),
-                Text('${_todoController.defaultTime.value.endTime.minute}'),
-                // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.endTime.hour} : '),
-                // Text('${_todoController.chartClassList[_todoController.currentIndex.value].data.last.timeRange.endTime.minute}')
+                Text(
+                  '${_todoController.defaultTime.value.endTime.hour} : '
+                  '${_todoController.defaultTime.value.endTime.minute}',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w200),
+                ),
               ],
             ),
           ],
@@ -253,8 +312,9 @@ class _AddTodoState extends State<AddTodo> {
   }
 
   Widget colorSelect() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+    return Container(
+      height: Get.mediaQuery.size.height * 0.05,
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: colorList.length,
@@ -297,8 +357,12 @@ class _AddTodoState extends State<AddTodo> {
               _todoController.titleTextController.value.clear();
               Get.back();
             },
-            color: Colors.white,
-            child: Text('CANCLE'),
+            color: primaryColor,
+            child: Text(
+              'CANCLE',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+            ),
           ),
           MaterialButton(
             onPressed: () {
@@ -315,8 +379,12 @@ class _AddTodoState extends State<AddTodo> {
               _todoController.titleTextController.value.clear();
               Get.off(() => Home());
             },
-            color: Colors.white,
-            child: Text('ADD'),
+            color: primaryColor,
+            child: Text(
+              'ADD',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+            ),
           ),
         ],
       ),
@@ -338,29 +406,24 @@ class _AddTodoState extends State<AddTodo> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 selectOfDate(),
+                titleField(),
+                Flexible(fit: FlexFit.tight, child: printTodo()),
                 Flexible(
-                  flex: 1,
-                  child: titleField(),
-                ),
-                Flexible(child: printTodo()),
-                Flexible(
-                  flex: 1,
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Expanded(
-                          child: setTime(context),
+                        Obx(
+                          () => Expanded(
+                            child: setTime(context),
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                Flexible(
-                  flex: 1,
-                  child: colorSelect(),
-                ),
+                colorSelect(),
                 actionButton()
               ],
             ),
