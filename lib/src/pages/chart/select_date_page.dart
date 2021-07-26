@@ -3,7 +3,6 @@ import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/select_date_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
-import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -11,6 +10,7 @@ import 'package:table_calendar/table_calendar.dart';
 final SelectDateController _selectDateController =
     Get.put(SelectDateController());
 final ChartController _chartController = Get.put(ChartController());
+final TodoController _todoController = Get.put(TodoController());
 
 class SelectDatePage extends StatefulWidget {
   @override
@@ -85,6 +85,14 @@ class _SelectDatePageState extends State<SelectDatePage> {
       rangeEndDay: _rangeEnd,
       calendarFormat: _calendarFormat,
       rangeSelectionMode: rangeSelectionMode,
+      eventLoader: (day) {
+        for (var todo in _todoController.loadTodoUidList.value.todoList) {
+          if (day == todo.ymd) {
+            return [Container()];
+          }
+        }
+        return [];
+      },
       onDaySelected: (selectedDay, focusedDay) {
         if (!isSameDay(_selectedDay, selectedDay)) {
           setState(() {
@@ -126,7 +134,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
       children: [
         MaterialButton(
             onPressed: () {
-              Get.back();
+              Get.off(() => Home(), transition: Transition.leftToRightWithFade);
             },
             color: Color(0xff95afc0),
             child: Text(

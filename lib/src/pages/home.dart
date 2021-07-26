@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/chart_page.dart';
@@ -16,7 +17,7 @@ import 'home/controller/home_controller.dart';
 class Home extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
   final TodoController _todoController = Get.put(TodoController());
-
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = GetStorage().read('isDarkMode');
@@ -48,7 +49,7 @@ class Home extends StatelessWidget {
                 padding: const EdgeInsets.all(4.0),
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(() => AddTodo());
+                    Get.to(() => AddTodo(), transition: Transition.fade);
                   },
                   child: Container(
                     width: 60,
