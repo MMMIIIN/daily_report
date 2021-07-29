@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,13 +11,12 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 class AddTodo extends StatefulWidget {
-  String? uid;
   int? year;
   int? month;
   int? day;
   bool? editMode;
 
-  AddTodo({this.year, this.month, this.day, this.uid, this.editMode = false});
+  AddTodo({this.year, this.month, this.day, this.editMode = false});
 
   @override
   _AddTodoState createState() => _AddTodoState();
@@ -365,17 +366,20 @@ class _AddTodoState extends State<AddTodo> {
             ),
           ),
           MaterialButton(
-            onPressed: () {
-              _todoController.addTodo(
-                  widget.uid ?? '',
-                  YMD(
-                      year: widget.year ?? 0,
-                      month: widget.month ?? 0,
-                      day: widget.day ?? 0),
-                  _todoController.titleTextController.value.text,
-                  _todoController.defaultTime.value,
-                  _todoController.defaultValue.value,
-                  _todoController.selectColorIndex.value);
+            onPressed: () async{
+              await FirebaseFirestore.instance.collection('todo').doc(FirebaseAuth.instance.currentUser!.uid).collection('todos').add({
+                'title': _todoController.titleTextController.value.text,
+                'startHour': _todoController.defaultTime.value.startTime.hour,
+                'startMinute': _todoController.defaultTime.value.startTime.minute,
+                'endHour': _todoController.defaultTime.value.endTime.hour,
+                'endMinute': _todoController.defaultTime.value.endTime.minute,
+                'uid': FirebaseAuth.instance.currentUser!.uid,
+                'value': _todoController.defaultValue.value,
+                'color': _todoController.selectColorIndex.value,
+                'year': _todoController.currentDateTime.value.year,
+                'month': _todoController.currentDateTime.value.month,
+                'day': _todoController.currentDateTime.value.day
+              });
               _todoController.titleTextController.value.clear();
               Get.off(() => Home());
             },
