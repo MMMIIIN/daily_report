@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/repository/todo_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_range_picker/time_range_picker.dart';
@@ -138,5 +140,34 @@ class TodoController extends GetxController {
     if (index == -1) {
       todoTitleList.add(TodoTitle(title: text));
     }
+  }
+
+  void initUidTodoList() {
+    loadTodoUidList.value.todoList.clear();
+    FirebaseFirestore.instance
+        .collection('todo')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('todos')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        var sampleTodo = TestTodo(
+            uid: element['uid'],
+            ymd: DateTime(element['year'], element['month'], element['day']),
+            title: element['title'],
+            startHour: element['startHour'],
+            startMinute: element['startMinute'],
+            endHour: element['endHour'],
+            endMinute: element['endMinute'],
+            value: element['value'].toInt(),
+            colorIndex: element['color']);
+        loadTodoUidList.value.todoList.add(sampleTodo);
+      });
+    });
+    loadTodoUidList.value.todoList.forEach((element) {
+      todoUidCheckAdd(element);
+    });
+    print(loadTodoUidList.value.todoList.length);
+    print(todoUidList.value.todoList.length);
   }
 }

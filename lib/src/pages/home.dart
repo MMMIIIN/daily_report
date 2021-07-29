@@ -18,7 +18,10 @@ class Home extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
   final TodoController _todoController = Get.put(TodoController());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  CollectionReference todo = FirebaseFirestore.instance.collection('todo');
+  CollectionReference todo = FirebaseFirestore.instance
+      .collection('todo')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('todos');
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +32,17 @@ class Home extends StatelessWidget {
           if (user.data == null) {
             return LoginPage();
           } else {
-            _todoController.todoUidLoad(user.data!.uid);
+            // _todoController.todoUidLoad(user.data!.uid);
             return StreamBuilder(
-                stream: todo.snapshots(),
+                stream: FirebaseFirestore.instance
+                    .collection(
+                        'todo/${FirebaseAuth.instance.currentUser!.uid}/todos')
+                    .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.connectionState == ConnectionState.none) {
                     return Center(child: CircularProgressIndicator());
                   } else {
+                    _todoController.initUidTodoList();
                     return Scaffold(
                       body: Obx(() {
                         switch (_homeController.currentIndex.value) {
