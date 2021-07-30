@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
+import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,109 +34,125 @@ class _AddTodoState extends State<AddTodo> {
       onTap: () {
         showDialog(
           context: context,
-          builder: (_) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 120),
-            child: Dialog(
-              child: Obx(
-                () => Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    TableCalendar(
-                        calendarBuilders: CalendarBuilders(
-                            selectedBuilder: (context, date, events) =>
-                                Container(
-                                  margin: const EdgeInsets.all(4),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: isDarkMode
-                                          ? Colors.grey
-                                          : primaryColor,
-                                      borderRadius: BorderRadius.circular(10)),
+          builder: (_) =>
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 120),
+                child: Dialog(
+                  child: Obx(
+                        () =>
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            TableCalendar(
+                                calendarBuilders: CalendarBuilders(
+                                    selectedBuilder: (context, date, events) =>
+                                        Container(
+                                          margin: const EdgeInsets.all(4),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              color: isDarkMode
+                                                  ? Colors.grey
+                                                  : primaryColor,
+                                              borderRadius: BorderRadius
+                                                  .circular(10)),
+                                          child: Text(
+                                            date.day.toString(),
+                                            style: TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                    todayBuilder: (context, date, events) =>
+                                        Container(
+                                          margin: const EdgeInsets.all(4),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xff95afc0),
+                                              borderRadius: BorderRadius
+                                                  .circular(10)),
+                                          child: Text(
+                                            date.day.toString(),
+                                            style: TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                    markerBuilder: (context, date, _) {
+                                      if (isDarkMode && _.isNotEmpty) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 5.0),
+                                          child: Container(
+                                            width: 7,
+                                            height: 7,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius
+                                                    .circular(10),
+                                                color: Colors.white),
+                                          ),
+                                        );
+                                      }
+                                    }),
+                                firstDay: FirstDay,
+                                lastDay: LastDay,
+                                focusedDay: _todoController.currentDateTime
+                                    .value,
+                                selectedDayPredicate: (day) =>
+                                    isSameDay(_selectedDay, day),
+                                calendarStyle: CalendarStyle(
+                                  weekendTextStyle: TextStyle(
+                                      color: Colors.red),
+                                  holidayTextStyle: TextStyle(
+                                      color: Colors.blue),
+                                ),
+                                eventLoader: (day) {
+                                  for (var todo in _todoController
+                                      .loadTodoUidList.value.todoList) {
+                                    if (day == todo.ymd) {
+                                      return [Container()];
+                                    }
+                                  }
+                                  return [];
+                                },
+                                onDaySelected:
+                                    (DateTime selectedDay,
+                                    DateTime focusedDay) {
+                                  setState(() {
+                                    if (!isSameDay(_selectedDay, selectedDay)) {
+                                      _selectedDay = selectedDay;
+                                      _todoController.currentDateTime(
+                                          selectedDay);
+                                    }
+                                  });
+                                }),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                MaterialButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  color: primaryColor,
                                   child: Text(
-                                    date.day.toString(),
+                                    '취 소',
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
-                            todayBuilder: (context, date, events) => Container(
-                                  margin: const EdgeInsets.all(4),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xff95afc0),
-                                      borderRadius: BorderRadius.circular(10)),
+                                MaterialButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  color: primaryColor,
                                   child: Text(
-                                    date.day.toString(),
+                                    '확 인',
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                ),
-                            markerBuilder: (context, date, _) {
-                              if (isDarkMode && _.isNotEmpty) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 5.0),
-                                  child: Container(
-                                    width: 7,
-                                    height: 7,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white),
-                                  ),
-                                );
-                              }
-                            }),
-                        firstDay: FirstDay,
-                        lastDay: LastDay,
-                        focusedDay: _todoController.currentDateTime.value,
-                        selectedDayPredicate: (day) =>
-                            isSameDay(_selectedDay, day),
-                        calendarStyle: CalendarStyle(
-                          weekendTextStyle: TextStyle(color: Colors.red),
-                          holidayTextStyle: TextStyle(color: Colors.blue),
+                                )
+                              ],
+                            )
+                          ],
                         ),
-                        eventLoader: (day) {
-                          for (var todo in _todoController
-                              .loadTodoUidList.value.todoList) {
-                            if (day == todo.ymd) {
-                              return [Container()];
-                            }
-                          }
-                          return [];
-                        },
-                        onDaySelected:
-                            (DateTime selectedDay, DateTime focusedDay) {
-                          setState(() {
-                            if (!isSameDay(_selectedDay, selectedDay)) {
-                              _selectedDay = selectedDay;
-                              _todoController.currentDateTime(selectedDay);
-                            }
-                          });
-                        }),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        MaterialButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          color: primaryColor,
-                          child: Text(
-                            '취 소',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        MaterialButton(
-                          onPressed: () {},
-                          color: primaryColor,
-                          child: Text(
-                            '확 인',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
         );
       },
       child: Padding(
@@ -152,11 +169,12 @@ class _AddTodoState extends State<AddTodo> {
             children: [
               Text(
                 '${_todoController.currentDateTime.value.year} .'
-                '${_todoController.currentDateTime.value.month} .'
-                '${_todoController.currentDateTime.value.day}',
-                style: TextStyle(fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.w300),
+                    '${_todoController.currentDateTime.value.month} .'
+                    '${_todoController.currentDateTime.value.day}',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w300),
               )
             ],
           ),
@@ -229,7 +247,7 @@ class _AddTodoState extends State<AddTodo> {
   Widget setTime(BuildContext context) {
     return InkWell(
       customBorder:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       onTap: () async {
         TimeRange result = await showTimeRangePicker(
           context: context,
@@ -255,15 +273,17 @@ class _AddTodoState extends State<AddTodo> {
               hour: widget.editMode == true
                   ? _todoController.defaultTime.value.endTime.hour
                   : (_todoController.defaultTime.value.endTime.hour + 2) > 24
-                      ? 0
-                      : _todoController.defaultTime.value.endTime.hour + 2,
+                  ? 0
+                  : _todoController.defaultTime.value.endTime.hour + 2,
               minute: widget.editMode == true
                   ? _todoController.defaultTime.value.endTime.minute
                   : _todoController.defaultTime.value.endTime.minute),
           ticks: 24,
           handlerRadius: 8,
           strokeColor: Colors.orangeAccent[200],
-          ticksColor: Theme.of(context).primaryColor,
+          ticksColor: Theme
+              .of(context)
+              .primaryColor,
           labelOffset: 30,
           rotateLabels: false,
           padding: 60,
@@ -286,7 +306,7 @@ class _AddTodoState extends State<AddTodo> {
                 SizedBox(width: 20),
                 Text(
                   '${_todoController.defaultTime.value.startTime.hour} : '
-                  '${_todoController.defaultTime.value.startTime.minute}',
+                      '${_todoController.defaultTime.value.startTime.minute}',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -298,7 +318,7 @@ class _AddTodoState extends State<AddTodo> {
               children: [
                 Text(
                   '${_todoController.defaultTime.value.endTime.hour} : '
-                  '${_todoController.defaultTime.value.endTime.minute}',
+                      '${_todoController.defaultTime.value.endTime.minute}',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -323,24 +343,26 @@ class _AddTodoState extends State<AddTodo> {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Obx(
-                () => GestureDetector(
-                  onTap: () {
-                    _todoController.selectColorIndex(index);
-                  },
-                  child: Container(
-                    width: 25,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      border: _todoController.selectColorIndex.value == index
-                          ? Border.all(
+                    () =>
+                    GestureDetector(
+                      onTap: () {
+                        _todoController.selectColorIndex(index);
+                      },
+                      child: Container(
+                        width: 25,
+                        height: 25,
+                        decoration: BoxDecoration(
+                          border: _todoController.selectColorIndex.value ==
+                              index
+                              ? Border.all(
                               width: 3,
                               color: isDarkMode ? Colors.white : Colors.black)
-                          : null,
-                      shape: BoxShape.circle,
-                      color: colorList[index],
+                              : null,
+                          shape: BoxShape.circle,
+                          color: colorList[index],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ),
             );
           }),
@@ -362,15 +384,20 @@ class _AddTodoState extends State<AddTodo> {
             child: Text(
               'CANCLE',
               style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+              TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
             ),
           ),
           MaterialButton(
-            onPressed: () async{
-              await FirebaseFirestore.instance.collection('todo').doc(FirebaseAuth.instance.currentUser!.uid).collection('todos').add({
+            onPressed: () async {
+              await FirebaseFirestore.instance
+                  .collection('todo')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection('todos')
+                  .add({
                 'title': _todoController.titleTextController.value.text,
                 'startHour': _todoController.defaultTime.value.startTime.hour,
-                'startMinute': _todoController.defaultTime.value.startTime.minute,
+                'startMinute':
+                _todoController.defaultTime.value.startTime.minute,
                 'endHour': _todoController.defaultTime.value.endTime.hour,
                 'endMinute': _todoController.defaultTime.value.endTime.minute,
                 'uid': FirebaseAuth.instance.currentUser!.uid,
@@ -379,15 +406,41 @@ class _AddTodoState extends State<AddTodo> {
                 'year': _todoController.currentDateTime.value.year,
                 'month': _todoController.currentDateTime.value.month,
                 'day': _todoController.currentDateTime.value.day
-              });
+              }).then((value) {
+                Get.off(() => Home());
+                Get.showSnackbar(GetBar(
+                  title: 'Success',
+                  message: 'good!',
+                  duration: Duration(seconds: 2),
+                  snackPosition: SnackPosition.BOTTOM,
+                ));
+                _todoController.todoUidCheckAdd(TestTodo(
+                    uid: FirebaseAuth.instance.currentUser!.uid,
+                    ymd: DateTime(_todoController.currentDateTime.value.year,
+                        _todoController.currentDateTime.value.month,
+                        _todoController.currentDateTime.value.day),
+                    title: _todoController.titleTextController.value.text,
+                    startHour: _todoController.defaultTime.value.startTime.hour,
+                    startMinute: _todoController.defaultTime.value.startTime.minute,
+                    endHour: _todoController.defaultTime.value.endTime.hour,
+                    endMinute: _todoController.defaultTime.value.endTime.minute,
+                    value: _todoController.defaultValue.value.toInt(),
+                    colorIndex: _todoController.selectColorIndex.value));
+              }).catchError((error) =>
+                  Get.showSnackbar(GetBar(
+                    title: 'ERROR',
+                    message: '로그인 정보를 확인하세요',
+                    duration: Duration(seconds: 2),
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: Colors.redAccent,
+                  )));
               _todoController.titleTextController.value.clear();
-              Get.off(() => Home());
             },
             color: primaryColor,
             child: Text(
               'ADD',
               style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+              TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
             ),
           ),
         ],
@@ -419,9 +472,10 @@ class _AddTodoState extends State<AddTodo> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Obx(
-                          () => Expanded(
-                            child: setTime(context),
-                          ),
+                              () =>
+                              Expanded(
+                                child: setTime(context),
+                              ),
                         ),
                       ],
                     ),
