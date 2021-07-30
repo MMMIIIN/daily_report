@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
-import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/chart_page.dart';
 import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
@@ -16,7 +15,6 @@ import 'home/controller/home_controller.dart';
 
 class Home extends StatelessWidget {
   final HomeController _homeController = Get.put(HomeController());
-  final TodoController _todoController = Get.put(TodoController());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference todo = FirebaseFirestore.instance
       .collection('todo')
@@ -32,7 +30,6 @@ class Home extends StatelessWidget {
           if (user.data == null) {
             return LoginPage();
           } else {
-            // _todoController.todoUidLoad(user.data!.uid);
             return StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection(
@@ -42,7 +39,6 @@ class Home extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.none) {
                     return Center(child: CircularProgressIndicator());
                   } else {
-                    _todoController.initUidTodoList();
                     return Scaffold(
                       body: Obx(() {
                         switch (_homeController.currentIndex.value) {

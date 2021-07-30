@@ -39,17 +39,6 @@ class TodoController extends GetxController {
   RxDouble defaultValue = 0.0.obs;
   RxInt selectColorIndex = 0.obs;
 
-  void todoUidLoad(String uid) async {
-    if (loadTodoUidList.value.todoList.isEmpty) {
-      print('uidLoad실행');
-      loadTodoUidList(await TodoRepository.to.loadUidTodo(uid));
-      initTodoTitleList();
-      for (int i = 0; i < loadTodoUidList.value.todoList.length; i++) {
-        todoUidCheckAdd(loadTodoUidList.value.todoList[i]);
-      }
-    }
-  }
-
   void todoUidCheckAdd(TestTodo data) {
     var addIndex = todoUidList.value.todoList.indexWhere(
         (element) => element.ymd == data.ymd && element.title == data.title);
@@ -80,7 +69,9 @@ class TodoController extends GetxController {
   void setCurrentIndex(DateTime time) {
     currentIndexList.clear();
     for (int i = 0; i < todoUidList.value.todoList.length; i++) {
-      if (todoUidList.value.todoList[i].ymd == time) {
+      if (todoUidList.value.todoList[i].ymd.year == time.year &&
+          todoUidList.value.todoList[i].ymd.month == time.month &&
+          todoUidList.value.todoList[i].ymd.day == time.day) {
         currentIndexList.add(i);
       }
     }
@@ -129,7 +120,6 @@ class TodoController extends GetxController {
   }
 
   void initTodoTitleList() {
-    print('initTitle실행 ');
     for (int i = 0; i < loadTodoUidList.value.todoList.length; i++) {
       addTodoTitle(loadTodoUidList.value.todoList[i].title);
     }
@@ -142,16 +132,17 @@ class TodoController extends GetxController {
     }
   }
 
-  void initUidTodoList() {
+  void initUidTodoList() async {
     loadTodoUidList.value.todoList.clear();
-    FirebaseFirestore.instance
+    TestTodo sampleTodo;
+    await FirebaseFirestore.instance
         .collection('todo')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('todos')
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        var sampleTodo = TestTodo(
+        sampleTodo = TestTodo(
             uid: element['uid'],
             ymd: DateTime(element['year'], element['month'], element['day']),
             title: element['title'],
@@ -161,13 +152,28 @@ class TodoController extends GetxController {
             endMinute: element['endMinute'],
             value: element['value'].toInt(),
             colorIndex: element['color']);
-        loadTodoUidList.value.todoList.add(sampleTodo);
+        print(sampleTodo.ymd);
+        loadTodoUidList.value.todoList.add(TestTodo(
+            uid: sampleTodo.uid,
+            ymd: sampleTodo.ymd,
+            title: sampleTodo.title,
+            startHour: sampleTodo.startHour,
+            startMinute: sampleTodo.startMinute,
+            endHour: sampleTodo.endHour,
+            endMinute: sampleTodo.endMinute,
+            value: sampleTodo.value,
+            colorIndex: sampleTodo.colorIndex));
+      });
+      loadTodoUidList.value.todoList.forEach((element) {
+        todoUidCheckAdd(element);
       });
     });
-    loadTodoUidList.value.todoList.forEach((element) {
-      todoUidCheckAdd(element);
-    });
-    print(loadTodoUidList.value.todoList.length);
-    print(todoUidList.value.todoList.length);
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    initUidTodoList();
   }
 }
