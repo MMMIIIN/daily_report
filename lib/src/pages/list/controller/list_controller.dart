@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 final TodoController _todoController = Get.put(TodoController());
 
-class ListController extends GetxController{
+class ListController extends GetxController {
   Rx<TodoUidList> searchTodoList = TodoUidList(todoList: []).obs;
   final selectedDays = <DateTime>[].obs;
   final searchResult = <TestTodo>[].obs;
@@ -33,9 +33,13 @@ class ListController extends GetxController{
     searchTodoList.value.todoList.clear();
     _dateTime.forEach((element) {
       searchTodoList.value.todoList.addAll(
-          _todoController.loadTodoUidList.value.todoList.where((todo) => todo.ymd == element));
+          _todoController.loadTodoUidList.value.todoList.where((todo) =>
+              todo.ymd.year == element.year &&
+              todo.ymd.month == element.month &&
+              todo.ymd.day == element.day));
     });
-    searchTodoList.value.todoList.sort((a, b) => a.startHour.compareTo(b.startHour));
+    searchTodoList.value.todoList
+        .sort((a, b) => a.startHour.compareTo(b.startHour));
     searchTodoList.value.todoList.sort((a, b) => a.ymd.compareTo(b.ymd));
   }
 

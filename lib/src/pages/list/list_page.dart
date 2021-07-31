@@ -4,6 +4,7 @@ import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
@@ -14,6 +15,7 @@ class ListPage extends StatefulWidget {
 
 final TodoController _todoController = Get.put(TodoController());
 final ListController _listController = Get.put(ListController());
+final bool isDarkMode = GetStorage().read('isDarkMode');
 
 class _ListPageState extends State<ListPage> {
   int touchedIndex = -1;
@@ -45,37 +47,43 @@ class _ListPageState extends State<ListPage> {
   }
 
   Widget searchWidget() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Container(
-        padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: Colors.black12),
-        child: TextField(
-          onChanged: (text) {
-            _listController.searchTerm(text);
-            _listController.searchTitle(text);
-            if (text.isNotEmpty) {
-              _listController.selectedDays.clear();
-            }
-          },
-          controller: _listController.searchTitleController.value,
-          decoration: InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              suffixIcon: _listController.searchTerm.value != ''
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.cancel_outlined,
-                        size: 20,
-                      ),
-                      onPressed: () {
-                        _listController.searchTerm('');
-                        _listController.searchTitleController.value.clear();
-                      },
-                    )
-                  : null,
-              hintText: '검색'),
-        ),
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: primaryColor.withOpacity(0.4)),
+      child: TextField(
+        onChanged: (text) {
+          _listController.searchTerm(text);
+          _listController.searchTitle(text);
+          if (text.isNotEmpty) {
+            _listController.selectedDays.clear();
+          }
+        },
+        controller: _listController.searchTitleController.value,
+        decoration: InputDecoration(
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent)),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+            ),
+            prefixIcon: Icon(
+              Icons.search,
+              color: primaryColor,
+            ),
+            suffixIcon: _listController.searchTerm.value != ''
+                ? IconButton(
+                    icon: Icon(
+                      Icons.cancel_outlined,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      _listController.searchTerm('');
+                      _listController.searchTitleController.value.clear();
+                    },
+                  )
+                : null,
+            hintText: '검색',
+            hintStyle: TextStyle(color: primaryColor)),
       ),
     );
   }
@@ -87,7 +95,7 @@ class _ListPageState extends State<ListPage> {
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+              color: isDarkMode ? Colors.grey : primaryColor,
               borderRadius: BorderRadius.circular(10)),
           child: Text(
             date.day.toString(),
@@ -105,6 +113,20 @@ class _ListPageState extends State<ListPage> {
             style: TextStyle(color: Colors.white),
           ),
         ),
+        markerBuilder: (context, date, _) {
+          if (_.isNotEmpty) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: Container(
+                width: 7,
+                height: 7,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: isDarkMode ? Colors.white : Colors.black),
+              ),
+            );
+          }
+        },
       ),
       firstDay: FirstDay,
       lastDay: LastDay,
@@ -120,7 +142,9 @@ class _ListPageState extends State<ListPage> {
       eventLoader: _listController.searchTerm.isEmpty
           ? (day) {
               for (var todo in _todoController.loadTodoUidList.value.todoList) {
-                if (day == todo.ymd) {
+                if (day.year == todo.ymd.year &&
+                    day.month == todo.ymd.month &&
+                    day.day == todo.ymd.day) {
                   return [Container()];
                 }
               }
@@ -196,18 +220,28 @@ class _ListPageState extends State<ListPage> {
             },
             child: Container(
               padding: EdgeInsets.all(10),
+              width: Get.mediaQuery.size.width * 0.8,
               height: Get.mediaQuery.size.height * 0.08,
               decoration: BoxDecoration(
-                  color: _listController.searchTodoList.value.todoList.isEmpty
-                      ? colorList[
-                          _listController.searchResult[index].colorIndex]
-                      : colorList[_listController
-                          .searchTodoList.value.todoList[index].colorIndex],
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all()),
+                color: primaryColor.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(15),
+                // border: Border.all(),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  Container(
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: _listController
+                                .searchTodoList.value.todoList.isEmpty
+                            ? colorList[
+                                _listController.searchResult[index].colorIndex]
+                            : colorList[_listController.searchTodoList.value
+                                .todoList[index].colorIndex]),
+                  ),
                   Text(
                       '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].ymd.year : _listController.searchTodoList.value.todoList[index].ymd.year}.'
                       '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].ymd.month : _listController.searchTodoList.value.todoList[index].ymd.month}.'

@@ -152,7 +152,7 @@ class TodoController extends GetxController {
             endMinute: element['endMinute'],
             value: element['value'].toInt(),
             colorIndex: element['color']);
-        print(sampleTodo.ymd);
+
         loadTodoUidList.value.todoList.add(TestTodo(
             uid: sampleTodo.uid,
             ymd: sampleTodo.ymd,
