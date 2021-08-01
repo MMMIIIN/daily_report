@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 final TodoController _todoController = Get.put(TodoController());
 
@@ -108,6 +109,18 @@ class _HomePageState extends State<HomePage> {
           _todoController.currentDateTime(focusedDay);
         },
       ),
+    );
+  }
+
+  Widget selectPH() {
+    return ToggleSwitch(
+      totalSwitches: 2,
+      minWidth: 40,
+      minHeight: 30,
+      labels: ['%', 'h'],
+      inactiveBgColor: isDarkMode ? Color(0xff34495e) : Color(0xffecf0f1),
+      activeBgColor: isDarkMode ? [Color(0xffecf0f1)] : [Color(0xff34495e)],
+      // onToggle: (index) {},
     );
   }
 
@@ -220,6 +233,10 @@ class _HomePageState extends State<HomePage> {
       child: SafeArea(
         child: Stack(
           children: [
+            Positioned(
+                bottom: 300,
+                right: 30,
+                child: selectPH()),
             Column(
               children: [
                 showCalendar(),

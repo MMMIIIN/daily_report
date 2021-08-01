@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
-import 'package:daily_report/src/repository/todo_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,12 +46,6 @@ class TodoController extends GetxController {
     } else {
       todoUidList.value.todoList.add(data);
     }
-  }
-
-  void addTodo(String uid, YMD ymd, String title, TimeRange timeRange,
-      double value, int colorIndex) async {
-    await TodoRepository.to
-        .addTodo(uid, ymd, title, timeRange, value, colorIndex);
   }
 
   void setPercent() {
