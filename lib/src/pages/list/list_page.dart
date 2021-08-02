@@ -122,7 +122,7 @@ class _ListPageState extends State<ListPage> {
                 height: 7,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: isDarkMode ? Colors.white : Colors.black),
+                    color: isDarkMode ? Colors.white : Colors.black87),
               ),
             );
           }

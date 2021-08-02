@@ -253,7 +253,6 @@ class _AddTodoState extends State<AddTodo> {
           context: context,
           clockRotation: 180,
           paintingStyle: PaintingStyle.fill,
-          backgroundColor: Colors.yellow[100],
           interval: Duration(minutes: 10),
           labels: ['0', '3', '6', '9', '12', '15', '18', '21']
               .asMap()
@@ -280,10 +279,10 @@ class _AddTodoState extends State<AddTodo> {
                   : _todoController.defaultTime.value.endTime.minute),
           ticks: 24,
           handlerRadius: 8,
-          strokeColor: Colors.orangeAccent[200],
-          ticksColor: Theme
-              .of(context)
-              .primaryColor,
+          handlerColor: isDarkMode ? Colors.grey : primaryColor,
+          backgroundColor: isDarkMode ? Colors.white.withOpacity(0.1) : primaryColor.withOpacity(0.1),
+          strokeColor: isDarkMode ? Colors.white.withOpacity(0.9) : primaryColor.withOpacity(0.8),
+          ticksColor: isDarkMode ? Colors.white.withOpacity(0.8) : primaryColor,
           labelOffset: 30,
           rotateLabels: false,
           padding: 60,

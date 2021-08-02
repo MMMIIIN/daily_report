@@ -1,3 +1,4 @@
+import 'package:daily_report/color.dart';
 import 'package:daily_report/src/binding/init_binding.dart';
 import 'package:daily_report/src/pages/app.dart';
 import 'package:daily_report/src/pages/chart/chart_page.dart';
@@ -23,7 +24,9 @@ class MyApp extends StatelessWidget {
         bool isDarkMode = appdata.read('isDarkMode');
         return GetMaterialApp(
           title: 'Daily Report',
-          theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+          theme: isDarkMode ? ThemeData.dark() : ThemeData(
+            primaryColor: primaryColor
+          ),
           initialRoute: '/',
           initialBinding: InitBinding(),
           getPages: [

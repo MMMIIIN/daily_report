@@ -5,6 +5,7 @@ import 'package:daily_report/src/pages/chart/controller/select_date_controller.d
 import 'package:daily_report/src/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final SelectDateController _selectDateController =
@@ -24,59 +25,73 @@ class _SelectDatePageState extends State<SelectDatePage> {
   DateTime? _selectedDay;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   var rangeSelectionMode = RangeSelectionMode.toggledOn;
+  bool isDarkMode = GetStorage().read('isDarkMode');
 
   Widget tableCalendar() {
     return TableCalendar(
       calendarBuilders: CalendarBuilders(
-          selectedBuilder: (context, date, _) => Container(
-                margin: const EdgeInsets.all(4),
-                alignment: Alignment.center,
+        selectedBuilder: (context, date, _) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        todayBuilder: (context, date, _) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Color(0xff95afc0),
+              borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        rangeStartBuilder: (context, date, _) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: primaryColor, borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        rangeEndBuilder: (context, date, _) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: primaryColor, borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        rangeHighlightBuilder: (context, date, _) => Container(
+          decoration: BoxDecoration(
+            color: _ ? Color(0xff95afc0) : null,
+          ),
+        ),
+        markerBuilder: (context, date, _) {
+          if (_.isNotEmpty) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: Container(
+                width: 7,
+                height: 7,
                 decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  date.day.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: isDarkMode ? Colors.white : Colors.black87),
               ),
-          todayBuilder: (context, date, _) => Container(
-                margin: const EdgeInsets.all(4),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Color(0xff95afc0),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  date.day.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-          rangeStartBuilder: (context, date, _) => Container(
-                margin: const EdgeInsets.all(4),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: primaryColor,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  date.day.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-          rangeEndBuilder: (context, date, _) => Container(
-                margin: const EdgeInsets.all(4),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: primaryColor,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  date.day.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-          rangeHighlightBuilder: (context, date, _) => Container(
-                decoration: BoxDecoration(
-                  color: _ ? Color(0xff95afc0) : null,
-                ),
-              )),
+            );
+          }
+        },
+      ),
       firstDay: FirstDay,
       lastDay: LastDay,
       focusedDay: _focusedDay,
@@ -86,8 +101,10 @@ class _SelectDatePageState extends State<SelectDatePage> {
       calendarFormat: _calendarFormat,
       rangeSelectionMode: rangeSelectionMode,
       eventLoader: (day) {
-        for (var todo in _todoController.loadTodoUidList.value.todoList) {
-          if (day == todo.ymd) {
+        for (var todo in _todoController.todoUidList.value.todoList) {
+          if (day.year == todo.ymd.year &&
+              day.month == todo.ymd.month &&
+              day.day == todo.ymd.day) {
             return [Container()];
           }
         }
