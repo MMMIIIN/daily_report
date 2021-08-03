@@ -14,6 +14,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   dynamic error = 'error';
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -37,30 +38,37 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             color: Colors.grey,
           ),
-          MaterialButton(onPressed: () async{
-            await FirebaseFirestore.instance
-                .collection('todo')
-                .doc('FirebaseAuth.instance.currentUser!.uid')
-                .collection('todos')
-                .add({
-              'title': '_todoController.titleTextController.value.text',
-            }).then((value) {
-              Get.showSnackbar(GetBar(
-                title: 'Success',
-                message: 'good!',
-                duration: Duration(seconds: 2),
-                snackPosition: SnackPosition.BOTTOM,
-              ));
-            }).catchError((error) =>
-                Get.showSnackbar(GetBar(
-                  backgroundColor: Colors.redAccent,
-                  title: 'ERROR',
-                  message: '로그인 정보를 확인하세요',
-                  duration: Duration(seconds: 2),
-                  snackPosition: SnackPosition.BOTTOM,
-                )));
-          },
-          color: Colors.greenAccent,)
+          MaterialButton(
+            onPressed: () async {
+              await FirebaseFirestore.instance
+                  .collection('todo')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection('todos')
+                  .get()
+                  .then((value) => value.docs.forEach((element) {
+                        print(element.id);
+                      }));
+            },
+            color: Colors.redAccent,
+          ),
+          MaterialButton(
+            onPressed: () async {
+              await FirebaseFirestore.instance
+                  .collection('todo')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection('todos')
+                  .get()
+                  .then((value) => value.docs.forEach((element) {
+                        FirebaseFirestore.instance
+                            .collection('todo')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection('todos')
+                            .doc(element.id)
+                            .update({'uid': element.id});
+                      }));
+            },
+            color: Colors.green,
+          )
         ],
       ),
     );
