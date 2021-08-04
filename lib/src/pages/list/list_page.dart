@@ -2,6 +2,7 @@ import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
+import 'package:daily_report/src/pages/list/todo_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -214,9 +215,50 @@ class _ListPageState extends State<ListPage> {
                                   .todoList[index].endMinute),
                 ),
               );
-              Get.to(AddTodo(
-                editMode: true,
-              ));
+              // Get.to(AddTodo(
+              //   editMode: true,
+              // ));
+              Get.to(
+                () => TodoInfoPage(
+                  title: _listController.searchTodoList.value.todoList.isEmpty
+                      ? _listController.searchResult[index].title
+                      : _listController
+                          .searchTodoList.value.todoList[index].title,
+                  timeRange: TimeRange(
+                    startTime: TimeOfDay(
+                        hour: _listController
+                                .searchTodoList.value.todoList.isEmpty
+                            ? _listController.searchResult[index].startHour
+                            : _listController
+                                .searchTodoList.value.todoList[index].startHour,
+                        minute: _listController
+                                .searchTodoList.value.todoList.isEmpty
+                            ? _listController.searchResult[index].startMinute
+                            : _listController.searchTodoList.value
+                                .todoList[index].startMinute),
+                    endTime: TimeOfDay(
+                        hour: _listController
+                                .searchTodoList.value.todoList.isEmpty
+                            ? _listController.searchResult[index].endHour
+                            : _listController
+                                .searchTodoList.value.todoList[index].endHour,
+                        minute: _listController
+                                .searchTodoList.value.todoList.isEmpty
+                            ? _listController.searchResult[index].endMinute
+                            : _listController.searchTodoList.value
+                                .todoList[index].endMinute),
+                  ),
+                  colorIndex:
+                      _listController.searchTodoList.value.todoList.isEmpty
+                          ? _listController.searchResult[index].colorIndex
+                          : _listController
+                              .searchTodoList.value.todoList[index].colorIndex,
+                  todoUid: _listController.searchTodoList.value.todoList.isEmpty
+                      ? _listController.searchResult[index].uid
+                      : _listController
+                          .searchTodoList.value.todoList[index].uid,
+                ),
+              );
             },
             child: Container(
               padding: EdgeInsets.all(10),

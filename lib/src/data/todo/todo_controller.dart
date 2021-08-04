@@ -8,14 +8,6 @@ import 'package:time_range_picker/time_range_picker.dart';
 
 enum CATEGORY { DEFAULT, STUDY, SHOPPING, EXERCISE, SLEEP }
 
-class YMD {
-  int year;
-  int month;
-  int day;
-
-  YMD({required this.year, required this.month, required this.day});
-}
-
 final now = DateTime.now();
 final FirstDay = DateTime(2020, 1, 1);
 final LastDay = DateTime(now.year + 5, 12, 31);
@@ -71,7 +63,6 @@ class TodoController extends GetxController {
     setCurrentList();
     setPercent();
     sortCurrentList();
-    print(currentIndexList.value);
   }
 
   void setCurrentList() {
