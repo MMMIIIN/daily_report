@@ -2,7 +2,6 @@ import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
-import 'package:daily_report/src/pages/list/todo_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -176,140 +175,112 @@ class _ListPageState extends State<ListPage> {
   Widget showListView() {
     return Expanded(
       child: ListView.builder(
-        itemCount: _listController.searchTodoList.value.todoList.isEmpty
-            ? _listController.searchResult.length
-            : _listController.searchTodoList.value.todoList.length,
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: InkWell(
-            customBorder:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            onTap: () {
-              _todoController.titleTextController.value.text = _listController
-                      .searchTodoList.value.todoList.isEmpty
-                  ? _listController.searchResult[index].title
-                  : _listController.searchTodoList.value.todoList[index].title;
-              _todoController.setTime(
-                TimeRange(
-                  startTime: TimeOfDay(
-                      hour:
-                          _listController.searchTodoList.value.todoList.isEmpty
-                              ? _listController.searchResult[index].startHour
-                              : _listController.searchTodoList.value
-                                  .todoList[index].startHour,
-                      minute:
-                          _listController.searchTodoList.value.todoList.isEmpty
-                              ? _listController.searchResult[index].startMinute
-                              : _listController.searchTodoList.value
-                                  .todoList[index].startMinute),
-                  endTime: TimeOfDay(
-                      hour:
-                          _listController.searchTodoList.value.todoList.isEmpty
-                              ? _listController.searchResult[index].endHour
-                              : _listController
-                                  .searchTodoList.value.todoList[index].endHour,
-                      minute:
-                          _listController.searchTodoList.value.todoList.isEmpty
-                              ? _listController.searchResult[index].endMinute
-                              : _listController.searchTodoList.value
-                                  .todoList[index].endMinute),
-                ),
-              );
-              // Get.to(AddTodo(
-              //   editMode: true,
-              // ));
-              Get.to(
-                () => TodoInfoPage(
-                  title: _listController.searchTodoList.value.todoList.isEmpty
-                      ? _listController.searchResult[index].title
-                      : _listController
-                          .searchTodoList.value.todoList[index].title,
-                  timeRange: TimeRange(
-                    startTime: TimeOfDay(
-                        hour: _listController
-                                .searchTodoList.value.todoList.isEmpty
-                            ? _listController.searchResult[index].startHour
-                            : _listController
-                                .searchTodoList.value.todoList[index].startHour,
-                        minute: _listController
-                                .searchTodoList.value.todoList.isEmpty
+          itemCount: _listController.searchTodoList.value.todoList.isEmpty
+              ? _listController.searchResult.length
+              : _listController.searchTodoList.value.todoList.length,
+          itemBuilder: (context, index) {
+            var currentTimeRange = TimeRange(
+                startTime: TimeOfDay(
+                    hour: _listController.searchTodoList.value.todoList.isEmpty
+                        ? _listController.searchResult[index].startHour
+                        : _listController
+                            .searchTodoList.value.todoList[index].startHour,
+                    minute:
+                        _listController.searchTodoList.value.todoList.isEmpty
                             ? _listController.searchResult[index].startMinute
                             : _listController.searchTodoList.value
                                 .todoList[index].startMinute),
-                    endTime: TimeOfDay(
-                        hour: _listController
-                                .searchTodoList.value.todoList.isEmpty
-                            ? _listController.searchResult[index].endHour
-                            : _listController
-                                .searchTodoList.value.todoList[index].endHour,
-                        minute: _listController
-                                .searchTodoList.value.todoList.isEmpty
+                endTime: TimeOfDay(
+                    hour: _listController.searchTodoList.value.todoList.isEmpty
+                        ? _listController.searchResult[index].endHour
+                        : _listController
+                            .searchTodoList.value.todoList[index].endHour,
+                    minute:
+                        _listController.searchTodoList.value.todoList.isEmpty
                             ? _listController.searchResult[index].endMinute
                             : _listController.searchTodoList.value
-                                .todoList[index].endMinute),
+                                .todoList[index].endMinute));
+            _todoController.titleTextController.value.text = _listController
+                    .searchTodoList.value.todoList.isEmpty
+                ? _listController.searchResult[index].title
+                : _listController.searchTodoList.value.todoList[index].title;
+            var currentTitle = _listController
+                    .searchTodoList.value.todoList.isEmpty
+                ? _listController.searchResult[index].title
+                : _listController.searchTodoList.value.todoList[index].title;
+            var currentColorIndex =
+                _listController.searchTodoList.value.todoList.isEmpty
+                    ? _listController.searchResult[index].colorIndex
+                    : _listController
+                        .searchTodoList.value.todoList[index].colorIndex;
+            var currentDateTime = DateTime(
+                _listController.searchTodoList.value.todoList.isEmpty
+                    ? _listController.searchResult[index].ymd.year
+                    : _listController
+                        .searchTodoList.value.todoList[index].ymd.year,
+                _listController.searchTodoList.value.todoList.isEmpty
+                    ? _listController.searchResult[index].ymd.month
+                    : _listController
+                        .searchTodoList.value.todoList[index].ymd.month,
+                _listController.searchTodoList.value.todoList.isEmpty
+                    ? _listController.searchResult[index].ymd.day
+                    : _listController
+                        .searchTodoList.value.todoList[index].ymd.day);
+            var todoUid = _listController.searchTodoList.value.todoList.isEmpty
+                ? _listController.searchResult[index].uid
+                : _listController.searchTodoList.value.todoList[index].uid;
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: InkWell(
+                customBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                onTap: () {
+                  _todoController.setTime(
+                    currentTimeRange,
+                  );
+                  _todoController.currentDateTime(currentDateTime);
+                  todoDialog(context, currentTitle, currentDateTime,
+                      currentTimeRange, currentColorIndex, todoUid);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  width: Get.mediaQuery.size.width * 0.8,
+                  height: Get.mediaQuery.size.height * 0.08,
+                  decoration: BoxDecoration(
+                    color: primaryColor.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(15),
+                    // border: Border.all(),
                   ),
-                  colorIndex:
-                      _listController.searchTodoList.value.todoList.isEmpty
-                          ? _listController.searchResult[index].colorIndex
-                          : _listController
-                              .searchTodoList.value.todoList[index].colorIndex,
-                  todoUid: _listController.searchTodoList.value.todoList.isEmpty
-                      ? _listController.searchResult[index].uid
-                      : _listController
-                          .searchTodoList.value.todoList[index].uid,
-                ),
-              );
-            },
-            child: Container(
-              padding: EdgeInsets.all(10),
-              width: Get.mediaQuery.size.width * 0.8,
-              height: Get.mediaQuery.size.height * 0.08,
-              decoration: BoxDecoration(
-                color: primaryColor.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(15),
-                // border: Border.all(),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: 16,
-                    height: 16,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: _listController
-                                .searchTodoList.value.todoList.isEmpty
-                            ? colorList[
-                                _listController.searchResult[index].colorIndex]
-                            : colorList[_listController.searchTodoList.value
-                                .todoList[index].colorIndex]),
-                  ),
-                  Text(
-                      '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].ymd.year : _listController.searchTodoList.value.todoList[index].ymd.year}.'
-                      '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].ymd.month : _listController.searchTodoList.value.todoList[index].ymd.month}.'
-                      '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].ymd.day : _listController.searchTodoList.value.todoList[index].ymd.day}'),
-                  Text(_listController.searchTodoList.value.todoList.isEmpty
-                      ? _listController.searchResult[index].title
-                      : _listController
-                          .searchTodoList.value.todoList[index].title),
-                  SizedBox(width: 10),
-                  Row(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                          '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].startHour : _listController.searchTodoList.value.todoList[index].startHour} : '
-                          '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].startMinute : _listController.searchTodoList.value.todoList[index].startMinute}'),
-                      SizedBox(width: 20),
-                      Text(
-                          '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].endHour : _listController.searchTodoList.value.todoList[index].endHour} : '
-                          '${_listController.searchTodoList.value.todoList.isEmpty ? _listController.searchResult[index].endMinute : _listController.searchTodoList.value.todoList[index].endMinute}')
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: colorList[currentColorIndex]),
+                      ),
+                      Text('${currentDateTime.year}.'
+                          '${currentDateTime.month}.'
+                          '${currentDateTime.day}'),
+                      Text(currentTitle),
+                      SizedBox(width: 10),
+                      Row(
+                        children: [
+                          Text('${currentTimeRange.startTime.hour} : '
+                              '${currentTimeRange.startTime.minute}'),
+                          SizedBox(width: 20),
+                          Text('${currentTimeRange.endTime.hour} : '
+                              '${currentTimeRange.endTime.minute}')
+                        ],
+                      )
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 
@@ -327,5 +298,75 @@ class _ListPageState extends State<ListPage> {
         _listController.searchTitle('');
       }
     });
+  }
+
+  void todoDialog(BuildContext context, String title, DateTime dateTime,
+      TimeRange timeRange, int colorIndex, String todoUid) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          title: Row(
+            children: [
+              Container(
+                width: 25,
+                height: 25,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: colorList[colorIndex],
+                ),
+              ),
+              SizedBox(width: 10),
+              Text(title),
+            ],
+          ),
+          content: Container(
+            height: Get.mediaQuery.size.height * 0.1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${dateTime.year} .'
+                  '${dateTime.month} .'
+                  '${dateTime.day}',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+                ),
+                Text(
+                  '${timeRange.startTime.hour} : '
+                  '${timeRange.startTime.minute} - '
+                  '${timeRange.endTime.hour} : '
+                  '${timeRange.endTime.minute}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            MaterialButton(
+              elevation: 0.0,
+              color: primaryColor.withOpacity(0.4),
+              onPressed: () {
+                Get.back();
+              },
+              child: Text('취소'),
+            ),
+            MaterialButton(
+              color: primaryColor,
+              onPressed: () {
+                _todoController.titleTextController.value.text = title;
+                _todoController.selectColorIndex(colorIndex);
+                Get.off(() => AddTodo(
+                      editMode: true,
+                      todoUid: todoUid,
+                    ));
+              },
+              child: Text('수정'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
