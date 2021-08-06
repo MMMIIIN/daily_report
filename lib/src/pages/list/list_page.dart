@@ -20,7 +20,6 @@ final ListController _listController = Get.put(ListController());
 
 class _ListPageState extends State<ListPage> {
   int touchedIndex = -1;
-  DateTime _focusedDay = _todoController.currentDateTime.value;
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
   final bool isDarkMode = GetStorage().read('isDarkMode');
 
@@ -288,7 +287,6 @@ class _ListPageState extends State<ListPage> {
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
-      _focusedDay = focusedDay;
       if (_listController.selectedDays.contains(selectedDay)) {
         _listController.selectedDays.remove(selectedDay);
       } else {

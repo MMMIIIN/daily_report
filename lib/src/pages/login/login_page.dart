@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 
 
 class LoginPage extends StatelessWidget {
-  TextEditingController _emailController = new TextEditingController();
-  TextEditingController _passwordController = new TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +61,7 @@ class LoginPage extends StatelessWidget {
       }
     }
     if (FirebaseAuth.instance.currentUser != null) {
-      Get.to(Home());
+      await Get.to(() => Home());
     }
   }
 }

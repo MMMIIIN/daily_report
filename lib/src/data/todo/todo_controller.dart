@@ -42,10 +42,10 @@ class TodoController extends GetxController {
 
   void setPercent() {
     valueSum = 0;
-    for (int i = 0; i < currentIndexList.length; i++) {
+    for (var i = 0; i < currentIndexList.length; i++) {
       valueSum += currentUidList.value.todoList[i].value;
     }
-    for (int j = 0; j < currentIndexList.length; j++) {
+    for (var j = 0; j < currentIndexList.length; j++) {
       currentUidList.value.todoList[j].percent =
           currentUidList.value.todoList[j].value / valueSum * 100;
     }
@@ -53,7 +53,7 @@ class TodoController extends GetxController {
 
   void setCurrentIndex(DateTime time) {
     currentIndexList.clear();
-    for (int i = 0; i < todoUidList.value.todoList.length; i++) {
+    for (var i = 0; i < todoUidList.value.todoList.length; i++) {
       if (todoUidList.value.todoList[i].ymd.year == time.year &&
           todoUidList.value.todoList[i].ymd.month == time.month &&
           todoUidList.value.todoList[i].ymd.day == time.day) {
@@ -67,7 +67,7 @@ class TodoController extends GetxController {
 
   void setCurrentList() {
     currentUidList.value.todoList.clear();
-    for (int i = 0; i < currentIndexList.length; i++) {
+    for (var i = 0; i < currentIndexList.length; i++) {
       currentUidList.value.todoList
           .add(todoUidList.value.todoList[currentIndexList[i]]);
     }
@@ -104,7 +104,7 @@ class TodoController extends GetxController {
   }
 
   void initTodoTitleList() {
-    for (int i = 0; i < loadTodoUidList.value.todoList.length; i++) {
+    for (var i = 0; i < loadTodoUidList.value.todoList.length; i++) {
       addTodoTitle(loadTodoUidList.value.todoList[i].title);
     }
   }

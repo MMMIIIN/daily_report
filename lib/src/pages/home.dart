@@ -13,9 +13,16 @@ import 'package:get_storage/get_storage.dart';
 
 import 'home/controller/home_controller.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   final HomeController _homeController = Get.put(HomeController());
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   CollectionReference todo = FirebaseFirestore.instance
       .collection('todo')
       .doc(FirebaseAuth.instance.currentUser!.uid)

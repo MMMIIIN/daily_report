@@ -30,7 +30,7 @@ class _ChartPageState extends State<ChartPage> {
       totalSwitches: 2,
       initialLabelIndex: _chartController.modeIndex.value,
       labels: ['%', 'h'],
-      inactiveBgColor: isDarkMode ?  Color(0xff34495e) : Color(0xffecf0f1),
+      inactiveBgColor: isDarkMode ? Color(0xff34495e) : Color(0xffecf0f1),
       activeBgColor: isDarkMode ? [Color(0xffecf0f1)] : [Color(0xff34495e)],
       onToggle: (index) {
         _chartController.setMode(index);
@@ -65,93 +65,105 @@ class _ChartPageState extends State<ChartPage> {
   }
 
   Widget showChart() {
-    return _chartController.checkChartPageList.value.todoList.isNotEmpty
-        ? PieChart(
-            PieChartData(
-              pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
-                setState(() {
-                  final desiredTouch =
-                      pieTouchResponse.touchInput is! PointerExitEvent &&
-                          pieTouchResponse.touchInput is! PointerUpEvent;
-                  if (desiredTouch && pieTouchResponse.touchedSection != null) {
-                    touchedIndex =
-                        pieTouchResponse.touchedSection!.touchedSectionIndex;
-                  } else {
-                    touchedIndex = -1;
-                  }
-                });
-              }),
-              startDegreeOffset: 270,
-              sectionsSpace: 4,
-              centerSpaceRadius: 130,
-              sections: List<PieChartSectionData>.generate(
-                _chartController.checkChartPageList.value.todoList.length,
-                (index) {
-                  final isTouched = index == touchedIndex;
-                  final radius = isTouched ? 70.0 : 50.0;
-                  final title = isTouched
-                      ? _chartController
-                          .checkChartPageList.value.todoList[index].title
-                      : '';
-                  return PieChartSectionData(
-                    title: title,
-                    radius: radius,
-                    value: _chartController
-                        .checkChartPageList.value.todoList[index].value
-                        .toDouble(),
-                    color: colorList[_chartController
-                        .checkChartPageList.value.todoList[index].colorIndex],
-                  );
-                },
-              ),
-            ),
-          )
-        : Container();
+    return GetBuilder<ChartController>(
+      init: ChartController(),
+      builder: (_) => Flexible(
+          flex: 3,
+          child: _chartController.currentIndexList.isNotEmpty
+              ? PieChart(
+                  PieChartData(
+                    pieTouchData:
+                        PieTouchData(touchCallback: (pieTouchResponse) {
+                      setState(() {
+                        final desiredTouch =
+                            pieTouchResponse.touchInput is! PointerExitEvent &&
+                                pieTouchResponse.touchInput is! PointerUpEvent;
+                        if (desiredTouch &&
+                            pieTouchResponse.touchedSection != null) {
+                          touchedIndex = pieTouchResponse
+                              .touchedSection!.touchedSectionIndex;
+                        } else {
+                          touchedIndex = -1;
+                        }
+                      });
+                    }),
+                    startDegreeOffset: 270,
+                    sectionsSpace: 4,
+                    centerSpaceRadius: 130,
+                    sections: List<PieChartSectionData>.generate(
+                      _chartController.currentIndexList.length,
+                      (index) {
+                        final isTouched = index == touchedIndex;
+                        final radius = isTouched ? 70.0 : 50.0;
+                        final title = isTouched
+                            ? _chartController
+                                .checkChartPageList.value.todoList[index].title
+                            : '';
+                        return PieChartSectionData(
+                          title: title,
+                          radius: radius,
+                          value: _chartController
+                              .checkChartPageList.value.todoList[index].value
+                              .toDouble(),
+                          color: colorList[_chartController.checkChartPageList
+                              .value.todoList[index].colorIndex],
+                        );
+                      },
+                    ),
+                  ),
+                )
+              : Container(
+                  child: Text('EMPTY'),
+                )),
+    );
   }
 
   Widget chartList() {
     return _chartController.checkChartPageList.value.todoList.isNotEmpty
-        ? GridView.builder(
-            itemCount:
-                _chartController.checkChartPageList.value.todoList.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 50,
-              mainAxisExtent: 30,
-            ),
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: colorList[_chartController.checkChartPageList
-                              .value.todoList[index].colorIndex]),
-                    ),
-                    SizedBox(width: 4),
-                    Row(
-                      children: [
-                        Text(
-                          '${_chartController.checkChartPageList.value.todoList[index].title}',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        _chartController.modeIndex.value == 0
-                            ? Text(
-                                ' ${_chartController.checkChartPageList.value.todoList[index].percent.toStringAsFixed(1)} %',
-                                style: TextStyle(fontSize: 13),
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            : Text(
-                                ' ${_chartController.checkChartPageList.value.todoList[index].hourMinute}')
-                      ],
-                    ),
-                  ],
+        ? Flexible(
+            flex: 1,
+            child: GridView.builder(
+              itemCount:
+                  _chartController.checkChartPageList.value.todoList.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 50,
+                mainAxisExtent: 30,
+              ),
+              itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: colorList[_chartController.checkChartPageList
+                                .value.todoList[index].colorIndex]),
+                      ),
+                      SizedBox(width: 4),
+                      Row(
+                        children: [
+                          Text(
+                            '${_chartController.checkChartPageList.value.todoList[index].title}',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          _chartController.modeIndex.value == 0
+                              ? Text(
+                                  ' ${_chartController.checkChartPageList.value.todoList[index].percent.toStringAsFixed(1)} %',
+                                  style: TextStyle(fontSize: 13),
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : Text(
+                                  ' ${_chartController.checkChartPageList.value.todoList[index].hourMinute}')
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -162,23 +174,24 @@ class _ChartPageState extends State<ChartPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Obx(
-        () => Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                selectCondition(),
-                toggleButton(),
-              ],
-            ),
-            Flexible(flex: 3, child: showChart()),
-            Flexible(flex: 1, child: chartList()),
-          ],
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Obx(
+          () => Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  selectCondition(),
+                  toggleButton(),
+                ],
+              ),
+              showChart(),
+              chartList(),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }
