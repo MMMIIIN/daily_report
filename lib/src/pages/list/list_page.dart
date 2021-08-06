@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,12 +17,12 @@ class ListPage extends StatefulWidget {
 
 final TodoController _todoController = Get.put(TodoController());
 final ListController _listController = Get.put(ListController());
-final bool isDarkMode = GetStorage().read('isDarkMode');
 
 class _ListPageState extends State<ListPage> {
   int touchedIndex = -1;
   DateTime _focusedDay = _todoController.currentDateTime.value;
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
+  final bool isDarkMode = GetStorage().read('isDarkMode');
 
   @override
   Widget build(BuildContext context) {
@@ -309,22 +311,57 @@ class _ListPageState extends State<ListPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: 25,
-                height: 25,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: colorList[colorIndex],
-                ),
+              Row(
+                children: [
+                  Container(
+                    width: 25,
+                    height: 25,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: colorList[colorIndex],
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(title),
+                ],
               ),
-              SizedBox(width: 10),
-              Text(title),
+              IconButton(
+                  icon: Icon(Icons.delete_outline),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('삭제 하시겠습니까?'),
+                            actions: [
+                              MaterialButton(
+                                elevation: 0.0,
+                                color: primaryColor.withOpacity(0.4),
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: Text('취소'),
+                              ),
+                              MaterialButton(
+                                color: primaryColor,
+                                onPressed: () {
+                                  todoFirebaseDelete(todoUid);
+                                  todoDelete(todoUid);
+                                },
+                                child: Text('삭제'),
+                              ),
+                            ],
+                          );
+                        });
+                  })
             ],
           ),
           content: Container(
             height: Get.mediaQuery.size.height * 0.1,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -368,5 +405,38 @@ class _ListPageState extends State<ListPage> {
         );
       },
     );
+  }
+
+  void todoFirebaseDelete(String todoUid) {
+    FirebaseFirestore.instance
+        .collection('todo')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('todos')
+        .doc(todoUid)
+        .delete()
+        .then((value) {
+      Get.back();
+      Get.back();
+    }).catchError(
+      (error) => Get.showSnackbar(
+        GetBar(
+          title: 'DELETE',
+          message: 'ERROR!',
+          duration: Duration(seconds: 2),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.redAccent,
+        ),
+      ),
+    );
+  }
+
+  void todoDelete(String todoUid) {
+    _todoController.loadTodoUidList.value.todoList
+        .removeWhere((element) => element.uid == todoUid);
+
+    _todoController.todoUidList.value.todoList.clear();
+    _todoController.loadTodoUidList.value.todoList.forEach((element) {
+      _todoController.todoUidCheckAdd(element);
+    });
   }
 }

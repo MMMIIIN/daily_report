@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
               holidayTextStyle: TextStyle(color: Colors.blue),
             ),
             eventLoader: (day) {
-              for (var todo in _todoController.todoUidList.value.todoList) {
+              for (var todo in _todoController.loadTodoUidList.value.todoList) {
                 if (day.year == todo.ymd.year &&
                     day.month == todo.ymd.month &&
                     day.day == todo.ymd.day) {
