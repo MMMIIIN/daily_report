@@ -250,31 +250,59 @@ class _ListPageState extends State<ListPage> {
                   decoration: BoxDecoration(
                     color: primaryColor.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(15),
-                    // border: Border.all(),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: colorList[currentColorIndex]),
+                        // color: Colors.amber,
+                        padding: EdgeInsets.only(left: 10),
+                        width: Get.mediaQuery.size.width * 0.55,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: 16,
+                                  height: 16,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: colorList[currentColorIndex]),
+                                ),
+                                SizedBox(
+                                    width: Get.mediaQuery.size.width * 0.03),
+                                Text('${currentDateTime.year}.'
+                                    '${currentDateTime.month}.'
+                                    '${currentDateTime.day}'
+                                    ' ${getOfDay(currentDateTime.weekday)}'),
+                              ],
+                            ),
+                            SizedBox(
+                              width: Get.mediaQuery.size.width * 0.07,
+                            ),
+                            Flexible(
+                              child: Text(
+                                currentTitle,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      Text('${currentDateTime.year}.'
-                          '${currentDateTime.month}.'
-                          '${currentDateTime.day}'),
-                      Text(currentTitle),
-                      SizedBox(width: 10),
-                      Row(
-                        children: [
-                          Text('${currentTimeRange.startTime.hour} : '
-                              '${currentTimeRange.startTime.minute}'),
-                          SizedBox(width: 20),
-                          Text('${currentTimeRange.endTime.hour} : '
-                              '${currentTimeRange.endTime.minute}')
-                        ],
+                      // Text(currentTitle),
+                      Container(
+                        width: Get.mediaQuery.size.width * 0.29,
+                        child: Row(
+                          children: [
+                            Text('${currentTimeRange.startTime.hour} : '
+                                '${currentTimeRange.startTime.minute}'),
+                            SizedBox(width: 20),
+                            Text('${currentTimeRange.endTime.hour} : '
+                                '${currentTimeRange.endTime.minute}')
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -283,6 +311,27 @@ class _ListPageState extends State<ListPage> {
             );
           }),
     );
+  }
+
+  String getOfDay(int weekday) {
+    switch (weekday) {
+      case 1:
+        return '(월)';
+      case 2:
+        return '(화)';
+      case 3:
+        return '(수)';
+      case 4:
+        return '(목)';
+      case 5:
+        return '(금)';
+      case 6:
+        return '(토)';
+      case 7:
+        return '(일)';
+      default:
+        return '';
+    }
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -327,6 +376,7 @@ class _ListPageState extends State<ListPage> {
               ),
               IconButton(
                   icon: Icon(Icons.delete_outline),
+                  splashRadius: 15,
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -365,7 +415,8 @@ class _ListPageState extends State<ListPage> {
                 Text(
                   '${dateTime.year} .'
                   '${dateTime.month} .'
-                  '${dateTime.day}',
+                  '${dateTime.day}'
+                  ' ${getOfDay(dateTime.weekday)}',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
                 ),
                 Text(
