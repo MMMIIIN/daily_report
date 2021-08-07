@@ -166,7 +166,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
               style: TextStyle(color: Colors.white),
             )),
         MaterialButton(
-          onPressed: () {
+          onPressed: ()async {
             if (_selectDateController.rangeBool.value) {
               // _chartController.makeDateRange(
               //     _selectDateController.rangeStart.value,
@@ -174,7 +174,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
               _chartController.makeRangeDate(DateTimeRange(
                   start: _selectDateController.rangeStart.value,
                   end: _selectDateController.rangeEnd.value));
-              Get.off(() => Home());
+              await Get.off(() => Home());
             }
           },
           color: _selectDateController.rangeBool.value

@@ -69,8 +69,9 @@ class ChartController extends GetxController {
   }
 
   void makeRangeDate(DateTimeRange timeRange) {
+    chartPageList.value.todoList.clear();
+    checkChartPageList.value.todoList.clear();
     var rangeOfDays = timeRange.end.difference(timeRange.start).inDays;
-    print(timeRange.start);
     currentIndexList.clear();
     for (var i = 0; i <= rangeOfDays; i++) {
       var date = timeRange.start.add(Duration(days: i));
@@ -91,40 +92,29 @@ class ChartController extends GetxController {
     chartPageList.value.todoList.forEach((element) {
       makeChart(element);
     });
-    print(checkChartPageList.value.todoList.isNotEmpty);
+    setPercent();
+    sortChartList();
+    setHourMinute();
   }
 
   void setChartList() {
     chartPageList.value.todoList.clear();
     for (var i = 0; i < currentIndexList.length; i++) {
-      chartPageList.value.todoList.add(
-          _todoController.loadTodoUidList.value.todoList[currentIndexList[i]]);
+      var item =
+          _todoController.loadTodoUidList.value.todoList[currentIndexList[i]];
+      chartPageList.value.todoList.add(TestTodo(
+          uid: item.uid,
+          ymd: item.ymd,
+          title: item.title,
+          startHour: item.startHour,
+          startMinute: item.startMinute,
+          endHour: item.endHour,
+          endMinute: item.endMinute,
+          value: item.value,
+          colorIndex: item.colorIndex));
     }
     update();
   }
-
-  // void makeDateRange(DateTime startTime, DateTime endTime) {
-  //   chartPageList.value.todoList.clear();
-  //   checkChartPageList.value.todoList.clear();
-  //   var rangeOfDays = endTime.difference(startTime).inDays + 1;
-  //   for (var i = 0; i < rangeOfDays; i++) {
-  //     chartPageList.value.todoList.addAll(
-  //         _todoController.todoUidList.value.todoList.where((element) =>
-  //             element.ymd.year == startTime.year &&
-  //             element.ymd.month == startTime.month &&
-  //             element.ymd.day == startTime.day + i));
-  //   }
-  //   print(
-  //       'chartPageList.value.todoList.length = ${chartPageList.value.todoList.length}');
-  //   checkChartPageList.value.todoList.clear();
-  //   for (var i = 0; i < chartPageList.value.todoList.length; i++) {
-  //     print('i = $i');
-  //     makeChart(chartPageList.value.todoList[i]);
-  //   }
-  //   setPercent();
-  //   sortChartList();
-  //   setHourMinute();
-  // }
 
   void makeChart(TestTodo data) {
     var index = checkChartPageList.value.todoList
@@ -136,9 +126,9 @@ class ChartController extends GetxController {
     }
   }
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   makeMonthChart(DateTime.now());
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    makeMonthChart(DateTime.now());
+  }
 }

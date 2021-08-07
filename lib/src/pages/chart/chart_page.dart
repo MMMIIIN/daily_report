@@ -41,7 +41,7 @@ class _ChartPageState extends State<ChartPage> {
   Widget selectCondition() {
     return InkWell(
       onTap: () {
-        Get.off(() => SelectDatePage());
+        Get.to(() => SelectDatePage());
       },
       child: Container(
         width: Get.mediaQuery.size.width * 0.6,
@@ -69,7 +69,7 @@ class _ChartPageState extends State<ChartPage> {
       init: ChartController(),
       builder: (_) => Flexible(
           flex: 3,
-          child: _chartController.currentIndexList.isNotEmpty
+          child: _chartController.checkChartPageList.value.todoList.isNotEmpty
               ? PieChart(
                   PieChartData(
                     pieTouchData:
@@ -91,7 +91,7 @@ class _ChartPageState extends State<ChartPage> {
                     sectionsSpace: 4,
                     centerSpaceRadius: 130,
                     sections: List<PieChartSectionData>.generate(
-                      _chartController.currentIndexList.length,
+                      _chartController.checkChartPageList.value.todoList.length,
                       (index) {
                         final isTouched = index == touchedIndex;
                         final radius = isTouched ? 70.0 : 50.0;
@@ -112,9 +112,8 @@ class _ChartPageState extends State<ChartPage> {
                     ),
                   ),
                 )
-              : Container(
-                  child: Text('EMPTY'),
-                )),
+              : Container(),
+      ),
     );
   }
 
