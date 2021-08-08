@@ -4,6 +4,7 @@ import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
+import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class _AddTodoState extends State<AddTodo> {
   bool isDarkMode = GetStorage().read('isDarkMode');
   final TodoController _todoController = Get.put(TodoController());
   final ListController _listController = Get.put(ListController());
+  final SettingsController _settingsController = Get.put(SettingsController());
 
   Widget selectOfDate() {
     var _selectedDay = _todoController.currentDateTime.value;
@@ -238,7 +240,7 @@ class _AddTodoState extends State<AddTodo> {
           context: context,
           clockRotation: 180,
           paintingStyle: PaintingStyle.fill,
-          interval: Duration(minutes: 10),
+          interval: Duration(minutes: _settingsController.timePickerOfInterval.value),
           labels: ['0', '3', '6', '9', '12', '15', '18', '21']
               .asMap()
               .entries
