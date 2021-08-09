@@ -24,9 +24,15 @@ class MyApp extends StatelessWidget {
         bool isDarkMode = appdata.read('isDarkMode');
         return GetMaterialApp(
           title: 'Daily Report',
-          theme: isDarkMode ? ThemeData.dark() : ThemeData(
-            primaryColor: primaryColor
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            fontFamily: 'Hyemin'
           ),
+          theme: ThemeData(
+            primaryColor: primaryColor,
+            fontFamily: 'Hyemin'
+          ),
+          themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
           initialRoute: '/',
           initialBinding: InitBinding(),
           getPages: [

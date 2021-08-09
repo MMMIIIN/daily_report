@@ -20,13 +20,13 @@ class SettingsController extends GetxController {
     }
   }
 
-  void setPercentOrHourIndex(int index){
+  void setPercentOrHourIndex(int index) {
     isPercentOrHourIndex(index);
     setPercentOrHour();
   }
 
-  void setPercentOrHour(){
-    if (isPercentOrHourIndex.value == 0){
+  void setPercentOrHour() {
+    if (isPercentOrHourIndex.value == 0) {
       GetStorage().write('isPercentOrHour', false);
     } else {
       GetStorage().write('isPercentOrHour', true);
@@ -38,22 +38,27 @@ class SettingsController extends GetxController {
     setTimePickerOfInterval(index);
   }
 
-  void setTimePickerOfInterval(index){
-    switch(index){
+  void setTimePickerOfInterval(index) async{
+    switch (index)  {
       case 0:
         timePickerOfInterval(5);
+        await GetStorage().write('timePickerOfInterval', 0);
         break;
       case 1:
         timePickerOfInterval(10);
+        await GetStorage().write('timePickerOfInterval', 1);
         break;
       case 2:
         timePickerOfInterval(15);
+        await GetStorage().write('timePickerOfInterval', 2);
         break;
       case 3:
         timePickerOfInterval(20);
+        await GetStorage().write('timePickerOfInterval', 3);
         break;
       case 4:
         timePickerOfInterval(30);
+        await GetStorage().write('timePickerOfInterval', 4);
         break;
     }
   }
@@ -61,15 +66,20 @@ class SettingsController extends GetxController {
   void setInitStorage() {
     var darkModeIndex = GetStorage().read('isDarkMode');
     var percentOrHour = GetStorage().read('isPercentOrHour');
-    if(darkModeIndex){
+    var interval = GetStorage().read('timePickerOfInterval');
+    if (darkModeIndex) {
       isDarkModeIndex(1);
-    } else{
+    } else {
       isDarkModeIndex(0);
     }
-    if(percentOrHour){
+    if (percentOrHour) {
       isPercentOrHourIndex(1);
-    } else{
+    } else {
       isPercentOrHourIndex(0);
+    }
+    if (interval != null) {
+      isTimePickerTimeIndex(interval);
+      setTimePickerTimeIndex(isTimePickerTimeIndex.value);
     }
   }
 
@@ -77,6 +87,9 @@ class SettingsController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     setInitStorage();
+    print(isDarkModeIndex.value);
+    print(isPercentOrHourIndex.value);
+    print(timePickerOfInterval.value);
     super.onInit();
   }
 }

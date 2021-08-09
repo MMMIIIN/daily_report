@@ -244,7 +244,7 @@ class _ListPageState extends State<ListPage> {
                       currentTimeRange, currentColorIndex, todoUid);
                 },
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   width: Get.mediaQuery.size.width * 0.8,
                   height: Get.mediaQuery.size.height * 0.08,
                   decoration: BoxDecoration(
@@ -255,7 +255,6 @@ class _ListPageState extends State<ListPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        // color: Colors.amber,
                         padding: EdgeInsets.only(left: 10),
                         width: Get.mediaQuery.size.width * 0.55,
                         child: Row(
@@ -293,7 +292,7 @@ class _ListPageState extends State<ListPage> {
                       ),
                       // Text(currentTitle),
                       Container(
-                        width: Get.mediaQuery.size.width * 0.29,
+                        width: Get.mediaQuery.size.width * 0.3,
                         child: Row(
                           children: [
                             Text('${currentTimeRange.startTime.hour} : '
