@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
+import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/pages/chart/chart_page.dart';
 import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
@@ -85,183 +86,140 @@ class _HomeState extends State<Home> {
                       bottomNavigationBar: BottomAppBar(
                         shape: CircularNotchedRectangle(),
                         child: Obx(
-                          () => isDarkMode
-                              ? Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 15.0),
-                                      child: IconButton(
-                                          icon: _homeController
-                                                      .currentIndex.value ==
-                                                  0
-                                              ? Icon(Icons.home,
-                                                  color: (_homeController
-                                                              .currentIndex
-                                                              .value ==
-                                                          0)
-                                                      ? Colors.white
-                                                      : Colors.grey)
-                                              : Icon(Icons.home_outlined,
-                                                  color: (_homeController
-                                                              .currentIndex
-                                                              .value ==
-                                                          0)
-                                                      ? Colors.white
-                                                      : Colors.grey),
-                                          onPressed: () {
-                                            _homeController.changeTapMenu(0);
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 30.0),
-                                      child: IconButton(
-                                          icon: _homeController
-                                                      .currentIndex.value ==
-                                                  1
-                                              ? Icon(Icons.storage,
-                                                  color: _homeController
-                                                              .currentIndex
-                                                              .value ==
-                                                          1
-                                                      ? Colors.white
-                                                      : Colors.grey)
-                                              : Icon(Icons.storage_outlined,
-                                                  color: _homeController
-                                                              .currentIndex
-                                                              .value ==
-                                                          1
-                                                      ? Colors.white
-                                                      : Colors.grey),
-                                          onPressed: () {
-                                            _homeController.changeTapMenu(1);
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 30.0),
-                                      child: IconButton(
-                                          icon: _homeController
-                                                      .currentIndex.value ==
-                                                  2
-                                              ? Icon(Icons.pie_chart,
-                                                  color: _homeController
-                                                              .currentIndex
-                                                              .value ==
-                                                          2
-                                                      ? Colors.white
-                                                      : Colors.grey)
-                                              : Icon(
-                                                  Icons
-                                                      .pie_chart_outline_rounded,
-                                                  color: _homeController
-                                                              .currentIndex
-                                                              .value ==
-                                                          2
-                                                      ? Colors.white
-                                                      : Colors.grey),
-                                          onPressed: () {
-                                            _homeController.changeTapMenu(2);
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 15.0),
-                                      child: IconButton(
-                                          icon: _homeController
-                                                      .currentIndex.value ==
-                                                  3
-                                              ? Icon(Icons.settings,
-                                                  color: _homeController
-                                                              .currentIndex
-                                                              .value ==
-                                                          3
-                                                      ? Colors.white
-                                                      : Colors.grey)
-                                              : Icon(Icons.settings_outlined,
-                                                  color: _homeController
-                                                              .currentIndex
-                                                              .value ==
-                                                          3
-                                                      ? Colors.white
-                                                      : Colors.grey),
-                                          onPressed: () {
-                                            _homeController.changeTapMenu(3);
-                                          }),
-                                    ),
-                                  ],
-                                )
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 15.0),
-                                      child: IconButton(
-                                          icon: Icon(Icons.home,
-                                              color: (_homeController
-                                                          .currentIndex.value ==
-                                                      0)
-                                                  ? Color(0xff95a5a6)
-                                                  : primaryColor),
-                                          onPressed: () {
-                                            _homeController.changeTapMenu(0);
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 30.0),
-                                      child: IconButton(
-                                          icon: Icon(Icons.storage,
-                                              color: _homeController
-                                                          .currentIndex.value ==
-                                                      1
-                                                  ? Color(0xff95a5a6)
-                                                  : primaryColor),
-                                          onPressed: () {
-                                            _homeController.changeTapMenu(1);
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 30.0),
-                                      child: IconButton(
-                                          icon: Icon(Icons.pie_chart,
-                                              color: _homeController
-                                                          .currentIndex.value ==
-                                                      2
-                                                  ? Color(0xff95a5a6)
-                                                  : primaryColor),
-                                          onPressed: () {
-                                            _homeController.changeTapMenu(2);
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 15.0),
-                                      child: IconButton(
-                                          icon: Icon(Icons.settings,
-                                              color: _homeController
-                                                          .currentIndex.value ==
-                                                      3
-                                                  ? Color(0xff95a5a6)
-                                                  : primaryColor),
-                                          onPressed: () {
-                                            _homeController.changeTapMenu(3);
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                        ),
+                            () => isDarkMode ? darkModeRow() : lightModeRow()),
                       ),
                     );
                   }
                 });
           }
         });
+  }
+
+  Widget darkModeRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child: IconButton(
+              icon: _homeController.currentIndex.value == 0
+                  ? Icon(IconsDB.home_thin,
+                      color: (_homeController.currentIndex.value == 0)
+                          ? Colors.white
+                          : Colors.grey)
+                  : Icon(IconsDB.home_bold,
+                      color: (_homeController.currentIndex.value == 0)
+                          ? Colors.white
+                          : Colors.grey),
+              onPressed: () {
+                _homeController.changeTapMenu(0);
+              }),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 30.0),
+          child: IconButton(
+              icon: _homeController.currentIndex.value == 1
+                  ? Icon(Icons.storage,
+                      color: _homeController.currentIndex.value == 1
+                          ? Colors.white
+                          : Colors.grey)
+                  : Icon(Icons.storage_outlined,
+                      color: _homeController.currentIndex.value == 1
+                          ? Colors.white
+                          : Colors.grey),
+              onPressed: () {
+                _homeController.changeTapMenu(1);
+              }),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 30.0),
+          child: IconButton(
+              icon: _homeController.currentIndex.value == 2
+                  ? Icon(Icons.pie_chart,
+                      color: _homeController.currentIndex.value == 2
+                          ? Colors.white
+                          : Colors.grey)
+                  : Icon(Icons.pie_chart_outline_rounded,
+                      color: _homeController.currentIndex.value == 2
+                          ? Colors.white
+                          : Colors.grey),
+              onPressed: () {
+                _homeController.changeTapMenu(2);
+              }),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 15.0),
+          child: IconButton(
+              icon: _homeController.currentIndex.value == 3
+                  ? Icon(Icons.settings,
+                      color: _homeController.currentIndex.value == 3
+                          ? Colors.white
+                          : Colors.grey)
+                  : Icon(Icons.settings_outlined,
+                      color: _homeController.currentIndex.value == 3
+                          ? Colors.white
+                          : Colors.grey),
+              onPressed: () {
+                _homeController.changeTapMenu(3);
+              }),
+        ),
+      ],
+    );
+  }
+
+  Widget lightModeRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child: IconButton(
+              icon: Icon(
+                _homeController.currentIndex.value == 0
+                    ? IconsDB.home_bold
+                    : IconsDB.home_thin,
+                size: 20,
+              ),
+              onPressed: () {
+                _homeController.changeTapMenu(0);
+              }),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 30.0),
+          child: IconButton(
+              icon: Icon(_homeController.currentIndex.value == 1
+                  ? IconsDB.menu_bold
+                  : IconsDB.menu_thin,
+              size: 24,),
+              onPressed: () {
+                _homeController.changeTapMenu(1);
+              }),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 30.0),
+          child: IconButton(
+              icon: Icon(_homeController.currentIndex.value == 2
+                  ? Icons.pie_chart
+                  : Icons.pie_chart_outline_outlined,
+              size: 24,),
+              onPressed: () {
+                _homeController.changeTapMenu(2);
+              }),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 15.0),
+          child: IconButton(
+              icon: Icon(
+                _homeController.currentIndex.value == 3
+                    ? IconsDB.settings_bold
+                    : IconsDB.settings_thin,
+                size: 24,
+              ),
+              onPressed: () {
+                _homeController.changeTapMenu(3);
+              }),
+        ),
+      ],
+    );
   }
 }
