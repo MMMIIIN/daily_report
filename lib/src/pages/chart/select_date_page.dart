@@ -9,7 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final SelectDateController _selectDateController =
-Get.put(SelectDateController());
+    Get.put(SelectDateController());
 final ChartController _chartController = Get.put(ChartController());
 final TodoController _todoController = Get.put(TodoController());
 
@@ -30,60 +30,53 @@ class _SelectDatePageState extends State<SelectDatePage> {
   Widget tableCalendar() {
     return TableCalendar(
       calendarBuilders: CalendarBuilders(
-        selectedBuilder: (context, date, _) =>
-            Container(
-              margin: const EdgeInsets.all(4),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Theme
-                      .of(context)
-                      .primaryColor,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                date.day.toString(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-        todayBuilder: (context, date, _) =>
-            Container(
-              margin: const EdgeInsets.all(4),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Color(0xff95afc0),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                date.day.toString(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-        rangeStartBuilder: (context, date, _) =>
-            Container(
-              margin: const EdgeInsets.all(4),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: primaryColor, borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                date.day.toString(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-        rangeEndBuilder: (context, date, _) =>
-            Container(
-              margin: const EdgeInsets.all(4),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: primaryColor, borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                date.day.toString(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-        rangeHighlightBuilder: (context, date, _) =>
-            Container(
-              decoration: BoxDecoration(
-                color: _ ? Color(0xff95afc0) : null,
-              ),
-            ),
+        selectedBuilder: (context, date, _) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        todayBuilder: (context, date, _) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Color(0xff95afc0),
+              borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        rangeStartBuilder: (context, date, _) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: primaryColor, borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        rangeEndBuilder: (context, date, _) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: primaryColor, borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        rangeHighlightBuilder: (context, date, _) => Container(
+          decoration: BoxDecoration(
+            color: _ ? Color(0xff95afc0) : null,
+          ),
+        ),
         markerBuilder: (context, date, _) {
           if (_.isNotEmpty) {
             return Padding(
@@ -158,7 +151,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
       children: [
         MaterialButton(
             onPressed: () {
-              Get.off(() => Home(), transition: Transition.leftToRightWithFade);
+              Get.offAll(() => Home());
             },
             color: Color(0xff95afc0),
             child: Text(
@@ -166,15 +159,10 @@ class _SelectDatePageState extends State<SelectDatePage> {
               style: TextStyle(color: Colors.white),
             )),
         MaterialButton(
-          onPressed: ()async {
+          onPressed: () {
             if (_selectDateController.rangeBool.value) {
-              // _chartController.makeDateRange(
-              //     _selectDateController.rangeStart.value,
-              //     _selectDateController.rangeEnd.value);
-              _chartController.makeRangeDate(DateTimeRange(
-                  start: _selectDateController.rangeStart.value,
-                  end: _selectDateController.rangeEnd.value));
-              await Get.off(() => Home());
+              _chartController.makeRangeDate();
+              Get.offAll(() => Home());
             }
           },
           color: _selectDateController.rangeBool.value
@@ -194,13 +182,12 @@ class _SelectDatePageState extends State<SelectDatePage> {
     return Material(
       child: SafeArea(
         child: Obx(
-              () =>
-              Column(
-                children: [
-                  tableCalendar(),
-                  twoButton(),
-                ],
-              ),
+          () => Column(
+            children: [
+              tableCalendar(),
+              twoButton(),
+            ],
+          ),
         ),
       ),
     );

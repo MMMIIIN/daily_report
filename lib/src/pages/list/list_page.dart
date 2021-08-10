@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
+import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,7 @@ class ListPage extends StatefulWidget {
 
 final TodoController _todoController = Get.put(TodoController());
 final ListController _listController = Get.put(ListController());
+final ChartController _chartController = Get.put(ChartController());
 
 class _ListPageState extends State<ListPage> {
   int touchedIndex = -1;
@@ -79,6 +81,7 @@ class _ListPageState extends State<ListPage> {
                     ),
                     onPressed: () {
                       _listController.searchTerm('');
+                      _listController.searchTitle('');
                       _listController.searchTitleController.value.clear();
                     },
                   )
@@ -153,7 +156,9 @@ class _ListPageState extends State<ListPage> {
             }
           : (day) {
               for (var todo in _listController.searchTodoList.value.todoList) {
-                if (day == todo.ymd) {
+                if (day.year == todo.ymd.year &&
+                    day.month == todo.ymd.month &&
+                    day.day == todo.ymd.day) {
                   return [Container()];
                 }
               }
@@ -201,10 +206,6 @@ class _ListPageState extends State<ListPage> {
                             ? _listController.searchResult[index].endMinute
                             : _listController.searchTodoList.value
                                 .todoList[index].endMinute));
-            _todoController.titleTextController.value.text = _listController
-                    .searchTodoList.value.todoList.isEmpty
-                ? _listController.searchResult[index].title
-                : _listController.searchTodoList.value.todoList[index].title;
             var currentTitle = _listController
                     .searchTodoList.value.todoList.isEmpty
                 ? _listController.searchResult[index].title
@@ -370,7 +371,13 @@ class _ListPageState extends State<ListPage> {
                     ),
                   ),
                   SizedBox(width: 10),
-                  Text(title),
+                  Container(
+                    width: Get.mediaQuery.size.width * 0.4,
+                    child: Text(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
               IconButton(
@@ -396,6 +403,7 @@ class _ListPageState extends State<ListPage> {
                                 onPressed: () {
                                   todoFirebaseDelete(todoUid);
                                   todoDelete(todoUid);
+                                  _chartController.makeRangeDate();
                                 },
                                 child: Text('삭제'),
                               ),

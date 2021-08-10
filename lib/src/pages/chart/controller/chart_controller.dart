@@ -1,9 +1,12 @@
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
+import 'package:daily_report/src/pages/chart/controller/select_date_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 final TodoController _todoController = Get.put(TodoController());
+final SelectDateController _selectDateController =
+    Get.put(SelectDateController());
 
 class ChartController extends GetxController {
   final currentIndexList = [].obs;
@@ -68,7 +71,10 @@ class ChartController extends GetxController {
         .sort((a, b) => b.value.compareTo(a.value));
   }
 
-  void makeRangeDate(DateTimeRange timeRange) {
+  void makeRangeDate() {
+    var timeRange = DateTimeRange(
+        start: _selectDateController.rangeStart.value,
+        end: _selectDateController.rangeEnd.value);
     chartPageList.value.todoList.clear();
     checkChartPageList.value.todoList.clear();
     var rangeOfDays = timeRange.end.difference(timeRange.start).inDays;

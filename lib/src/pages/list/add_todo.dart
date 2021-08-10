@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
+import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
@@ -22,6 +23,7 @@ class AddTodo extends StatefulWidget {
   @override
   _AddTodoState createState() => _AddTodoState();
 }
+final ChartController _chartController = Get.put(ChartController());
 
 class _AddTodoState extends State<AddTodo> {
   bool isDarkMode = GetStorage().read('isDarkMode');
@@ -470,7 +472,10 @@ class _AddTodoState extends State<AddTodo> {
                         endMinute:
                             _todoController.defaultTime.value.endTime.minute,
                         value: _todoController.defaultValue.value.toInt(),
-                        colorIndex: _todoController.selectColorIndex.value);
+                        colorIndex: _todoController.selectColorIndex.value,
+                      hourMinute: '${_todoController.defaultValue.value.toInt() ~/ 60}h '
+                        '${_todoController.defaultValue.value.toInt() % 60}m'
+                    );
                     await FirebaseFirestore.instance
                         .collection('todo')
                         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -497,7 +502,8 @@ class _AddTodoState extends State<AddTodo> {
                           .collection('todos')
                           .doc(value.id)
                           .update({'uid': value.id});
-                      Get.off(() => Home());
+                      _chartController.makeRangeDate();
+                      Get.offAll(() => Home());
                       Get.showSnackbar(GetBar(
                         title: 'ADD',
                         message: 'success!!',

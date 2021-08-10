@@ -40,6 +40,8 @@ class _ChartPageState extends State<ChartPage> {
 
   Widget selectCondition() {
     return InkWell(
+      customBorder:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       onTap: () {
         Get.to(() => SelectDatePage());
       },
@@ -68,51 +70,50 @@ class _ChartPageState extends State<ChartPage> {
     return GetBuilder<ChartController>(
       init: ChartController(),
       builder: (_) => Flexible(
-          flex: 3,
-          child: _chartController.checkChartPageList.value.todoList.isNotEmpty
-              ? PieChart(
-                  PieChartData(
-                    pieTouchData:
-                        PieTouchData(touchCallback: (pieTouchResponse) {
-                      setState(() {
-                        final desiredTouch =
-                            pieTouchResponse.touchInput is! PointerExitEvent &&
-                                pieTouchResponse.touchInput is! PointerUpEvent;
-                        if (desiredTouch &&
-                            pieTouchResponse.touchedSection != null) {
-                          touchedIndex = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
-                        } else {
-                          touchedIndex = -1;
-                        }
-                      });
-                    }),
-                    startDegreeOffset: 270,
-                    sectionsSpace: 4,
-                    centerSpaceRadius: 130,
-                    sections: List<PieChartSectionData>.generate(
-                      _chartController.checkChartPageList.value.todoList.length,
-                      (index) {
-                        final isTouched = index == touchedIndex;
-                        final radius = isTouched ? 70.0 : 50.0;
-                        final title = isTouched
-                            ? _chartController
-                                .checkChartPageList.value.todoList[index].title
-                            : '';
-                        return PieChartSectionData(
-                          title: title,
-                          radius: radius,
-                          value: _chartController
-                              .checkChartPageList.value.todoList[index].value
-                              .toDouble(),
-                          color: colorList[_chartController.checkChartPageList
-                              .value.todoList[index].colorIndex],
-                        );
-                      },
-                    ),
+        flex: 3,
+        child: _chartController.checkChartPageList.value.todoList.isNotEmpty
+            ? PieChart(
+                PieChartData(
+                  pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+                    setState(() {
+                      final desiredTouch =
+                          pieTouchResponse.touchInput is! PointerExitEvent &&
+                              pieTouchResponse.touchInput is! PointerUpEvent;
+                      if (desiredTouch &&
+                          pieTouchResponse.touchedSection != null) {
+                        touchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                      } else {
+                        touchedIndex = -1;
+                      }
+                    });
+                  }),
+                  startDegreeOffset: 270,
+                  sectionsSpace: 4,
+                  centerSpaceRadius: 130,
+                  sections: List<PieChartSectionData>.generate(
+                    _chartController.checkChartPageList.value.todoList.length,
+                    (index) {
+                      final isTouched = index == touchedIndex;
+                      final radius = isTouched ? 70.0 : 50.0;
+                      final title = isTouched
+                          ? _chartController
+                              .checkChartPageList.value.todoList[index].title
+                          : '';
+                      return PieChartSectionData(
+                        title: title,
+                        radius: radius,
+                        value: _chartController
+                            .checkChartPageList.value.todoList[index].value
+                            .toDouble(),
+                        color: colorList[_chartController.checkChartPageList
+                            .value.todoList[index].colorIndex],
+                      );
+                    },
                   ),
-                )
-              : Container(),
+                ),
+              )
+            : Container(),
       ),
     );
   }
