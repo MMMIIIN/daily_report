@@ -145,7 +145,11 @@ class _ListPageState extends State<ListPage> {
         holidayTextStyle: TextStyle(color: Colors.blue),
       ),
       daysOfWeekVisible: true,
-      headerStyle: HeaderStyle(titleCentered: true, formatButtonVisible: false),
+      headerStyle: HeaderStyle(
+        titleCentered: true,
+        formatButtonVisible: false,
+        titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+      ),
       locale: 'ko-KR',
       eventLoader: _listController.searchTerm.isEmpty
           ? (day) {
@@ -306,7 +310,8 @@ class _ListPageState extends State<ListPage> {
                               style: TextStyle(fontSize: 14),
                             ),
                             SizedBox(width: 20),
-                            Text('${currentTimeRange.endTime.hour} : '
+                            Text(
+                                '${currentTimeRange.endTime.hour} : '
                                 '${currentTimeRange.endTime.minute}',
                                 style: TextStyle(fontSize: 14))
                           ],

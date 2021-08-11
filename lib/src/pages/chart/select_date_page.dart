@@ -5,6 +5,7 @@ import 'package:daily_report/src/pages/chart/controller/select_date_controller.d
 import 'package:daily_report/src/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -100,6 +101,11 @@ class _SelectDatePageState extends State<SelectDatePage> {
       rangeEndDay: _rangeEnd,
       calendarFormat: _calendarFormat,
       rangeSelectionMode: rangeSelectionMode,
+      locale: 'ko-KR',
+      headerStyle: HeaderStyle(
+        titleCentered: true,
+        formatButtonVisible: false
+      ),
       eventLoader: (day) {
         for (var todo in _todoController.todoUidList.value.todoList) {
           if (day.year == todo.ymd.year &&
@@ -151,7 +157,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
       children: [
         MaterialButton(
             onPressed: () {
-              Get.offAll(() => Home());
+              Get.offAll(() => Home(),transition: Transition.leftToRight);
             },
             color: Color(0xff95afc0),
             child: Text(
@@ -162,7 +168,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
           onPressed: () {
             if (_selectDateController.rangeBool.value) {
               _chartController.makeRangeDate();
-              Get.offAll(() => Home());
+              Get.offAll(() => Home(),transition: Transition.leftToRight);
             }
           },
           color: _selectDateController.rangeBool.value
