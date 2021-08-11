@@ -79,6 +79,12 @@ class _HomePageState extends State<HomePage> {
             }
           },
         ),
+        headerStyle: HeaderStyle(
+          formatButtonVisible: false,
+          titleCentered: true,
+          titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+        ),
+        locale: 'ko-KR',
         firstDay: FirstDay,
         lastDay: LastDay,
         focusedDay: _todoController.currentDateTime.value,

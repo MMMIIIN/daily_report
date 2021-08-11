@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   await GetStorage.init();
@@ -32,6 +33,13 @@ class MyApp extends StatelessWidget {
             primaryColor: primaryColor,
             fontFamily: 'Hyemin'
           ),
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('ko','KR')
+          ],
           themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
           initialRoute: '/',
           initialBinding: InitBinding(),

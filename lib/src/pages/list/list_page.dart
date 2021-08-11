@@ -51,6 +51,7 @@ class _ListPageState extends State<ListPage> {
 
   Widget searchWidget() {
     return Container(
+      height: Get.mediaQuery.size.height * 0.06,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: primaryColor.withOpacity(0.4)),
@@ -143,6 +144,9 @@ class _ListPageState extends State<ListPage> {
         weekendTextStyle: TextStyle(color: Colors.red),
         holidayTextStyle: TextStyle(color: Colors.blue),
       ),
+      daysOfWeekVisible: true,
+      headerStyle: HeaderStyle(titleCentered: true, formatButtonVisible: false),
+      locale: 'ko-KR',
       eventLoader: _listController.searchTerm.isEmpty
           ? (day) {
               for (var todo in _todoController.loadTodoUidList.value.todoList) {
@@ -293,14 +297,18 @@ class _ListPageState extends State<ListPage> {
                       ),
                       // Text(currentTitle),
                       Container(
-                        width: Get.mediaQuery.size.width * 0.3,
+                        width: Get.mediaQuery.size.width * 0.30,
                         child: Row(
                           children: [
-                            Text('${currentTimeRange.startTime.hour} : '
-                                '${currentTimeRange.startTime.minute}'),
+                            Text(
+                              '${currentTimeRange.startTime.hour} : '
+                              '${currentTimeRange.startTime.minute}',
+                              style: TextStyle(fontSize: 14),
+                            ),
                             SizedBox(width: 20),
                             Text('${currentTimeRange.endTime.hour} : '
-                                '${currentTimeRange.endTime.minute}')
+                                '${currentTimeRange.endTime.minute}',
+                                style: TextStyle(fontSize: 14))
                           ],
                         ),
                       )
@@ -376,6 +384,7 @@ class _ListPageState extends State<ListPage> {
                     child: Text(
                       title,
                       overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: FontWeight.w700),
                     ),
                   ),
                 ],
@@ -424,14 +433,14 @@ class _ListPageState extends State<ListPage> {
                   '${dateTime.month} .'
                   '${dateTime.day}'
                   ' ${getOfDay(dateTime.weekday)}',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+                  style: TextStyle(fontSize: 30),
                 ),
                 Text(
                   '${timeRange.startTime.hour} : '
                   '${timeRange.startTime.minute} - '
                   '${timeRange.endTime.hour} : '
                   '${timeRange.endTime.minute}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                  style: TextStyle(fontSize: 20),
                 ),
               ],
             ),
