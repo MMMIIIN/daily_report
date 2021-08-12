@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
                       bottomNavigationBar: BottomAppBar(
                         shape: CircularNotchedRectangle(),
                         child: Obx(
-                            () => isDarkMode ? darkModeRow() : lightModeRow()),
+                            () => BottomRowMenu()),
                       ),
                     );
                   }
@@ -95,79 +95,7 @@ class _HomeState extends State<Home> {
         });
   }
 
-  Widget darkModeRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0),
-          child: IconButton(
-              icon: _homeController.currentIndex.value == 0
-                  ? Icon(IconsDB.home_thin,
-                      color: (_homeController.currentIndex.value == 0)
-                          ? Colors.white
-                          : Colors.grey)
-                  : Icon(IconsDB.home_bold,
-                      color: (_homeController.currentIndex.value == 0)
-                          ? Colors.white
-                          : Colors.grey),
-              onPressed: () {
-                _homeController.changeTapMenu(0);
-              }),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 30.0),
-          child: IconButton(
-              icon: _homeController.currentIndex.value == 1
-                  ? Icon(Icons.storage,
-                      color: _homeController.currentIndex.value == 1
-                          ? Colors.white
-                          : Colors.grey)
-                  : Icon(Icons.storage_outlined,
-                      color: _homeController.currentIndex.value == 1
-                          ? Colors.white
-                          : Colors.grey),
-              onPressed: () {
-                _homeController.changeTapMenu(1);
-              }),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: IconButton(
-              icon: _homeController.currentIndex.value == 2
-                  ? Icon(Icons.pie_chart,
-                      color: _homeController.currentIndex.value == 2
-                          ? Colors.white
-                          : Colors.grey)
-                  : Icon(Icons.pie_chart_outline_rounded,
-                      color: _homeController.currentIndex.value == 2
-                          ? Colors.white
-                          : Colors.grey),
-              onPressed: () {
-                _homeController.changeTapMenu(2);
-              }),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 15.0),
-          child: IconButton(
-              icon: _homeController.currentIndex.value == 3
-                  ? Icon(Icons.settings,
-                      color: _homeController.currentIndex.value == 3
-                          ? Colors.white
-                          : Colors.grey)
-                  : Icon(Icons.settings_outlined,
-                      color: _homeController.currentIndex.value == 3
-                          ? Colors.white
-                          : Colors.grey),
-              onPressed: () {
-                _homeController.changeTapMenu(3);
-              }),
-        ),
-      ],
-    );
-  }
-
-  Widget lightModeRow() {
+  Widget BottomRowMenu() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -176,8 +104,8 @@ class _HomeState extends State<Home> {
           child: IconButton(
               icon: Icon(
                 _homeController.currentIndex.value == 0
-                    ? IconsDB.home_bold
-                    : IconsDB.home_thin,
+                    ? IconsDB.home_filled
+                    : IconsDB.home_outlined,
                 size: 20,
               ),
               onPressed: () {
@@ -188,8 +116,8 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.only(right: 30.0),
           child: IconButton(
               icon: Icon(_homeController.currentIndex.value == 1
-                  ? IconsDB.menu_bold
-                  : IconsDB.menu_thin,
+                  ? IconsDB.menu_filled
+                  : IconsDB.menu_outlined,
               size: 24,),
               onPressed: () {
                 _homeController.changeTapMenu(1);
@@ -199,8 +127,8 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.only(left: 30.0),
           child: IconButton(
               icon: Icon(_homeController.currentIndex.value == 2
-                  ? Icons.pie_chart
-                  : Icons.pie_chart_outline_outlined,
+                  ? IconsDB.pie_chart_filled
+                  : IconsDB.pie_chart_outlined,
               size: 24,),
               onPressed: () {
                 _homeController.changeTapMenu(2);
@@ -211,8 +139,8 @@ class _HomeState extends State<Home> {
           child: IconButton(
               icon: Icon(
                 _homeController.currentIndex.value == 3
-                    ? IconsDB.settings_bold
-                    : IconsDB.settings_thin,
+                    ? IconsDB.settings_filled
+                    : IconsDB.settings_outlined,
                 size: 24,
               ),
               onPressed: () {
