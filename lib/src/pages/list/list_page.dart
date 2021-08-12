@@ -419,6 +419,10 @@ class _ListPageState extends State<ListPage> {
                                   todoFirebaseDelete(todoUid);
                                   todoDelete(todoUid);
                                   _chartController.makeRangeDate();
+                                  _listController.setSearchTodoList(_listController.selectedDays);
+                                  if(_listController.searchTodoList.value.todoList.isEmpty){
+                                    _listController.selectedDays.clear();
+                                  }
                                 },
                                 child: Text('삭제'),
                               ),

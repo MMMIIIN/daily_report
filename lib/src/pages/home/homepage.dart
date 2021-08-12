@@ -28,12 +28,8 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        _todoController.currentDateTime(selectedDay);
-        print('_selectedDay = $_selectedDay');
-        print('_focusedDay = $_focusedDay');
         _todoController.setCurrentIndex(_selectedDay);
         _todoController.currentDateTime(_selectedDay);
-        print('todoDateTime ${_todoController.currentDateTime.value}');
       });
     }
   }

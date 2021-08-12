@@ -408,13 +408,6 @@ class _AddTodoState extends State<AddTodo> {
                       'day': _todoController.currentDateTime.value.day
                     }).then((value) {
                       _listController.initSearchResult();
-                      Get.off(() => Home());
-                      Get.showSnackbar(GetBar(
-                        title: 'UPDATE',
-                        message: 'success!!',
-                        duration: Duration(seconds: 2),
-                        snackPosition: SnackPosition.BOTTOM,
-                      ));
                       var todoIndex = _todoController.todoUidList.value.todoList
                           .indexWhere(
                               (element) => element.uid == widget.todoUid);
@@ -446,6 +439,13 @@ class _AddTodoState extends State<AddTodo> {
                                 _todoController.currentDateTime.value.month,
                                 _todoController.currentDateTime.value.day);
                       }
+                      Get.off(() => Home());
+                      Get.showSnackbar(GetBar(
+                        title: 'UPDATE',
+                        message: 'success!!',
+                        duration: Duration(seconds: 2),
+                        snackPosition: SnackPosition.BOTTOM,
+                      ));
                     }).catchError((error) => Get.showSnackbar(GetBar(
                               title: 'UPDATE',
                               message: 'ERROR!',
@@ -509,23 +509,30 @@ class _AddTodoState extends State<AddTodo> {
                           .doc(value.id)
                           .update({'uid': value.id});
                       _chartController.makeRangeDate();
+                      _todoController.loadTodoUidList.value.todoList
+                          .add(addTodoDto);
+                      _todoController.todoUidCheckAdd(addTodoDto);
+                      _todoController.setCurrentIndex(
+                          _todoController.currentDateTime.value);
+                      _chartController.makeRangeDate();
                       Get.offAll(() => Home());
                       Get.showSnackbar(GetBar(
                         title: 'ADD',
                         message: 'success!!',
-                        duration: Duration(seconds: 2),
+                        duration: Duration(seconds: 1),
                         snackPosition: SnackPosition.BOTTOM,
                       ));
-                      _todoController.loadTodoUidList.value.todoList
-                          .add(addTodoDto);
-                      _todoController.todoUidCheckAdd(addTodoDto);
-                    }).catchError((error) => Get.showSnackbar(GetBar(
-                              title: 'ERROR',
-                              message: '로그인 정보를 확인하세요',
-                              duration: Duration(seconds: 2),
-                              snackPosition: SnackPosition.BOTTOM,
-                              backgroundColor: Colors.redAccent,
-                            )));
+                    }).catchError(
+                      (error) async => await Get.showSnackbar(
+                        GetBar(
+                          title: 'ERROR',
+                          message: '로그인 정보를 확인하세요',
+                          duration: Duration(seconds: 2),
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.redAccent,
+                        ),
+                      ),
+                    );
                     _todoController.titleTextController.value.clear();
                   },
                   color: primaryColor,
@@ -550,7 +557,9 @@ class _AddTodoState extends State<AddTodo> {
             height: Get.mediaQuery.size.height * 0.85,
             width: Get.mediaQuery.size.width * 0.99,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), border: Border.all()),
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: primaryColor),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

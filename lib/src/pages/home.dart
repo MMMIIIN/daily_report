@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
                       bottomNavigationBar: BottomAppBar(
                         shape: CircularNotchedRectangle(),
                         child: Obx(
-                            () => BottomRowMenu()),
+                            () => isDarkMode ? darkModeRow() : lightModeRow()),
                       ),
                     );
                   }
@@ -95,7 +95,79 @@ class _HomeState extends State<Home> {
         });
   }
 
-  Widget BottomRowMenu() {
+  Widget darkModeRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child: IconButton(
+              icon: _homeController.currentIndex.value == 0
+                  ? Icon(IconsDB.home_filled,
+                      color: (_homeController.currentIndex.value == 0)
+                          ? Colors.white
+                          : Colors.grey)
+                  : Icon(IconsDB.home_outlined,
+                      color: (_homeController.currentIndex.value == 0)
+                          ? Colors.white
+                          : Colors.grey),
+              onPressed: () {
+                _homeController.changeTapMenu(0);
+              }),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 30.0),
+          child: IconButton(
+              icon: _homeController.currentIndex.value == 1
+                  ? Icon(Icons.storage,
+                      color: _homeController.currentIndex.value == 1
+                          ? Colors.white
+                          : Colors.grey)
+                  : Icon(Icons.storage_outlined,
+                      color: _homeController.currentIndex.value == 1
+                          ? Colors.white
+                          : Colors.grey),
+              onPressed: () {
+                _homeController.changeTapMenu(1);
+              }),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 30.0),
+          child: IconButton(
+              icon: _homeController.currentIndex.value == 2
+                  ? Icon(Icons.pie_chart,
+                      color: _homeController.currentIndex.value == 2
+                          ? Colors.white
+                          : Colors.grey)
+                  : Icon(Icons.pie_chart_outline_rounded,
+                      color: _homeController.currentIndex.value == 2
+                          ? Colors.white
+                          : Colors.grey),
+              onPressed: () {
+                _homeController.changeTapMenu(2);
+              }),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 15.0),
+          child: IconButton(
+              icon: _homeController.currentIndex.value == 3
+                  ? Icon(Icons.settings,
+                      color: _homeController.currentIndex.value == 3
+                          ? Colors.white
+                          : Colors.grey)
+                  : Icon(Icons.settings_outlined,
+                      color: _homeController.currentIndex.value == 3
+                          ? Colors.white
+                          : Colors.grey),
+              onPressed: () {
+                _homeController.changeTapMenu(3);
+              }),
+        ),
+      ],
+    );
+  }
+
+  Widget lightModeRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
