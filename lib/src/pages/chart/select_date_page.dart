@@ -48,9 +48,15 @@ class _SelectDatePageState extends State<SelectDatePage> {
           decoration: BoxDecoration(
               color: Color(0xff95afc0),
               borderRadius: BorderRadius.circular(10)),
-          child: Text(
-            date.day.toString(),
-            style: TextStyle(color: Colors.white),
+          child: Column(
+            children: [
+              Text('today',
+              style: TextStyle(fontSize: 11),),
+              Text(
+                date.day.toString(),
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
           ),
         ),
         rangeStartBuilder: (context, date, _) => Container(
@@ -73,15 +79,30 @@ class _SelectDatePageState extends State<SelectDatePage> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        rangeHighlightBuilder: (context, date, _) => Container(
-          decoration: BoxDecoration(
-            color: _ ? Color(0xff95afc0) : null,
+        withinRangeBuilder: (context, date, _) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        rangeHighlightBuilder: (context, date, _) => Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Container(
+            margin: EdgeInsetsDirectional.only(
+              start: date == _rangeStart ? 10 : 0.0,
+              end: date == _rangeEnd ? 10 : 0.0
+            ),
+            decoration: BoxDecoration(
+              color: _ ? primaryColor.withOpacity(0.7) : null,
+            ),
           ),
         ),
         markerBuilder: (context, date, _) {
           if (_.isNotEmpty) {
             return Padding(
-              padding: const EdgeInsets.only(bottom: 5.0),
+              padding: const EdgeInsets.only(bottom: 2.0),
               child: Container(
                 width: 7,
                 height: 7,

@@ -423,6 +423,8 @@ class _ListPageState extends State<ListPage> {
                                   if(_listController.searchTodoList.value.todoList.isEmpty){
                                     _listController.selectedDays.clear();
                                   }
+                                  _todoController.setCurrentIndex(
+                                      _todoController.currentDateTime.value);
                                 },
                                 child: Text('삭제'),
                               ),

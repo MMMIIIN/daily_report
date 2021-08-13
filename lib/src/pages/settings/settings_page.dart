@@ -1,5 +1,6 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
+import 'package:daily_report/src/pages/login/login_page.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,10 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget userInfo() {
     return Row(
       children: [
-        Icon(Icons.person,color: primaryColor,),
+        Icon(
+          Icons.person,
+          color: primaryColor,
+        ),
         Text('${FirebaseAuth.instance.currentUser!.email}'),
       ],
     );
@@ -104,7 +108,7 @@ class _SettingsPageState extends State<SettingsPage> {
             minWidth: 50,
             minHeight: 25,
             totalSwitches: 5,
-            labels: ['5m','10m', '15m', '20m', '30m'],
+            labels: ['5m', '10m', '15m', '20m', '30m'],
             activeBgColor: [
               _settingsController.isDarkModeIndex.value == 0
                   ? Color(0xff34495e)
@@ -114,7 +118,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ? primaryColor.withOpacity(0.2)
                 : primaryColor.withOpacity(0.7),
             initialLabelIndex: _settingsController.isTimePickerTimeIndex.value,
-            onToggle: (index){
+            onToggle: (index) {
               _settingsController.setTimePickerTimeIndex(index);
             },
           )
@@ -174,6 +178,12 @@ class _SettingsPageState extends State<SettingsPage> {
             showPercentOrHour(),
             timePickerOfTime(),
             logoutButton(),
+            MaterialButton(
+              onPressed: () {
+                Get.to(() => LoginPage());
+              },
+              color: Colors.cyanAccent,
+            )
           ],
         ),
       ),

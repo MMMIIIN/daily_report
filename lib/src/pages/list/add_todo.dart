@@ -187,6 +187,7 @@ class _AddTodoState extends State<AddTodo> {
             color: primaryColor.withOpacity(0.3)),
         child: TextField(
           controller: _todoController.titleTextController.value,
+          cursorColor: primaryColor,
           decoration: InputDecoration(
             focusColor: primaryColor,
             prefixIcon: Icon(Icons.title, color: primaryColor),
@@ -477,7 +478,7 @@ class _AddTodoState extends State<AddTodo> {
                         endHour: _todoController.defaultTime.value.endTime.hour,
                         endMinute:
                             _todoController.defaultTime.value.endTime.minute,
-                        value: _todoController.defaultValue.value.toInt(),
+                        value: _todoController.defaultValue.value,
                         colorIndex: _todoController.selectColorIndex.value,
                         hourMinute:
                             '${_todoController.defaultValue.value.toInt() ~/ 60}h '
@@ -589,5 +590,12 @@ class _AddTodoState extends State<AddTodo> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _todoController.initDefaultValue();
   }
 }

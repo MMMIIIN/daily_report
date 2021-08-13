@@ -14,9 +14,7 @@ final LastDay = DateTime(now.year + 5, 12, 31);
 
 class TodoController extends GetxController {
   final currentIndexList = [].obs;
-  Rx<DateTime> currentDateTime = DateTime
-      .now()
-      .obs;
+  Rx<DateTime> currentDateTime = DateTime.now().obs;
   final todoList = <Todo>[].obs;
   final Rx<TodoUidList> loadTodoUidList = TodoUidList(todoList: []).obs;
   final Rx<TodoUidList> todoUidList = TodoUidList(todoList: []).obs;
@@ -26,16 +24,15 @@ class TodoController extends GetxController {
   final todoTitleList = <TodoTitle>[].obs;
 
   Rx<TimeRange> defaultTime = TimeRange(
-      startTime: TimeOfDay(hour: 0, minute: 0),
-      endTime: TimeOfDay(hour: 0, minute: 0))
+          startTime: TimeOfDay(hour: 0, minute: 0),
+          endTime: TimeOfDay(hour: 0, minute: 0))
       .obs;
-  RxDouble defaultValue = 0.0.obs;
+  RxInt defaultValue = 0.obs;
   RxInt selectColorIndex = 0.obs;
 
   void todoUidCheckAdd(TestTodo data) {
     var addIndex = todoUidList.value.todoList.indexWhere(
-            (element) =>
-        element.ymd == data.ymd && element.title == data.title);
+        (element) => element.ymd == data.ymd && element.title == data.title);
     if (addIndex != -1) {
       todoUidList.value.todoList[addIndex].value += data.value;
     } else {
@@ -46,7 +43,7 @@ class TodoController extends GetxController {
   void setHourMinute() {
     for (var i = 0; i < todoUidList.value.todoList.length; i++) {
       todoUidList.value.todoList[i].hourMinute =
-      '${todoUidList.value.todoList[i].value ~/ 60}h '
+          '${todoUidList.value.todoList[i].value ~/ 60}h '
           '${todoUidList.value.todoList[i].value % 60}m';
     }
   }
@@ -102,18 +99,27 @@ class TodoController extends GetxController {
         .sort((a, b) => a.time.startTime.hour.compareTo(b.time.startTime.hour));
   }
 
-  double getValue(DateTime _datetime, TimeRange time) {
+  void initDefaultValue() {
+    defaultValue(
+      getValue(
+        currentDateTime.value,
+        TimeRange(
+            startTime: defaultTime.value.startTime,
+            endTime: defaultTime.value.endTime),
+      ),
+    );
+  }
+
+  int getValue(DateTime _datetime, TimeRange time) {
     var time1 = DateTime(_datetime.year, _datetime.month, _datetime.day,
         time.startTime.hour, time.startTime.minute);
     var time2 = DateTime(_datetime.year, _datetime.month, _datetime.day,
         time.endTime.hour, time.endTime.minute);
-    var result = time2
-        .difference(time1)
-        .inMinutes;
+    var result = time2.difference(time1).inMinutes;
     if (result < 0) {
       result += 1440;
     }
-    return result.toDouble();
+    return result;
   }
 
   void initTodoTitleList() {
