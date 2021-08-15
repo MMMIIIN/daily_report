@@ -7,8 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
-  var emailController = TextEditingController().obs;
-  var passwordController = TextEditingController().obs;
   final LoginController _loginController = Get.put(LoginController());
 
   Widget emailField() {
@@ -34,7 +32,7 @@ class LoginPage extends StatelessWidget {
                 },
                 obscureText: false,
                 cursorColor: primaryColor,
-                controller: emailController.value,
+                controller: _loginController.emailController.value,
                 decoration: InputDecoration(
                   errorText: _loginController.checkEmail.value
                       ? null
@@ -50,7 +48,7 @@ class LoginPage extends StatelessWidget {
                       : IconButton(
                           icon: Icon(Icons.cancel_outlined),
                           onPressed: () {
-                            emailController.value.clear();
+                            _loginController.emailController.value.clear();
                             _loginController.loginEmail('');
                           },
                         ),
@@ -89,11 +87,11 @@ class LoginPage extends StatelessWidget {
                 },
                 obscureText: true,
                 cursorColor: primaryColor,
-                controller: passwordController.value,
+                controller: _loginController.passwordController.value,
                 decoration: InputDecoration(
                   errorText: _loginController.checkPassword.value
-                      ? '패스워드가 너무 짧습니다.'
-                      : null,
+                      ? null
+                      : '패스워드가 너무 짧습니다.',
                   hintText: 'password',
                   hintStyle: TextStyle(
                     color: primaryColor,
@@ -105,7 +103,7 @@ class LoginPage extends StatelessWidget {
                       : IconButton(
                           icon: Icon(Icons.cancel_outlined),
                           onPressed: () {
-                            passwordController.value.clear();
+                            _loginController.passwordController.value.clear();
                             _loginController.loginPassword('');
                           },
                         ),
@@ -119,6 +117,31 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void logIn(String userId, String userPw) async {
+    try {
+      await await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+        email: userId,
+        password: userPw,
+      )
+          .then((value) => Get.off(() => Home())).catchError((error) async => await
+      Get.showSnackbar(GetBar(
+        title: 'ERROR',
+        message: error.toString(),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 2),
+      ))
+      );
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
   }
 
   @override
@@ -146,13 +169,10 @@ class LoginPage extends StatelessWidget {
                     ),
                     MaterialButton(
                       elevation: 0,
-                      color: _loginController.checkEmail.value &&
-                              _loginController.checkPassword.value
-                          ? primaryColor
-                          : primaryColor.withOpacity(0.2),
+                      color: primaryColor,
                       onPressed: () {
-                        logIn(emailController.value.text,
-                            passwordController.value.text);
+                        logIn(_loginController.emailController.value.text,
+                            _loginController.passwordController.value.text);
                       },
                       child: Text(
                         'Login',
@@ -167,23 +187,5 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void logIn(String userId, String userPw) async {
-    try {
-      await await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-            email: userId,
-            password: userPw,
-          )
-          .then((value) => Get.off(() => Home()));
-    } on FirebaseAuthException catch (e) {
-      print(e.code);
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
-    }
   }
 }
