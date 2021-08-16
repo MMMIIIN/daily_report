@@ -149,6 +149,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   MaterialButton(
                     onPressed: () {
                       FirebaseAuth.instance.signOut();
+                      Get.back();
                     },
                     elevation: 0.0,
                     color: primaryColor,
