@@ -1,4 +1,5 @@
 import 'package:daily_report/color.dart';
+import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/pages/signup/signup_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,15 @@ class SignUpPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(Icons.person_outline),
+            _signUpController.genderIndex.value == 1
+                ? Icon(
+                    IconsDB.user_woman_outlined,
+                    size: 20,
+                  )
+                : Icon(
+                    IconsDB.user_man_outlined,
+                    size: 20,
+                  ),
             Container(
               padding: EdgeInsets.only(left: 5),
               width: Get.mediaQuery.size.width * 0.8,
@@ -67,7 +76,10 @@ class SignUpPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(Icons.email_outlined),
+            Icon(
+              IconsDB.mail_outlined,
+              size: 20,
+            ),
             Container(
               padding: EdgeInsets.only(left: 5),
               width: Get.mediaQuery.size.width * 0.8,
@@ -117,7 +129,10 @@ class SignUpPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(Icons.vpn_key_outlined),
+            Icon(
+              IconsDB.locked_outlined,
+              size: 20,
+            ),
             Container(
               padding: EdgeInsets.only(left: 5),
               width: Get.mediaQuery.size.width * 0.8,
@@ -167,7 +182,10 @@ class SignUpPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(Icons.vpn_key),
+            Icon(
+              IconsDB.locked_filled,
+              size: 20,
+            ),
             Container(
               padding: EdgeInsets.only(left: 5),
               width: Get.mediaQuery.size.width * 0.8,
@@ -210,10 +228,10 @@ class SignUpPage extends StatelessWidget {
         minWidth: double.infinity,
         inactiveBgColor: primaryColor.withOpacity(0.2),
         activeBgColor: [primaryColor],
-        labels: ['여', '남'],
-          totalSwitches: 2,
+        labels: ['남', '여'],
+        totalSwitches: 2,
         initialLabelIndex: _signUpController.genderIndex.value,
-        onToggle: (index){
+        onToggle: (index) {
           _signUpController.setGenderIndex(index);
         },
       ),
@@ -225,6 +243,8 @@ class SignUpPage extends StatelessWidget {
       onPressed: () {
         Get.back();
       },
+      highlightColor: Colors.white.withOpacity(0.9),
+      splashColor: Colors.transparent,
       color: primaryColor.withOpacity(0.2),
       elevation: 0,
       child: Text(

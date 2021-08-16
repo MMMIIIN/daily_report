@@ -20,10 +20,13 @@ class _SettingsPageState extends State<SettingsPage> {
     return Row(
       children: [
         Icon(
-          Icons.person,
+          IconsDB.user_man_circle_outlined,
           color: primaryColor,
         ),
-        Text('${FirebaseAuth.instance.currentUser!.email}'),
+        Text(
+          '  ${FirebaseAuth.instance.currentUser!.email}',
+          style: TextStyle(fontSize: 17),
+        ),
       ],
     );
   }
@@ -192,7 +195,6 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               color: Colors.deepPurpleAccent,
             ),
-
           ],
         ),
       ),
