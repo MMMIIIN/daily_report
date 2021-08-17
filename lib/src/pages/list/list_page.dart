@@ -486,7 +486,7 @@ class _ListPageState extends State<ListPage> {
 
   void todoFirebaseDelete(String todoUid) {
     FirebaseFirestore.instance
-        .collection('todo')
+        .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('todos')
         .doc(todoUid)

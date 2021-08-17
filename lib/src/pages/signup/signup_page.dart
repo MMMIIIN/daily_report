@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
+import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/signup/signup_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -256,14 +258,19 @@ class SignUpPage extends StatelessWidget {
 
   Widget signUpButton() {
     return MaterialButton(
-      color: primaryColor,
+      color: _signUpController.allCheck.value
+          ? primaryColor
+          : primaryColor.withOpacity(0.3),
+      elevation: 0,
       onPressed: () {
         signUp(_signUpController.signupEmailController.value.text,
             _signUpController.signupPasswordController.value.text);
       },
       child: Text(
         '회원가입',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+            color:
+                _signUpController.allCheck.value ? Colors.white : primaryColor),
       ),
     );
   }
@@ -272,11 +279,21 @@ class SignUpPage extends StatelessWidget {
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-            email: userEmail,
-            password: userPw,
-          )
-          .then((value) => FirebaseAuth.instance.currentUser!
-              .updateDisplayName(_signUpController.signupName.value));
+        email: userEmail,
+        password: userPw,
+      )
+          .then((value) {
+        FirebaseAuth.instance.currentUser!
+            .updateDisplayName(_signUpController.signupName.value);
+        FirebaseFirestore.instance
+            .collection('user')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection('info')
+            .doc().set({
+          'gender' : _signUpController.genderIndex.value
+        });
+        Get.off(() => Home());
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');

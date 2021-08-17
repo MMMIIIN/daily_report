@@ -22,13 +22,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final HomeController _homeController = Get.put(HomeController());
 
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  CollectionReference todo = FirebaseFirestore.instance
-      .collection('todo')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .collection('todos');
-
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = GetStorage().read('isDarkMode');
@@ -41,7 +34,7 @@ class _HomeState extends State<Home> {
             return StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection(
-                        'todo/${FirebaseAuth.instance.currentUser!.uid}/todos')
+                        'user/${FirebaseAuth.instance.currentUser!.uid}/todos')
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.connectionState == ConnectionState.none) {

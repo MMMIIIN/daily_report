@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
+import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,8 @@ enum CATEGORY { DEFAULT, STUDY, SHOPPING, EXERCISE, SLEEP }
 final now = DateTime.now();
 final FirstDay = DateTime(2020, 1, 1);
 final LastDay = DateTime(now.year + 5, 12, 31);
+
+final ListController _listController = Get.put(ListController());
 
 class TodoController extends GetxController {
   final currentIndexList = [].obs;
@@ -136,10 +139,10 @@ class TodoController extends GetxController {
   }
 
   void initUidTodoList() async {
-    loadTodoUidList.value.todoList.clear();
+    clearAllData();
     TestTodo sampleTodo;
     await FirebaseFirestore.instance
-        .collection('todo')
+        .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('todos')
         .get()
@@ -172,6 +175,16 @@ class TodoController extends GetxController {
       });
     });
     setHourMinute();
+  }
+
+  void clearAllData() {
+    loadTodoUidList.value.todoList.clear();
+    currentIndexList.clear();
+    todoUidList.value.todoList.clear();
+    todoTitleList.clear();
+    todoList.clear();
+
+    _listController.clearAllData();
   }
 
   @override

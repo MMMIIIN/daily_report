@@ -43,10 +43,14 @@ class ListController extends GetxController {
     searchTodoList.value.todoList.sort((a, b) => a.ymd.compareTo(b.ymd));
   }
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    initSearchResult();
+  void clearAllData() {
+    searchTodoList.value.todoList.clear();
   }
+
+  // @override
+  // void onInit() {
+  //   // TODO: implement onInit
+  //   super.onInit();
+  //   initSearchResult();
+  // }
 }

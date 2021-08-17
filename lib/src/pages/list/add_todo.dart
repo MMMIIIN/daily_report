@@ -388,7 +388,7 @@ class _AddTodoState extends State<AddTodo> {
               ? MaterialButton(
                   onPressed: () async {
                     await FirebaseFirestore.instance
-                        .collection('todo')
+                        .collection('user')
                         .doc(FirebaseAuth.instance.currentUser!.uid)
                         .collection('todos')
                         .doc(widget.todoUid)
@@ -484,7 +484,7 @@ class _AddTodoState extends State<AddTodo> {
                             '${_todoController.defaultValue.value.toInt() ~/ 60}h '
                             '${_todoController.defaultValue.value.toInt() % 60}m');
                     await FirebaseFirestore.instance
-                        .collection('todo')
+                        .collection('user')
                         .doc(FirebaseAuth.instance.currentUser!.uid)
                         .collection('todos')
                         .add({
@@ -504,7 +504,7 @@ class _AddTodoState extends State<AddTodo> {
                       'day': _todoController.currentDateTime.value.day
                     }).then((value) {
                       FirebaseFirestore.instance
-                          .collection('todo')
+                          .collection('user')
                           .doc(FirebaseAuth.instance.currentUser!.uid)
                           .collection('todos')
                           .doc(value.id)
@@ -516,6 +516,8 @@ class _AddTodoState extends State<AddTodo> {
                       _todoController.setCurrentIndex(
                           _todoController.currentDateTime.value);
                       _chartController.makeRangeDate();
+                      _listController.initSearchResult();
+                      _listController.searchTitle('');
                       Get.offAll(() => Home());
                       Get.showSnackbar(GetBar(
                         title: 'ADD',
