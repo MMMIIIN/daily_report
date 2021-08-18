@@ -1,7 +1,8 @@
 import 'package:daily_report/color.dart';
+import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
-import 'package:daily_report/src/pages/login/login_controller.dart';
+import 'package:daily_report/src/pages/login/controller/login_controller.dart';
 import 'package:daily_report/src/pages/signup/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +12,25 @@ class LoginPage extends StatelessWidget {
   final LoginController _loginController = Get.put(LoginController());
   final TodoController _todoController = Get.put(TodoController());
 
-  Widget emailField() {
+  final emailFocus = FocusNode();
+  final passwordFocus = FocusNode();
+
+  Widget customImage() {
+    return Container(
+      width: 200,
+      height: 200,
+      decoration: BoxDecoration(
+          color: primaryColor.withOpacity(0.8), shape: BoxShape.circle),
+      child: Center(
+        child: Text(
+          'Daily Report',
+          style: TextStyle(fontSize: 25, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget emailField(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5),
       child: Container(
@@ -23,15 +42,20 @@ class LoginPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(Icons.email_outlined),
+            Icon(IconsDB.mail_outlined),
             Container(
               padding: EdgeInsets.only(left: 5),
               width: Get.mediaQuery.size.width * 0.8,
               child: TextField(
+                focusNode: emailFocus,
                 onChanged: (text) {
                   _loginController.setLoginEmail(text);
                   _loginController.setCheckEmail();
                 },
+                textInputAction: TextInputAction.next,
+                autofocus: true,
+                onSubmitted: (_) =>
+                    FocusScope.of(context).requestFocus(passwordFocus),
                 obscureText: false,
                 cursorColor: primaryColor,
                 controller: _loginController.emailController.value,
@@ -45,15 +69,6 @@ class LoginPage extends StatelessWidget {
                     fontSize: 16,
                   ),
                   focusColor: primaryColor,
-                  suffixIcon: _loginController.loginEmail.value == ''
-                      ? null
-                      : IconButton(
-                    icon: Icon(Icons.cancel_outlined),
-                    onPressed: () {
-                      _loginController.emailController.value.clear();
-                      _loginController.loginEmail('');
-                    },
-                  ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
@@ -66,7 +81,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget passwordField() {
+  Widget passwordField(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5),
       child: Container(
@@ -78,15 +93,17 @@ class LoginPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(Icons.vpn_key_outlined),
+            Icon(IconsDB.locked_outlined),
             Container(
               padding: EdgeInsets.only(left: 5),
               width: Get.mediaQuery.size.width * 0.8,
               child: TextField(
+                focusNode: passwordFocus,
                 onChanged: (text) {
                   _loginController.setLoginPassword(text);
                   _loginController.setCheckPassword();
                 },
+                onSubmitted: (_) => FocusScope.of(context).unfocus(),
                 obscureText: true,
                 cursorColor: primaryColor,
                 controller: _loginController.passwordController.value,
@@ -94,21 +111,12 @@ class LoginPage extends StatelessWidget {
                   errorText: _loginController.checkPassword.value
                       ? null
                       : '패스워드가 너무 짧습니다.',
-                  hintText: 'password',
+                  hintText: '비밀번호',
                   hintStyle: TextStyle(
                     color: primaryColor,
                     fontSize: 16,
                   ),
                   focusColor: primaryColor,
-                  suffixIcon: _loginController.loginPassword.value == ''
-                      ? null
-                      : IconButton(
-                    icon: Icon(Icons.cancel_outlined),
-                    onPressed: () {
-                      _loginController.passwordController.value.clear();
-                      _loginController.loginPassword('');
-                    },
-                  ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
@@ -116,6 +124,42 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget forgotPassword() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(),
+        Text(
+          '비밀번호 찾기',
+          style: TextStyle(fontSize: 16, color: primaryColor),
+        ),
+      ],
+    );
+  }
+
+  Widget loginButton() {
+    return GestureDetector(
+      onTap: () {
+        logIn(_loginController.loginEmail.value,
+            _loginController.loginPassword.value);
+      },
+      child: Container(
+        width: double.infinity,
+        height: Get.mediaQuery.size.height * 0.07,
+        decoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Text(
+            '로그인',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
         ),
       ),
     );
@@ -131,14 +175,12 @@ class LoginPage extends StatelessWidget {
           .then((value) {
         Get.off(() => Home());
         _todoController.initUidTodoList();
-        })
-          .catchError((error) async =>
-      await Get.showSnackbar(GetBar(
-        title: 'ERROR',
-        message: error.toString(),
-        backgroundColor: Colors.redAccent,
-        duration: Duration(seconds: 2),
-      )));
+      }).catchError((error) async => await Get.showSnackbar(GetBar(
+                title: 'ERROR',
+                message: error.toString(),
+                backgroundColor: Colors.redAccent,
+                duration: Duration(seconds: 2),
+              )));
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'user-not-found') {
@@ -149,6 +191,28 @@ class LoginPage extends StatelessWidget {
     }
   }
 
+  Widget signUpText() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          '아직 계정이 없다면?  ',
+          style: TextStyle(
+              color: primaryColor.withOpacity(0.5), fontSize: 16),
+        ),
+        GestureDetector(
+          onTap: () {
+            Get.to(() => SignUpPage());
+          },
+          child: Text(
+            '회원가입',
+            style: TextStyle(color: primaryColor, fontSize: 16),
+          ),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,39 +220,26 @@ class LoginPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Obx(
-                () =>
-                Column(
-                  children: [
-                    emailField(),
-                    passwordField(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(SignUpPage());
-                          },
-                          child: Text(
-                            'Sign Up',
-                            style: TextStyle(color: Colors.redAccent),
-                          ),
-                        ),
-                        MaterialButton(
-                          elevation: 0,
-                          color: primaryColor,
-                          onPressed: () {
-                            logIn(_loginController.emailController.value.text,
-                                _loginController.passwordController.value.text);
-                          },
-                          child: Text(
-                            'Login',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+            () => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                customImage(),
+                SizedBox(
+                  height: Get.mediaQuery.size.height * 0.1,
                 ),
+                emailField(context),
+                passwordField(context),
+                forgotPassword(),
+                SizedBox(
+                  height: Get.mediaQuery.size.height * 0.1,
+                ),
+                loginButton(),
+                SizedBox(
+                  height: Get.mediaQuery.size.height * 0.02,
+                ),
+                signUpText(),
+              ],
+            ),
           ),
         ),
       ),

@@ -32,4 +32,12 @@ class LoginController extends GetxController {
       checkPassword(false);
     }
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    emailController.value.dispose();
+    passwordController.value.dispose();
+  }
 }

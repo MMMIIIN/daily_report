@@ -16,6 +16,7 @@ final LastDay = DateTime(now.year + 5, 12, 31);
 final ListController _listController = Get.put(ListController());
 
 class TodoController extends GetxController {
+  // static TodoController get to => Get.find();
   final currentIndexList = [].obs;
   Rx<DateTime> currentDateTime = DateTime.now().obs;
   final todoList = <Todo>[].obs;
@@ -184,7 +185,7 @@ class TodoController extends GetxController {
     todoTitleList.clear();
     todoList.clear();
 
-    _listController.clearAllData();
+    // _listController.clearAllData();
   }
 
   @override

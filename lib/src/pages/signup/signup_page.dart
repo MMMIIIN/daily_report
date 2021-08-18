@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/pages/home.dart';
-import 'package:daily_report/src/pages/signup/signup_controller.dart';
+import 'package:daily_report/src/pages/signup/controller/signup_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +13,21 @@ class SignUpPage extends StatelessWidget {
   final emailFocus = FocusNode();
   final passwordFocus = FocusNode();
   final passwordCheckFocus = FocusNode();
+
+  Widget customImage() {
+    return Container(
+      width: 180,
+      height: 180,
+      decoration: BoxDecoration(
+          color: primaryColor.withOpacity(0.8), shape: BoxShape.circle),
+      child: Center(
+        child: Text(
+          'Daily Report',
+          style: TextStyle(fontSize: 25, color: Colors.white),
+        ),
+      ),
+    );
+  }
 
   Widget nameField(BuildContext context) {
     return Padding(
@@ -257,20 +272,24 @@ class SignUpPage extends StatelessWidget {
   }
 
   Widget signUpButton() {
-    return MaterialButton(
-      color: _signUpController.allCheck.value
-          ? primaryColor
-          : primaryColor.withOpacity(0.3),
-      elevation: 0,
-      onPressed: () {
-        signUp(_signUpController.signupEmailController.value.text,
-            _signUpController.signupPasswordController.value.text);
+    return GestureDetector(
+      onTap: () {
+        signUp(_signUpController.signupEmail.value,
+            _signUpController.signupPassword.value);
       },
-      child: Text(
-        '회원가입',
-        style: TextStyle(
-            color:
-                _signUpController.allCheck.value ? Colors.white : primaryColor),
+      child: Container(
+        width: double.infinity,
+        height: Get.mediaQuery.size.height * 0.07,
+        decoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Text(
+            '회원가입',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
       ),
     );
   }
@@ -289,9 +308,8 @@ class SignUpPage extends StatelessWidget {
             .collection('user')
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .collection('info')
-            .doc().set({
-          'gender' : _signUpController.genderIndex.value
-        });
+            .doc()
+            .set({'gender': _signUpController.genderIndex.value});
         Get.off(() => Home());
       });
     } on FirebaseAuthException catch (e) {
@@ -308,12 +326,40 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: InkWell(
+          customBorder:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          onTap: () {
+            Get.back();
+          },
+          child: Container(
+            width: 20,
+            height: 20,
+            child: Center(
+              child: Text(
+                '<',
+                style: TextStyle(
+                    color: primaryColor,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Obx(
             () => Column(
               children: [
+                customImage(),
+                SizedBox(
+                  height: Get.mediaQuery.size.height * 0.03,
+                ),
                 nameField(context),
                 signupEmailField(context),
                 signupPasswordField(context),
@@ -322,13 +368,7 @@ class SignUpPage extends StatelessWidget {
                 SizedBox(
                   height: Get.mediaQuery.size.height * 0.05,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    cancleButton(),
-                    signUpButton(),
-                  ],
-                ),
+                signUpButton()
               ],
             ),
           ),

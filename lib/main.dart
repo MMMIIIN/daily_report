@@ -17,40 +17,33 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final appdata = GetStorage();
+
   @override
   Widget build(BuildContext context) {
     appdata.writeIfNull('isDarkMode', false);
-    return SimpleBuilder(
-      builder: (_){
-        bool isDarkMode = appdata.read('isDarkMode');
-        return GetMaterialApp(
-          title: 'Daily Report',
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            fontFamily: 'Hyemin'
-          ),
-          theme: ThemeData(
-            primaryColor: primaryColor,
-            fontFamily: 'Hyemin'
-          ),
-          localizationsDelegates: [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [
-            const Locale('ko','KR')
-          ],
-          themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-          initialRoute: '/',
-          initialBinding: InitBinding(),
-          getPages: [
-            GetPage(name: '/', page: () => App()),
-            GetPage(name: 'chart', page: () => ChartPage()),
-          ],
-        );
-      }
-
-    );
+    return SimpleBuilder(builder: (_) {
+      bool isDarkMode = appdata.read('isDarkMode');
+      return GetMaterialApp(
+        title: 'Daily Report',
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          fontFamily: 'Hyemin'
+        ),
+        theme: ThemeData(primaryColor: primaryColor, fontFamily: 'Hyemin'),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [const Locale('ko', 'KR')],
+        themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+        initialRoute: '/',
+        initialBinding: InitBinding(),
+        getPages: [
+          GetPage(name: '/', page: () => App()),
+          GetPage(name: 'chart', page: () => ChartPage()),
+        ],
+      );
+    });
   }
 }

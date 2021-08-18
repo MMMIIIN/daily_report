@@ -13,6 +13,7 @@ class ListController extends GetxController {
   RxString searchTerm = ''.obs;
 
   void initSearchResult() {
+    clearAllData();
     searchResult.addAll(searchTitle(''));
   }
 
@@ -47,10 +48,10 @@ class ListController extends GetxController {
     searchTodoList.value.todoList.clear();
   }
 
-  // @override
-  // void onInit() {
-  //   // TODO: implement onInit
-  //   super.onInit();
-  //   initSearchResult();
-  // }
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    initSearchResult();
+  }
 }
