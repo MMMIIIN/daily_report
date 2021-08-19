@@ -1,6 +1,7 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
+import 'package:daily_report/src/error/error_handling.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/login/controller/login_controller.dart';
 import 'package:daily_report/src/pages/signup/signup_page.dart';
@@ -175,19 +176,14 @@ class LoginPage extends StatelessWidget {
           .then((value) {
         Get.off(() => Home());
         _todoController.initUidTodoList();
-      }).catchError((error) async => await Get.showSnackbar(GetBar(
-                title: 'ERROR',
-                message: error.toString(),
-                backgroundColor: Colors.redAccent,
-                duration: Duration(seconds: 2),
-              )));
+      });
     } on FirebaseAuthException catch (e) {
-      print(e.code);
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
+      await Get.showSnackbar(GetBar(
+        title: 'ERROR',
+        message: setErrorMessage(e.code),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 2),
+      ));
     }
   }
 

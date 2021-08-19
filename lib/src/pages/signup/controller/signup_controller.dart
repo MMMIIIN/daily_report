@@ -14,9 +14,9 @@ class SignUpController extends GetxController{
 
   RxInt genderIndex = 0.obs;
 
-  RxBool checkEmail = true.obs;
-  RxBool checkPassword = true.obs;
-  RxBool equalPassword = true.obs;
+  RxBool checkEmail = false.obs;
+  RxBool checkPassword = false.obs;
+  RxBool equalPassword = false.obs;
   RxBool allCheck = false.obs;
 
   void setSignupName(String name){

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
+import 'package:daily_report/src/error/error_handling.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/signup/controller/signup_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -113,7 +114,8 @@ class SignUpPage extends StatelessWidget {
                 cursorColor: primaryColor,
                 controller: _signUpController.signupEmailController.value,
                 decoration: InputDecoration(
-                  errorText: _signUpController.checkEmail.value
+                  errorText: _signUpController.checkEmail.value ||
+                          _signUpController.signupEmail.isEmpty
                       ? null
                       : '이메일 형식이 아닙니다.',
                   hintText: 'example@email.com',
@@ -166,7 +168,8 @@ class SignUpPage extends StatelessWidget {
                 cursorColor: primaryColor,
                 controller: _signUpController.signupPasswordController.value,
                 decoration: InputDecoration(
-                  errorText: _signUpController.checkPassword.value
+                  errorText: _signUpController.checkPassword.value ||
+                          _signUpController.signupPassword.isEmpty
                       ? null
                       : '비밀번호가 너무 짧습니다.',
                   hintText: '비밀번호',
@@ -223,7 +226,8 @@ class SignUpPage extends StatelessWidget {
                     color: primaryColor,
                     fontSize: 15,
                   ),
-                  errorText: _signUpController.equalPassword.value
+                  errorText: _signUpController.equalPassword.value ||
+                          _signUpController.signupPasswordCheck.isEmpty
                       ? null
                       : '비밀번호가 일치하지 않습니다.',
                   enabledBorder: UnderlineInputBorder(
@@ -274,14 +278,18 @@ class SignUpPage extends StatelessWidget {
   Widget signUpButton() {
     return GestureDetector(
       onTap: () {
-        signUp(_signUpController.signupEmail.value,
-            _signUpController.signupPassword.value);
+        _signUpController.allCheck.value
+            ? signUp(_signUpController.signupEmail.value,
+                _signUpController.signupPassword.value)
+            : null;
       },
       child: Container(
         width: double.infinity,
         height: Get.mediaQuery.size.height * 0.07,
         decoration: BoxDecoration(
-          color: primaryColor,
+          color: _signUpController.allCheck.value
+              ? primaryColor
+              : primaryColor.withOpacity(0.4),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
@@ -309,15 +317,20 @@ class SignUpPage extends StatelessWidget {
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .collection('info')
             .doc()
-            .set({'gender': _signUpController.genderIndex.value});
+            .set({
+          'gender': _signUpController.genderIndex.value,
+          'name': _signUpController.signupName.value
+        });
         Get.off(() => Home());
       });
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
+      print(e.code);
+      await Get.showSnackbar(GetBar(
+        title: 'ERROR',
+        message: setErrorMessage(e.code),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 2),
+      ));
     } catch (e) {
       print(e);
     }
@@ -354,22 +367,24 @@ class SignUpPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Obx(
-            () => Column(
-              children: [
-                customImage(),
-                SizedBox(
-                  height: Get.mediaQuery.size.height * 0.03,
-                ),
-                nameField(context),
-                signupEmailField(context),
-                signupPasswordField(context),
-                passwordCheckField(context),
-                genderSwitch(),
-                SizedBox(
-                  height: Get.mediaQuery.size.height * 0.05,
-                ),
-                signUpButton()
-              ],
+            () => SingleChildScrollView(
+              child: Column(
+                children: [
+                  customImage(),
+                  SizedBox(
+                    height: Get.mediaQuery.size.height * 0.03,
+                  ),
+                  nameField(context),
+                  signupEmailField(context),
+                  signupPasswordField(context),
+                  passwordCheckField(context),
+                  genderSwitch(),
+                  SizedBox(
+                    height: Get.mediaQuery.size.height * 0.05,
+                  ),
+                  signUpButton()
+                ],
+              ),
             ),
           ),
         ),
