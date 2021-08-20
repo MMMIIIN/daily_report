@@ -25,11 +25,10 @@ class MyApp extends StatelessWidget {
       bool isDarkMode = appdata.read('isDarkMode');
       return GetMaterialApp(
         title: 'Daily Report',
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          fontFamily: 'Hyemin'
-        ),
-        theme: ThemeData(primaryColor: primaryColor, fontFamily: 'Hyemin'),
+        darkTheme: ThemeData(brightness: Brightness.dark, fontFamily: 'Hyemin'),
+        theme: ThemeData(
+            primaryColor: primaryColor,
+            fontFamily: 'Hyemin'),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

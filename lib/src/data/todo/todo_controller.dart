@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
-import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,12 +12,10 @@ final now = DateTime.now();
 final FirstDay = DateTime(2020, 1, 1);
 final LastDay = DateTime(now.year + 5, 12, 31);
 
-final ListController _listController = Get.put(ListController());
-
 class TodoController extends GetxController {
-  // static TodoController get to => Get.find();
   final currentIndexList = [].obs;
   Rx<DateTime> currentDateTime = DateTime.now().obs;
+  Rx<DateTime> selectDateTime = DateTime.now().obs;
   final todoList = <Todo>[].obs;
   final Rx<TodoUidList> loadTodoUidList = TodoUidList(todoList: []).obs;
   final Rx<TodoUidList> todoUidList = TodoUidList(todoList: []).obs;
@@ -29,7 +26,7 @@ class TodoController extends GetxController {
 
   Rx<TimeRange> defaultTime = TimeRange(
           startTime: TimeOfDay(hour: 0, minute: 0),
-          endTime: TimeOfDay(hour: 0, minute: 0))
+          endTime: TimeOfDay(hour: 1, minute: 0))
       .obs;
   RxInt defaultValue = 0.obs;
   RxInt selectColorIndex = 0.obs;
@@ -95,7 +92,6 @@ class TodoController extends GetxController {
       val!.startTime = time.startTime;
       val.endTime = time.endTime;
     });
-    update();
   }
 
   void sortTodoList() {
@@ -159,7 +155,6 @@ class TodoController extends GetxController {
             endMinute: element['endMinute'],
             value: element['value'].toInt(),
             colorIndex: element['color']);
-
         loadTodoUidList.value.todoList.add(TestTodo(
             uid: sampleTodo.uid,
             ymd: sampleTodo.ymd,
@@ -184,8 +179,6 @@ class TodoController extends GetxController {
     todoUidList.value.todoList.clear();
     todoTitleList.clear();
     todoList.clear();
-
-    // _listController.clearAllData();
   }
 
   @override

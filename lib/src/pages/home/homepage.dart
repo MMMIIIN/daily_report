@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
         _focusedDay = focusedDay;
         _todoController.setCurrentIndex(_selectedDay);
         _todoController.currentDateTime(_selectedDay);
+        _todoController.selectDateTime(_selectedDay);
       });
     }
   }

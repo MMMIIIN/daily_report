@@ -25,17 +25,21 @@ class AddTodo extends StatefulWidget {
 }
 
 final ChartController _chartController = Get.put(ChartController());
+final TodoController _todoController = Get.put(TodoController());
+final ListController _listController = Get.put(ListController());
+final SettingsController _settingsController = Get.put(SettingsController());
 
 class _AddTodoState extends State<AddTodo> {
   bool isDarkMode = GetStorage().read('isDarkMode');
-  final TodoController _todoController = Get.put(TodoController());
-  final ListController _listController = Get.put(ListController());
-  final SettingsController _settingsController = Get.put(SettingsController());
+  final currentDay = DateTime(
+      _todoController.currentDateTime.value.year,
+      _todoController.currentDateTime.value.month,
+      _todoController.currentDateTime.value.day);
 
   Widget selectOfDate() {
-    var _selectedDay = _todoController.currentDateTime.value;
     return GestureDetector(
       onTap: () {
+        var _selectedDay = _todoController.selectDateTime.value;
         showDialog(
           context: context,
           builder: (_) => Padding(
@@ -90,7 +94,7 @@ class _AddTodoState extends State<AddTodo> {
                         locale: 'ko-KR',
                         firstDay: FirstDay,
                         lastDay: LastDay,
-                        focusedDay: _todoController.currentDateTime.value,
+                        focusedDay: _todoController.selectDateTime.value,
                         selectedDayPredicate: (day) =>
                             isSameDay(_selectedDay, day),
                         calendarStyle: CalendarStyle(
@@ -113,7 +117,7 @@ class _AddTodoState extends State<AddTodo> {
                           setState(() {
                             if (!isSameDay(_selectedDay, selectedDay)) {
                               _selectedDay = selectedDay;
-                              _todoController.currentDateTime(selectedDay);
+                              _todoController.selectDateTime(_selectedDay);
                             }
                           });
                         }),
@@ -123,8 +127,11 @@ class _AddTodoState extends State<AddTodo> {
                         MaterialButton(
                           onPressed: () {
                             Get.back();
+                            _todoController.selectDateTime(
+                                _todoController.currentDateTime.value);
                           },
-                          color: primaryColor,
+                          color: primaryColor.withOpacity(0.5),
+                          elevation: 0,
                           child: Text(
                             '취 소',
                             style: TextStyle(color: Colors.white),
@@ -132,6 +139,8 @@ class _AddTodoState extends State<AddTodo> {
                         ),
                         MaterialButton(
                           onPressed: () {
+                            _todoController.currentDateTime(
+                                _todoController.selectDateTime.value);
                             Get.back();
                           },
                           color: primaryColor,
@@ -150,29 +159,31 @@ class _AddTodoState extends State<AddTodo> {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: Container(
-          width: Get.mediaQuery.size.width * 0.4,
-          height: 30,
-          decoration: BoxDecoration(
-            color: primaryColor,
-            borderRadius: BorderRadius.circular(10),
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Obx(
+            () => Container(
+              width: Get.mediaQuery.size.width * 0.4,
+              height: 30,
+              decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '${_todoController.currentDateTime.value.year} .'
+                    '${_todoController.currentDateTime.value.month} .'
+                    '${_todoController.currentDateTime.value.day}',
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300),
+                  )
+                ],
+              ),
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '${_todoController.currentDateTime.value.year} .'
-                '${_todoController.currentDateTime.value.month} .'
-                '${_todoController.currentDateTime.value.day}',
-                style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w300),
-              )
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -240,57 +251,94 @@ class _AddTodoState extends State<AddTodo> {
   }
 
   Widget setTime(BuildContext context) {
+    var changeStartTime = _todoController.defaultTime.value.startTime;
+    var changeEndTime = _todoController.defaultTime.value.endTime;
     return InkWell(
       customBorder:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       onTap: () async {
-        TimeRange result = await showTimeRangePicker(
+        await showDialog(
           context: context,
-          clockRotation: 180,
-          paintingStyle: PaintingStyle.fill,
-          interval:
-              Duration(minutes: _settingsController.timePickerOfInterval.value),
-          labels: ['0', '3', '6', '9', '12', '15', '18', '21']
-              .asMap()
-              .entries
-              .map((e) {
-            return ClockLabel.fromIndex(idx: e.key, length: 8, text: e.value);
-          }).toList(),
-          snap: true,
-          start: TimeOfDay(
-              hour: widget.editMode == true
-                  ? _todoController.defaultTime.value.startTime.hour
-                  : _todoController.defaultTime.value.endTime.hour,
-              minute: widget.editMode == true
-                  ? _todoController.defaultTime.value.startTime.minute
-                  : _todoController.defaultTime.value.endTime.minute),
-          end: TimeOfDay(
-              hour: widget.editMode == true
-                  ? _todoController.defaultTime.value.endTime.hour
-                  : (_todoController.defaultTime.value.endTime.hour + 2) > 24
-                      ? 0
-                      : _todoController.defaultTime.value.endTime.hour + 2,
-              minute: widget.editMode == true
-                  ? _todoController.defaultTime.value.endTime.minute
-                  : _todoController.defaultTime.value.endTime.minute),
-          ticks: 24,
-          handlerRadius: 8,
-          handlerColor: isDarkMode ? Colors.grey : primaryColor,
-          backgroundColor: isDarkMode
-              ? Colors.white.withOpacity(0.1)
-              : primaryColor.withOpacity(0.1),
-          strokeColor: isDarkMode
-              ? Colors.white.withOpacity(0.9)
-              : primaryColor.withOpacity(0.8),
-          ticksColor: isDarkMode ? Colors.white.withOpacity(0.8) : primaryColor,
-          labelOffset: 30,
-          rotateLabels: false,
-          padding: 60,
+          builder: (_) => Padding(
+            padding: EdgeInsets.symmetric(vertical: 100),
+            child: Dialog(
+              child: Column(
+                children: [
+                  TimeRangePicker(
+                    hideButtons: true,
+                    clockRotation: 180,
+                    paintingStyle: PaintingStyle.fill,
+                    fromText: 'START',
+                    toText: 'END',
+                    interval: Duration(
+                        minutes:
+                            _settingsController.timePickerOfInterval.value),
+                    labels: ['0', '3', '6', '9', '12', '15', '18', '21']
+                        .asMap()
+                        .entries
+                        .map((e) {
+                      return ClockLabel.fromIndex(
+                          idx: e.key, length: 8, text: e.value);
+                    }).toList(),
+                    snap: true,
+                    start: _todoController.defaultTime.value.startTime,
+                    end: _todoController.defaultTime.value.endTime,
+                    onStartChange: (startTime) {
+                      changeStartTime = startTime;
+                    },
+                    onEndChange: (endTime) {
+                      changeEndTime = endTime;
+                    },
+                    ticks: 24,
+                    handlerRadius: 8,
+                    handlerColor: isDarkMode ? Colors.grey : primaryColor,
+                    backgroundColor: isDarkMode
+                        ? Colors.white.withOpacity(0.1)
+                        : primaryColor.withOpacity(0.1),
+                    strokeColor: isDarkMode
+                        ? Colors.white.withOpacity(0.9)
+                        : primaryColor.withOpacity(0.8),
+                    ticksColor: isDarkMode
+                        ? Colors.white.withOpacity(0.8)
+                        : primaryColor,
+                    labelOffset: 30,
+                    rotateLabels: false,
+                    padding: 60,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        elevation: 0,
+                        color: primaryColor.withOpacity(0.4),
+                        child: Text(
+                          '취 소',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          _todoController.setTime(TimeRange(
+                              startTime: changeStartTime,
+                              endTime: changeEndTime));
+                          Get.back();
+                        },
+                        color: primaryColor,
+                        child: Text(
+                          '확 인',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
         );
-        _todoController.setTime(result);
-        _todoController.defaultValue(_todoController.getValue(
-            _todoController.currentDateTime.value, result));
-        print(_todoController.defaultValue.value);
       },
       child: Container(
         height: Get.mediaQuery.size.height * 0.1,
@@ -377,9 +425,10 @@ class _AddTodoState extends State<AddTodo> {
               _todoController.titleTextController.value.clear();
               Get.back();
             },
-            color: primaryColor,
+            color: primaryColor.withOpacity(0.5),
+            elevation: 0,
             child: Text(
-              'CANCLE',
+              '취 소',
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
             ),
@@ -447,17 +496,21 @@ class _AddTodoState extends State<AddTodo> {
                         duration: Duration(seconds: 2),
                         snackPosition: SnackPosition.BOTTOM,
                       ));
-                    }).catchError((error) => Get.showSnackbar(GetBar(
-                              title: 'UPDATE',
-                              message: 'ERROR!',
-                              duration: Duration(seconds: 2),
-                              snackPosition: SnackPosition.BOTTOM,
-                              backgroundColor: Colors.redAccent,
-                            )));
+                    }).catchError(
+                      (error) async => await Get.showSnackbar(
+                        GetBar(
+                          title: 'UPDATE',
+                          message: 'ERROR!',
+                          duration: Duration(seconds: 2),
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.redAccent,
+                        ),
+                      ),
+                    );
                   },
                   color: primaryColor,
                   child: Text(
-                    'UPDATE',
+                    '수 정',
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.w300),
                   ),
@@ -540,7 +593,7 @@ class _AddTodoState extends State<AddTodo> {
                   },
                   color: primaryColor,
                   child: Text(
-                    'ADD',
+                    '추 가',
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.w300),
                   ),
