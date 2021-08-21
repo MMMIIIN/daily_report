@@ -130,14 +130,107 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget forgotPassword() {
+  Widget forgotPassword(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(),
-        Text(
-          '비밀번호 찾기',
-          style: TextStyle(fontSize: 16, color: primaryColor),
+        GestureDetector(
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                      title: Text(
+                        '찾으시는 이메일을 입력해주세요.',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      content: Container(
+                        height: Get.mediaQuery.size.height * 0.2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: primaryColor.withOpacity(0.3)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5.0),
+                                    child:
+                                        Icon(IconsDB.mail_outlined, size: 20),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 10),
+                                    width: Get.mediaQuery.size.width * 0.55,
+                                    child: TextField(
+                                      controller: _loginController
+                                          .forgotEmailController.value,
+                                      onChanged: (text) {
+                                        _loginController.setForgotEmail(text);
+                                      },
+                                      decoration: InputDecoration(
+                                        hintText: 'example@email.com',
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.transparent),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Text(
+                              '해당 이메일로 비밀번호 재설정 메일이 발송됩니다.',
+                              // textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: primaryColor.withOpacity(0.5),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                MaterialButton(
+                                  onPressed: () {
+                                    Get.back();
+                                    _loginController.forgotEmailController.value.clear();
+                                    _loginController.forgotPasswordEmail('');
+                                  },
+                                  elevation: 0,
+                                  color: primaryColor.withOpacity(0.5),
+                                  child: Text(
+                                    '취 소',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                MaterialButton(
+                                  onPressed: () {
+                                    forgotUserPassword(_loginController
+                                        .forgotPasswordEmail.value);
+                                  },
+                                  elevation: 0,
+                                  color: primaryColor,
+                                  child: Text(
+                                    '확 인',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ));
+          },
+          child: Text(
+            '비밀번호 찾기',
+            style: TextStyle(fontSize: 16, color: primaryColor),
+          ),
         ),
       ],
     );
@@ -176,6 +269,7 @@ class LoginPage extends StatelessWidget {
           .then((value) {
         Get.off(() => Home());
         _todoController.initUidTodoList();
+        _loginController.clearTextField();
       });
     } on FirebaseAuthException catch (e) {
       await Get.showSnackbar(GetBar(
@@ -187,14 +281,38 @@ class LoginPage extends StatelessWidget {
     }
   }
 
+  void forgotUserPassword(String email) async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: email)
+          .then((value) {
+        Get.off(() => LoginPage());
+        Get.showSnackbar(GetBar(
+          backgroundColor: Colors.greenAccent,
+          title: 'SUCCESS',
+          message: '메일이 발송되었습니다.',
+          duration: Duration(seconds: 2),
+        ));
+        _loginController.forgotEmailController.value.clear();
+        _loginController.forgotPasswordEmail('');
+      });
+    } on FirebaseAuthException catch (error) {
+      await Get.showSnackbar(GetBar(
+        backgroundColor: Colors.redAccent,
+        title: 'ERROR',
+        message: setErrorMessage(error.code),
+        duration: Duration(seconds: 2),
+      ));
+    }
+  }
+
   Widget signUpText() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           '아직 계정이 없다면?  ',
-          style: TextStyle(
-              color: primaryColor.withOpacity(0.5), fontSize: 16),
+          style: TextStyle(color: primaryColor.withOpacity(0.5), fontSize: 16),
         ),
         GestureDetector(
           onTap: () {
@@ -225,7 +343,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 emailField(context),
                 passwordField(context),
-                forgotPassword(),
+                forgotPassword(context),
                 SizedBox(
                   height: Get.mediaQuery.size.height * 0.1,
                 ),

@@ -195,6 +195,15 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               color: Colors.deepPurpleAccent,
             ),
+            MaterialButton(
+              onPressed: () {
+                FirebaseAuth.instance.sendPasswordResetEmail(email: 'wbsldj7645@naver.com').then((value) =>
+                print('email 전송')).catchError((error) {
+                  print(error);
+                });
+              },
+              child: Text('forgot'),
+            ),
           ],
         ),
       ),

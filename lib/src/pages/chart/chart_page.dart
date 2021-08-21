@@ -58,8 +58,8 @@ class _ChartPageState extends State<ChartPage> {
       totalSwitches: 2,
       initialLabelIndex: _chartController.modeIndex.value,
       labels: ['%', 'h'],
-      inactiveBgColor: isDarkMode ? Color(0xff34495e) : Color(0xffecf0f1),
-      activeBgColor: isDarkMode ? [Color(0xffecf0f1)] : [Color(0xff34495e)],
+      inactiveBgColor: isDarkMode ? primaryColor : Color(0xffecf0f1),
+      activeBgColor: isDarkMode ? [Color(0xffecf0f1)] : [primaryColor],
       onToggle: (index) {
         _chartController.setMode(index);
       },

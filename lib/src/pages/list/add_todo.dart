@@ -159,31 +159,31 @@ class _AddTodoState extends State<AddTodo> {
         );
       },
       child: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Obx(
-            () => Container(
-              width: Get.mediaQuery.size.width * 0.4,
-              height: 30,
-              decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '${_todoController.currentDateTime.value.year} .'
-                    '${_todoController.currentDateTime.value.month} .'
-                    '${_todoController.currentDateTime.value.day}',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300),
-                  )
-                ],
-              ),
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Obx(
+          () => Container(
+            width: Get.mediaQuery.size.width * 0.4,
+            height: 30,
+            decoration: BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${_todoController.currentDateTime.value.year} .'
+                  '${_todoController.currentDateTime.value.month} .'
+                  '${_todoController.currentDateTime.value.day}',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w300),
+                )
+              ],
             ),
           ),
+        ),
       ),
     );
   }
@@ -324,6 +324,11 @@ class _AddTodoState extends State<AddTodo> {
                           _todoController.setTime(TimeRange(
                               startTime: changeStartTime,
                               endTime: changeEndTime));
+                          _todoController.defaultValue(_todoController.getValue(
+                              _todoController.currentDateTime.value,
+                              TimeRange(
+                                  startTime: changeStartTime,
+                                  endTime: changeEndTime)));
                           Get.back();
                         },
                         color: primaryColor,
