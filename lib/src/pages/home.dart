@@ -21,10 +21,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final HomeController _homeController = Get.put(HomeController());
+  bool isDarkMode = GetStorage().read('isDarkMode');
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = GetStorage().read('isDarkMode');
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, AsyncSnapshot<User?> user) {
@@ -68,10 +68,13 @@ class _HomeState extends State<Home> {
                             width: 60,
                             height: 60,
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: primaryColor),
+                                shape: BoxShape.circle,
+                                color: isDarkMode
+                                    ? darkPrimaryColor
+                                    : primaryColor),
                             child: Icon(
                               Icons.add,
-                              color: Colors.white,
+                              color: isDarkMode ? Colors.black : Colors.white,
                             ),
                           ),
                         ),
@@ -95,15 +98,12 @@ class _HomeState extends State<Home> {
         Padding(
           padding: const EdgeInsets.only(left: 15.0),
           child: IconButton(
-              icon: _homeController.currentIndex.value == 0
-                  ? Icon(IconsDB.home_filled,
-                      color: (_homeController.currentIndex.value == 0)
-                          ? Colors.white
-                          : Colors.grey)
-                  : Icon(IconsDB.home_outlined,
-                      color: (_homeController.currentIndex.value == 0)
-                          ? Colors.white
-                          : Colors.grey),
+              icon: Icon(
+                _homeController.currentIndex.value == 0
+                    ? IconsDB.home_filled
+                    : IconsDB.home_outlined,
+                size: 22,
+              ),
               onPressed: () {
                 _homeController.changeTapMenu(0);
               }),
@@ -111,15 +111,9 @@ class _HomeState extends State<Home> {
         Padding(
           padding: const EdgeInsets.only(right: 30.0),
           child: IconButton(
-              icon: _homeController.currentIndex.value == 1
-                  ? Icon(Icons.storage,
-                      color: _homeController.currentIndex.value == 1
-                          ? Colors.white
-                          : Colors.grey)
-                  : Icon(Icons.storage_outlined,
-                      color: _homeController.currentIndex.value == 1
-                          ? Colors.white
-                          : Colors.grey),
+              icon: Icon(_homeController.currentIndex.value == 1
+                  ? IconsDB.menu_filled
+                  : IconsDB.menu_outlined),
               onPressed: () {
                 _homeController.changeTapMenu(1);
               }),
@@ -127,15 +121,9 @@ class _HomeState extends State<Home> {
         Padding(
           padding: const EdgeInsets.only(left: 30.0),
           child: IconButton(
-              icon: _homeController.currentIndex.value == 2
-                  ? Icon(Icons.pie_chart,
-                      color: _homeController.currentIndex.value == 2
-                          ? Colors.white
-                          : Colors.grey)
-                  : Icon(Icons.pie_chart_outline_rounded,
-                      color: _homeController.currentIndex.value == 2
-                          ? Colors.white
-                          : Colors.grey),
+              icon: Icon(_homeController.currentIndex.value == 2
+                  ? IconsDB.pie_chart_filled
+                  : IconsDB.pie_chart_outlined),
               onPressed: () {
                 _homeController.changeTapMenu(2);
               }),
@@ -143,15 +131,9 @@ class _HomeState extends State<Home> {
         Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(
-              icon: _homeController.currentIndex.value == 3
-                  ? Icon(Icons.settings,
-                      color: _homeController.currentIndex.value == 3
-                          ? Colors.white
-                          : Colors.grey)
-                  : Icon(Icons.settings_outlined,
-                      color: _homeController.currentIndex.value == 3
-                          ? Colors.white
-                          : Colors.grey),
+              icon: Icon(_homeController.currentIndex.value == 3
+                  ? IconsDB.settings_filled
+                  : IconsDB.settings_outlined),
               onPressed: () {
                 _homeController.changeTapMenu(3);
               }),
@@ -171,7 +153,7 @@ class _HomeState extends State<Home> {
                 _homeController.currentIndex.value == 0
                     ? IconsDB.home_filled
                     : IconsDB.home_outlined,
-                size: 20,
+                size: 22,
               ),
               onPressed: () {
                 _homeController.changeTapMenu(0);
@@ -180,10 +162,12 @@ class _HomeState extends State<Home> {
         Padding(
           padding: const EdgeInsets.only(right: 30.0),
           child: IconButton(
-              icon: Icon(_homeController.currentIndex.value == 1
-                  ? IconsDB.menu_filled
-                  : IconsDB.menu_outlined,
-              size: 24,),
+              icon: Icon(
+                _homeController.currentIndex.value == 1
+                    ? IconsDB.menu_filled
+                    : IconsDB.menu_outlined,
+                size: 24,
+              ),
               onPressed: () {
                 _homeController.changeTapMenu(1);
               }),
@@ -191,10 +175,12 @@ class _HomeState extends State<Home> {
         Padding(
           padding: const EdgeInsets.only(left: 30.0),
           child: IconButton(
-              icon: Icon(_homeController.currentIndex.value == 2
-                  ? IconsDB.pie_chart_filled
-                  : IconsDB.pie_chart_outlined,
-              size: 24,),
+              icon: Icon(
+                _homeController.currentIndex.value == 2
+                    ? IconsDB.pie_chart_filled
+                    : IconsDB.pie_chart_outlined,
+                size: 24,
+              ),
               onPressed: () {
                 _homeController.changeTapMenu(2);
               }),

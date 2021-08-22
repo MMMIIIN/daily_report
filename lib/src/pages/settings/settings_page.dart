@@ -16,12 +16,14 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final isDarkMode = _settingsController.isDarkModeIndex.value == 1;
+
   Widget userInfo() {
     return Row(
       children: [
         Icon(
           IconsDB.user_man_circle_outlined,
-          color: primaryColor,
+          color: isDarkMode ? Colors.white : primaryColor,
         ),
         Text(
           '  ${FirebaseAuth.instance.currentUser!.email}',
@@ -45,21 +47,21 @@ class _SettingsPageState extends State<SettingsPage> {
             labels: ['v', 'v'],
             customTextStyles: [
               TextStyle(
-                  color: _settingsController.isDarkModeIndex.value == 0
-                      ? Colors.white
-                      : Colors.transparent),
-              TextStyle(
-                  color: _settingsController.isDarkModeIndex.value == 0
+                  color: isDarkMode
                       ? Colors.transparent
-                      : primaryColor)
+                      : Colors.white),
+              TextStyle(
+                  color: isDarkMode
+                      ? primaryColor
+                      : Colors.transparent)
             ],
-            inactiveBgColor: _settingsController.isDarkModeIndex.value == 0
-                ? primaryColor.withOpacity(0.2)
-                : primaryColor.withOpacity(0.7),
+            inactiveBgColor: isDarkMode
+                ? primaryColor.withOpacity(0.7)
+                : primaryColor.withOpacity(0.2),
             activeBgColor: [
-              _settingsController.isDarkModeIndex.value == 0
-                  ? Color(0xff34495e)
-                  : Color(0xffecf0f1)
+              isDarkMode
+                  ? darkPrimaryColor
+                  : primaryColor
             ],
             initialLabelIndex: _settingsController.isDarkModeIndex.value,
             onToggle: (index) {
@@ -83,13 +85,13 @@ class _SettingsPageState extends State<SettingsPage> {
             minHeight: 30,
             totalSwitches: 2,
             labels: ['%', 'h'],
-            inactiveBgColor: _settingsController.isDarkModeIndex.value == 0
-                ? primaryColor.withOpacity(0.2)
-                : primaryColor.withOpacity(0.7),
+            inactiveBgColor: isDarkMode
+                ? primaryColor.withOpacity(0.7)
+                : primaryColor.withOpacity(0.2),
             activeBgColor: [
-              _settingsController.isDarkModeIndex.value == 0
-                  ? Color(0xff34495e)
-                  : Color(0xffecf0f1)
+              isDarkMode
+                  ? darkPrimaryColor
+                  : primaryColor
             ],
             initialLabelIndex: _settingsController.isPercentOrHourIndex.value,
             onToggle: (index) {
@@ -114,13 +116,13 @@ class _SettingsPageState extends State<SettingsPage> {
             totalSwitches: 5,
             labels: ['5m', '10m', '15m', '20m', '30m'],
             activeBgColor: [
-              _settingsController.isDarkModeIndex.value == 0
-                  ? Color(0xff34495e)
-                  : Color(0xffecf0f1)
+              isDarkMode
+                  ? darkPrimaryColor
+                  : primaryColor
             ],
-            inactiveBgColor: _settingsController.isDarkModeIndex.value == 0
-                ? primaryColor.withOpacity(0.2)
-                : primaryColor.withOpacity(0.7),
+            inactiveBgColor: isDarkMode
+                ? primaryColor.withOpacity(0.7)
+                : primaryColor.withOpacity(0.2),
             initialLabelIndex: _settingsController.isTimePickerTimeIndex.value,
             onToggle: (index) {
               _settingsController.setTimePickerTimeIndex(index);
@@ -161,7 +163,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               );
             });
-        // FirebaseAuth.instance.signOut();
       },
       color: primaryColor,
       child: Text(
@@ -197,10 +198,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             MaterialButton(
               onPressed: () {
-                FirebaseAuth.instance.sendPasswordResetEmail(email: 'wbsldj7645@naver.com').then((value) =>
-                print('email 전송')).catchError((error) {
-                  print(error);
-                });
+                print(DateTime(2021,8,22).weekday);
               },
               child: Text('forgot'),
             ),

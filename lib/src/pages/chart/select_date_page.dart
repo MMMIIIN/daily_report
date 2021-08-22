@@ -31,27 +31,18 @@ class _SelectDatePageState extends State<SelectDatePage> {
   Widget tableCalendar() {
     return TableCalendar(
       calendarBuilders: CalendarBuilders(
-        selectedBuilder: (context, date, _) => Container(
-          margin: const EdgeInsets.all(4),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(10)),
-          child: Text(
-            date.day.toString(),
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
         todayBuilder: (context, date, _) => Container(
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Color(0xff95afc0),
+              color: isDarkMode ? darkTodayColor : Color(0xff95afc0),
               borderRadius: BorderRadius.circular(10)),
           child: Column(
             children: [
-              Text('today',
-              style: TextStyle(fontSize: 11),),
+              Text(
+                'today',
+                style: TextStyle(fontSize: 11),
+              ),
               Text(
                 date.day.toString(),
                 style: TextStyle(color: Colors.white),
@@ -63,7 +54,8 @@ class _SelectDatePageState extends State<SelectDatePage> {
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: primaryColor, borderRadius: BorderRadius.circular(10)),
+              color: isDarkMode ? darkSelectColor : primaryColor,
+              borderRadius: BorderRadius.circular(10)),
           child: Text(
             date.day.toString(),
             style: TextStyle(color: Colors.white),
@@ -73,15 +65,8 @@ class _SelectDatePageState extends State<SelectDatePage> {
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: primaryColor, borderRadius: BorderRadius.circular(10)),
-          child: Text(
-            date.day.toString(),
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        withinRangeBuilder: (context, date, _) => Container(
-          margin: const EdgeInsets.all(4),
-          alignment: Alignment.center,
+              color: isDarkMode ? darkSelectColor : primaryColor,
+              borderRadius: BorderRadius.circular(10)),
           child: Text(
             date.day.toString(),
             style: TextStyle(color: Colors.white),
@@ -91,12 +76,21 @@ class _SelectDatePageState extends State<SelectDatePage> {
           padding: EdgeInsets.symmetric(vertical: 10),
           child: Container(
             margin: EdgeInsetsDirectional.only(
-              start: date == _rangeStart ? 10 : 0.0,
-              end: date == _rangeEnd ? 10 : 0.0
-            ),
+                start: date == _rangeStart ? 10 : 0.0,
+                end: date == _rangeEnd ? 10 : 0.0),
             decoration: BoxDecoration(
-              color: _ ? primaryColor.withOpacity(0.7) : null,
+              color: isDarkMode
+                  ? (_ ? darkSelectColor.withOpacity(0.85) : null)
+                  : (_ ? primaryColor.withOpacity(0.8) : null),
             ),
+          ),
+        ),
+        withinRangeBuilder: (context, date, _) => Container(
+          margin: const EdgeInsets.all(4),
+          alignment: Alignment.center,
+          child: Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.white),
           ),
         ),
         markerBuilder: (context, date, _) {
@@ -123,10 +117,13 @@ class _SelectDatePageState extends State<SelectDatePage> {
       calendarFormat: _calendarFormat,
       rangeSelectionMode: rangeSelectionMode,
       locale: 'ko-KR',
-      headerStyle: HeaderStyle(
-        titleCentered: true,
-        formatButtonVisible: false
+      daysOfWeekStyle: DaysOfWeekStyle(
+        weekendStyle: TextStyle(color: Colors.red),
       ),
+      calendarStyle: CalendarStyle(
+        weekendTextStyle: TextStyle(color: Colors.red),
+      ),
+      headerStyle: HeaderStyle(titleCentered: true, formatButtonVisible: false),
       eventLoader: (day) {
         for (var todo in _todoController.todoUidList.value.todoList) {
           if (day.year == todo.ymd.year &&
@@ -178,7 +175,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
       children: [
         MaterialButton(
             onPressed: () {
-              Get.offAll(() => Home(),transition: Transition.leftToRight);
+              Get.offAll(() => Home(), transition: Transition.leftToRight);
             },
             color: Color(0xff95afc0),
             child: Text(
@@ -189,7 +186,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
           onPressed: () {
             if (_selectDateController.rangeBool.value) {
               _chartController.makeRangeDate();
-              Get.offAll(() => Home(),transition: Transition.leftToRight);
+              Get.offAll(() => Home(), transition: Transition.leftToRight);
             }
           },
           color: _selectDateController.rangeBool.value

@@ -36,6 +36,51 @@ class _AddTodoState extends State<AddTodo> {
       _todoController.currentDateTime.value.month,
       _todoController.currentDateTime.value.day);
 
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Center(
+          child: Container(
+            height: Get.mediaQuery.size.height * 0.85,
+            width: Get.mediaQuery.size.width * 0.99,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                  color: isDarkMode ? darkPrimaryColor : primaryColor),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                selectOfDate(),
+                titleField(),
+                Flexible(fit: FlexFit.tight, child: printTodo()),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Obx(
+                          () => Expanded(
+                            child: setTime(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                colorSelect(),
+                actionButton()
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget selectOfDate() {
     return GestureDetector(
       onTap: () {
@@ -56,7 +101,9 @@ class _AddTodoState extends State<AddTodo> {
                             margin: const EdgeInsets.all(4),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: isDarkMode ? Colors.grey : primaryColor,
+                                color: isDarkMode
+                                    ? darkPrimaryColor
+                                    : primaryColor,
                                 borderRadius: BorderRadius.circular(10)),
                             child: Text(
                               date.day.toString(),
@@ -67,11 +114,24 @@ class _AddTodoState extends State<AddTodo> {
                             margin: const EdgeInsets.all(4),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: Color(0xff95afc0),
+                                color: isDarkMode
+                                    ? darkTodayColor
+                                    : Color(0xff95afc0),
                                 borderRadius: BorderRadius.circular(10)),
-                            child: Text(
-                              date.day.toString(),
-                              style: TextStyle(color: Colors.white),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'today',
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.white),
+                                ),
+                                date.weekday == 6 || date.weekday == 7
+                                    ? Text(
+                                        date.day.toString(),
+                                        style: TextStyle(color: Colors.red),
+                                      )
+                                    : Text(date.day.toString())
+                              ],
                             ),
                           ),
                           markerBuilder: (context, date, _) {
@@ -97,9 +157,11 @@ class _AddTodoState extends State<AddTodo> {
                         focusedDay: _todoController.selectDateTime.value,
                         selectedDayPredicate: (day) =>
                             isSameDay(_selectedDay, day),
+                        daysOfWeekStyle: DaysOfWeekStyle(
+                          weekendStyle: TextStyle(color: Colors.red),
+                        ),
                         calendarStyle: CalendarStyle(
                           weekendTextStyle: TextStyle(color: Colors.red),
-                          holidayTextStyle: TextStyle(color: Colors.blue),
                         ),
                         eventLoader: (day) {
                           for (var todo in _todoController
@@ -165,7 +227,7 @@ class _AddTodoState extends State<AddTodo> {
             width: Get.mediaQuery.size.width * 0.4,
             height: 30,
             decoration: BoxDecoration(
-              color: primaryColor,
+              color: isDarkMode ? darkPrimaryColor.withOpacity(0.9) : primaryColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
@@ -177,7 +239,7 @@ class _AddTodoState extends State<AddTodo> {
                   '${_todoController.currentDateTime.value.day}',
                   style: TextStyle(
                       fontSize: 20,
-                      color: Colors.white,
+                      color: isDarkMode ? Colors.black : Colors.white,
                       fontWeight: FontWeight.w300),
                 )
               ],
@@ -195,21 +257,27 @@ class _AddTodoState extends State<AddTodo> {
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: primaryColor.withOpacity(0.3)),
+            color: isDarkMode
+                ? darkPrimaryColor.withOpacity(0.9)
+                : primaryColor.withOpacity(0.3)),
         child: TextField(
+          style: TextStyle(
+            color: isDarkMode ? Colors.black : primaryColor
+          ),
           controller: _todoController.titleTextController.value,
-          cursorColor: primaryColor,
+          cursorColor: isDarkMode ? Colors.black : primaryColor,
           decoration: InputDecoration(
-            focusColor: primaryColor,
-            prefixIcon: Icon(Icons.title, color: primaryColor),
+            prefixIcon: Icon(Icons.title,
+                color: isDarkMode ? Colors.black : primaryColor),
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.transparent),
             ),
             focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: primaryColor)),
+                borderSide: BorderSide(
+                    color: isDarkMode ? Colors.black : primaryColor)),
             hintText: 'Title',
             hintStyle: TextStyle(
-              color: primaryColor,
+              color: isDarkMode ? Colors.black : primaryColor,
               fontWeight: FontWeight.w300,
             ),
           ),
@@ -348,7 +416,7 @@ class _AddTodoState extends State<AddTodo> {
       child: Container(
         height: Get.mediaQuery.size.height * 0.1,
         decoration: BoxDecoration(
-            color: primaryColor.withOpacity(1),
+            color: isDarkMode ? darkPrimaryColor.withOpacity(0.9) : primaryColor,
             borderRadius: BorderRadius.circular(15)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -360,11 +428,17 @@ class _AddTodoState extends State<AddTodo> {
                   '${_todoController.defaultTime.value.startTime.hour} : '
                   '${_todoController.defaultTime.value.startTime.minute}',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: isDarkMode ? Colors.black : Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w200),
                 ),
               ],
+            ),
+            Text(
+              '~',
+              style: TextStyle(
+                  color: isDarkMode ? Colors.black : Colors.white,
+                  fontSize: 20),
             ),
             Row(
               children: [
@@ -372,7 +446,7 @@ class _AddTodoState extends State<AddTodo> {
                   '${_todoController.defaultTime.value.endTime.hour} : '
                   '${_todoController.defaultTime.value.endTime.minute}',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: isDarkMode ? Colors.black : Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w200),
                 ),
@@ -430,12 +504,15 @@ class _AddTodoState extends State<AddTodo> {
               _todoController.titleTextController.value.clear();
               Get.back();
             },
-            color: primaryColor.withOpacity(0.5),
+            color: isDarkMode
+                ? darkPrimaryColor.withOpacity(0.8)
+                : primaryColor.withOpacity(0.4),
             elevation: 0,
             child: Text(
               '취 소',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+              style: TextStyle(
+                  color: isDarkMode ? Colors.black : Colors.white,
+                  fontWeight: FontWeight.w300),
             ),
           ),
           widget.editMode == true
@@ -513,11 +590,13 @@ class _AddTodoState extends State<AddTodo> {
                       ),
                     );
                   },
-                  color: primaryColor,
+                  color: isDarkMode ? darkPrimaryColor : primaryColor,
+                  elevation: 0,
                   child: Text(
                     '수 정',
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w300),
+                        color: isDarkMode ? Colors.black : Colors.white,
+                        fontWeight: FontWeight.w300),
                   ),
                 )
               : MaterialButton(
@@ -596,58 +675,16 @@ class _AddTodoState extends State<AddTodo> {
                     );
                     _todoController.titleTextController.value.clear();
                   },
-                  color: primaryColor,
+                  color: isDarkMode ? darkPrimaryColor : primaryColor,
+                  elevation: 0,
                   child: Text(
                     '추 가',
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w300),
+                        color: isDarkMode ? Colors.black : Colors.white,
+                        fontWeight: FontWeight.w300),
                   ),
                 ),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Center(
-          child: Container(
-            height: Get.mediaQuery.size.height * 0.85,
-            width: Get.mediaQuery.size.width * 0.99,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: primaryColor),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                selectOfDate(),
-                titleField(),
-                Flexible(fit: FlexFit.tight, child: printTodo()),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Obx(
-                          () => Expanded(
-                            child: setTime(context),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                colorSelect(),
-                actionButton()
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

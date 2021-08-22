@@ -54,8 +54,11 @@ class _ListPageState extends State<ListPage> {
     return Container(
       height: Get.mediaQuery.size.height * 0.06,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: primaryColor.withOpacity(0.4)),
+        borderRadius: BorderRadius.circular(15),
+        color: isDarkMode
+            ? Colors.white.withOpacity(0.9)
+            : primaryColor.withOpacity(0.4),
+      ),
       child: TextField(
         onChanged: (text) {
           _listController.searchTerm(text);
@@ -64,6 +67,10 @@ class _ListPageState extends State<ListPage> {
             _listController.selectedDays.clear();
           }
         },
+        cursorColor: primaryColor,
+        style: TextStyle(
+          color: primaryColor
+        ),
         controller: _listController.searchTitleController.value,
         decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(
@@ -101,7 +108,7 @@ class _ListPageState extends State<ListPage> {
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: isDarkMode ? Colors.grey : primaryColor,
+              color: isDarkMode ? darkSelectColor : primaryColor,
               borderRadius: BorderRadius.circular(10)),
           child: Text(
             date.day.toString(),
@@ -112,11 +119,21 @@ class _ListPageState extends State<ListPage> {
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Color(0xff95afc0),
+              color: isDarkMode ? darkTodayColor : Color(0xff95afc0),
               borderRadius: BorderRadius.circular(10)),
-          child: Text(
-            date.day.toString(),
-            style: TextStyle(color: Colors.white),
+          child: Column(
+            children: [
+              Text(
+                'today',
+                style: TextStyle(fontSize: 10, color: Colors.white),
+              ),
+              date.weekday == 6 || date.weekday == 7
+                  ? Text(
+                date.day.toString(),
+                style: TextStyle(color: Colors.red),
+              )
+                  : Text(date.day.toString())
+            ],
           ),
         ),
         markerBuilder: (context, date, _) {
@@ -140,6 +157,9 @@ class _ListPageState extends State<ListPage> {
       selectedDayPredicate: (day) {
         return _listController.selectedDays.contains(day);
       },
+      daysOfWeekStyle: DaysOfWeekStyle(
+        weekendStyle: TextStyle(color: Colors.red),
+      ),
       calendarFormat: _calendarFormat,
       calendarStyle: CalendarStyle(
         weekendTextStyle: TextStyle(color: Colors.red),
@@ -258,7 +278,9 @@ class _ListPageState extends State<ListPage> {
                   width: Get.mediaQuery.size.width * 0.8,
                   height: Get.mediaQuery.size.height * 0.08,
                   decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.3),
+                    color: isDarkMode
+                        ? darkPrimaryColor.withOpacity(0.2)
+                        : primaryColor.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Row(
@@ -419,8 +441,10 @@ class _ListPageState extends State<ListPage> {
                                   todoFirebaseDelete(todoUid);
                                   todoDelete(todoUid);
                                   _chartController.makeRangeDate();
-                                  _listController.setSearchTodoList(_listController.selectedDays);
-                                  if(_listController.searchTodoList.value.todoList.isEmpty){
+                                  _listController.setSearchTodoList(
+                                      _listController.selectedDays);
+                                  if (_listController
+                                      .searchTodoList.value.todoList.isEmpty) {
                                     _listController.selectedDays.clear();
                                   }
                                   _todoController.setCurrentIndex(
@@ -467,6 +491,7 @@ class _ListPageState extends State<ListPage> {
               child: Text('취소'),
             ),
             MaterialButton(
+              elevation: 0,
               color: primaryColor,
               onPressed: () {
                 _todoController.titleTextController.value.text = title;

@@ -38,7 +38,7 @@ class _ChartPageState extends State<ChartPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  selectCondition(),
+                  selectDateTime(),
                   toggleButton(),
                 ],
               ),
@@ -59,14 +59,14 @@ class _ChartPageState extends State<ChartPage> {
       initialLabelIndex: _chartController.modeIndex.value,
       labels: ['%', 'h'],
       inactiveBgColor: isDarkMode ? primaryColor : Color(0xffecf0f1),
-      activeBgColor: isDarkMode ? [Color(0xffecf0f1)] : [primaryColor],
+      activeBgColor: [isDarkMode ? Color(0xffecf0f1) : primaryColor],
       onToggle: (index) {
         _chartController.setMode(index);
       },
     );
   }
 
-  Widget selectCondition() {
+  Widget selectDateTime() {
     return InkWell(
       customBorder:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -77,7 +77,8 @@ class _ChartPageState extends State<ChartPage> {
         width: Get.mediaQuery.size.width * 0.6,
         height: 50,
         decoration: BoxDecoration(
-            border: Border.all(color: Color(0xff34495e)),
+            border: Border.all(
+                color: isDarkMode ? darkPrimaryColor : Color(0xff34495e)),
             borderRadius: BorderRadius.circular(15)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -247,7 +248,8 @@ class _ChartPageState extends State<ChartPage> {
                       ),
                       MaterialButton(
                         onPressed: () {
-                          _selectDateController.setRangeTime(_rangeStart!, _rangeEnd!);
+                          _selectDateController.setRangeTime(
+                              _rangeStart!, _rangeEnd!);
                           _chartController.makeRangeDate();
                           Get.offAll(Home());
                         },
