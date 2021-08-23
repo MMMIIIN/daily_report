@@ -275,7 +275,7 @@ class LoginPage extends StatelessWidget {
       await Get.showSnackbar(GetBar(
         title: 'ERROR',
         message: setErrorMessage(e.code),
-        backgroundColor: Colors.redAccent,
+        backgroundColor: errorColor,
         duration: Duration(seconds: 2),
       ));
     }
@@ -288,20 +288,20 @@ class LoginPage extends StatelessWidget {
           .then((value) {
         Get.off(() => LoginPage());
         Get.showSnackbar(GetBar(
-          backgroundColor: Colors.greenAccent,
           title: 'SUCCESS',
           message: '메일이 발송되었습니다.',
           duration: Duration(seconds: 2),
+          backgroundColor: successColor,
         ));
         _loginController.forgotEmailController.value.clear();
         _loginController.forgotPasswordEmail('');
       });
     } on FirebaseAuthException catch (error) {
       await Get.showSnackbar(GetBar(
-        backgroundColor: Colors.redAccent,
         title: 'ERROR',
         message: setErrorMessage(error.code),
         duration: Duration(seconds: 2),
+        backgroundColor: errorColor,
       ));
     }
   }

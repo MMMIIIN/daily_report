@@ -198,7 +198,27 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             MaterialButton(
               onPressed: () {
-                print(DateTime(2021,8,22).weekday);
+                Get.showSnackbar(GetBar(
+                  title: 'SUCCESS',
+                  message: '성공적으로 삭제되었습니다.',
+                  duration: Duration(
+                    seconds: 2
+                  ),
+                  backgroundColor: Color(0xff1dd1a1),
+                ));
+              },
+              child: Text('forgot'),
+            ),
+            MaterialButton(
+              onPressed: () {
+                Get.showSnackbar(GetBar(
+                  title: 'ERROR',
+                  message: 'ERROR',
+                  duration: Duration(
+                      seconds: 2
+                  ),
+                  backgroundColor: Color(0xffee5253),
+                ));
               },
               child: Text('forgot'),
             ),

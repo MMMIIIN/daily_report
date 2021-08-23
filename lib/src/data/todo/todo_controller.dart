@@ -23,6 +23,7 @@ class TodoController extends GetxController {
   int valueSum = 0;
   var titleTextController = TextEditingController().obs;
   final todoTitleList = <TodoTitle>[].obs;
+  RxString currentUid = ''.obs;
 
   Rx<TimeRange> defaultTime = TimeRange(
           startTime: TimeOfDay(hour: 0, minute: 0),
@@ -154,7 +155,8 @@ class TodoController extends GetxController {
             endHour: element['endHour'],
             endMinute: element['endMinute'],
             value: element['value'].toInt(),
-            colorIndex: element['color']);
+            colorIndex: element['color'],
+            hourMinute: element['hourMinute']);
         loadTodoUidList.value.todoList.add(TestTodo(
             uid: sampleTodo.uid,
             ymd: sampleTodo.ymd,
@@ -164,7 +166,8 @@ class TodoController extends GetxController {
             endHour: sampleTodo.endHour,
             endMinute: sampleTodo.endMinute,
             value: sampleTodo.value,
-            colorIndex: sampleTodo.colorIndex));
+            colorIndex: sampleTodo.colorIndex,
+            hourMinute: sampleTodo.hourMinute));
       });
       loadTodoUidList.value.todoList.forEach((element) {
         todoUidCheckAdd(element);

@@ -227,7 +227,8 @@ class _AddTodoState extends State<AddTodo> {
             width: Get.mediaQuery.size.width * 0.4,
             height: 30,
             decoration: BoxDecoration(
-              color: isDarkMode ? darkPrimaryColor.withOpacity(0.9) : primaryColor,
+              color:
+                  isDarkMode ? darkPrimaryColor.withOpacity(0.9) : primaryColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
@@ -261,9 +262,7 @@ class _AddTodoState extends State<AddTodo> {
                 ? darkPrimaryColor.withOpacity(0.9)
                 : primaryColor.withOpacity(0.3)),
         child: TextField(
-          style: TextStyle(
-            color: isDarkMode ? Colors.black : primaryColor
-          ),
+          style: TextStyle(color: isDarkMode ? Colors.black : primaryColor),
           controller: _todoController.titleTextController.value,
           cursorColor: isDarkMode ? Colors.black : primaryColor,
           decoration: InputDecoration(
@@ -416,7 +415,8 @@ class _AddTodoState extends State<AddTodo> {
       child: Container(
         height: Get.mediaQuery.size.height * 0.1,
         decoration: BoxDecoration(
-            color: isDarkMode ? darkPrimaryColor.withOpacity(0.9) : primaryColor,
+            color:
+                isDarkMode ? darkPrimaryColor.withOpacity(0.9) : primaryColor,
             borderRadius: BorderRadius.circular(15)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -517,78 +517,8 @@ class _AddTodoState extends State<AddTodo> {
           ),
           widget.editMode == true
               ? MaterialButton(
-                  onPressed: () async {
-                    await FirebaseFirestore.instance
-                        .collection('user')
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .collection('todos')
-                        .doc(widget.todoUid)
-                        .update({
-                      'title': _todoController.titleTextController.value.text,
-                      'startHour':
-                          _todoController.defaultTime.value.startTime.hour,
-                      'startMinute':
-                          _todoController.defaultTime.value.startTime.minute,
-                      'endHour': _todoController.defaultTime.value.endTime.hour,
-                      'endMinute':
-                          _todoController.defaultTime.value.endTime.minute,
-                      'uid': widget.todoUid,
-                      'value': _todoController.defaultValue.value,
-                      'color': _todoController.selectColorIndex.value,
-                      'year': _todoController.currentDateTime.value.year,
-                      'month': _todoController.currentDateTime.value.month,
-                      'day': _todoController.currentDateTime.value.day
-                    }).then((value) {
-                      _listController.initSearchResult();
-                      var todoIndex = _todoController.todoUidList.value.todoList
-                          .indexWhere(
-                              (element) => element.uid == widget.todoUid);
-                      if (todoIndex != -1) {
-                        _todoController.todoUidList.value.todoList[todoIndex]
-                            .value = _todoController.defaultValue.value.toInt();
-                        _todoController
-                                .todoUidList.value.todoList[todoIndex].title =
-                            _todoController.titleTextController.value.text;
-                        _todoController.todoUidList.value.todoList[todoIndex]
-                                .startHour =
-                            _todoController.defaultTime.value.startTime.hour;
-                        _todoController.todoUidList.value.todoList[todoIndex]
-                                .startMinute =
-                            _todoController.defaultTime.value.startTime.minute;
-                        _todoController
-                                .todoUidList.value.todoList[todoIndex].endHour =
-                            _todoController.defaultTime.value.endTime.hour;
-                        _todoController.todoUidList.value.todoList[todoIndex]
-                                .endMinute =
-                            _todoController.defaultTime.value.endTime.minute;
-                        _todoController.todoUidList.value.todoList[todoIndex]
-                                .colorIndex =
-                            _todoController.selectColorIndex.value;
-                        _todoController
-                                .todoUidList.value.todoList[todoIndex].ymd =
-                            DateTime(
-                                _todoController.currentDateTime.value.year,
-                                _todoController.currentDateTime.value.month,
-                                _todoController.currentDateTime.value.day);
-                      }
-                      Get.off(() => Home());
-                      Get.showSnackbar(GetBar(
-                        title: 'UPDATE',
-                        message: 'success!!',
-                        duration: Duration(seconds: 2),
-                        snackPosition: SnackPosition.BOTTOM,
-                      ));
-                    }).catchError(
-                      (error) async => await Get.showSnackbar(
-                        GetBar(
-                          title: 'UPDATE',
-                          message: 'ERROR!',
-                          duration: Duration(seconds: 2),
-                          snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: Colors.redAccent,
-                        ),
-                      ),
-                    );
+                  onPressed: () {
+                    updateFireStore();
                   },
                   color: isDarkMode ? darkPrimaryColor : primaryColor,
                   elevation: 0,
@@ -600,80 +530,8 @@ class _AddTodoState extends State<AddTodo> {
                   ),
                 )
               : MaterialButton(
-                  onPressed: () async {
-                    var addTodoDto = TestTodo(
-                        uid: 'NULL',
-                        ymd: DateTime(
-                            _todoController.currentDateTime.value.year,
-                            _todoController.currentDateTime.value.month,
-                            _todoController.currentDateTime.value.day),
-                        title: _todoController.titleTextController.value.text,
-                        startHour:
-                            _todoController.defaultTime.value.startTime.hour,
-                        startMinute:
-                            _todoController.defaultTime.value.startTime.minute,
-                        endHour: _todoController.defaultTime.value.endTime.hour,
-                        endMinute:
-                            _todoController.defaultTime.value.endTime.minute,
-                        value: _todoController.defaultValue.value,
-                        colorIndex: _todoController.selectColorIndex.value,
-                        hourMinute:
-                            '${_todoController.defaultValue.value.toInt() ~/ 60}h '
-                            '${_todoController.defaultValue.value.toInt() % 60}m');
-                    await FirebaseFirestore.instance
-                        .collection('user')
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .collection('todos')
-                        .add({
-                      'title': _todoController.titleTextController.value.text,
-                      'startHour':
-                          _todoController.defaultTime.value.startTime.hour,
-                      'startMinute':
-                          _todoController.defaultTime.value.startTime.minute,
-                      'endHour': _todoController.defaultTime.value.endTime.hour,
-                      'endMinute':
-                          _todoController.defaultTime.value.endTime.minute,
-                      'uid': 'NULL',
-                      'value': _todoController.defaultValue.value,
-                      'color': _todoController.selectColorIndex.value,
-                      'year': _todoController.currentDateTime.value.year,
-                      'month': _todoController.currentDateTime.value.month,
-                      'day': _todoController.currentDateTime.value.day
-                    }).then((value) {
-                      FirebaseFirestore.instance
-                          .collection('user')
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .collection('todos')
-                          .doc(value.id)
-                          .update({'uid': value.id});
-                      _chartController.makeRangeDate();
-                      _todoController.loadTodoUidList.value.todoList
-                          .add(addTodoDto);
-                      _todoController.todoUidCheckAdd(addTodoDto);
-                      _todoController.setCurrentIndex(
-                          _todoController.currentDateTime.value);
-                      _chartController.makeRangeDate();
-                      _listController.initSearchResult();
-                      _listController.searchTitle('');
-                      Get.offAll(() => Home());
-                      Get.showSnackbar(GetBar(
-                        title: 'ADD',
-                        message: 'success!!',
-                        duration: Duration(seconds: 1),
-                        snackPosition: SnackPosition.BOTTOM,
-                      ));
-                    }).catchError(
-                      (error) async => await Get.showSnackbar(
-                        GetBar(
-                          title: 'ERROR',
-                          message: '로그인 정보를 확인하세요',
-                          duration: Duration(seconds: 2),
-                          snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: Colors.redAccent,
-                        ),
-                      ),
-                    );
-                    _todoController.titleTextController.value.clear();
+                  onPressed: () {
+                    addFireStore();
                   },
                   color: isDarkMode ? darkPrimaryColor : primaryColor,
                   elevation: 0,
@@ -685,6 +543,146 @@ class _AddTodoState extends State<AddTodo> {
                   ),
                 ),
         ],
+      ),
+    );
+  }
+
+  Future<void> updateFireStore() async {
+    return await FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('todos')
+        .doc(widget.todoUid)
+        .update({
+      'title': _todoController.titleTextController.value.text,
+      'startHour': _todoController.defaultTime.value.startTime.hour,
+      'startMinute': _todoController.defaultTime.value.startTime.minute,
+      'endHour': _todoController.defaultTime.value.endTime.hour,
+      'endMinute': _todoController.defaultTime.value.endTime.minute,
+      'uid': widget.todoUid,
+      'value': _todoController.defaultValue.value,
+      'color': _todoController.selectColorIndex.value,
+      'year': _todoController.currentDateTime.value.year,
+      'month': _todoController.currentDateTime.value.month,
+      'day': _todoController.currentDateTime.value.day,
+      'hourMinute': '${_todoController.defaultValue.value.toInt() ~/ 60}h '
+          '${_todoController.defaultValue.value.toInt() % 60}m'
+    }).then((value) {
+      _listController.initSearchResult();
+      var todoIndex = _todoController.todoUidList.value.todoList
+          .indexWhere((element) => element.uid == widget.todoUid);
+      print('todoIndex = $todoIndex');
+      if (todoIndex != -1) {
+        _todoController.todoUidList.value.todoList[todoIndex].value =
+            _todoController.defaultValue.value.toInt();
+        _todoController.todoUidList.value.todoList[todoIndex].title =
+            _todoController.titleTextController.value.text;
+        _todoController.todoUidList.value.todoList[todoIndex].startHour =
+            _todoController.defaultTime.value.startTime.hour;
+        _todoController.todoUidList.value.todoList[todoIndex].startMinute =
+            _todoController.defaultTime.value.startTime.minute;
+        _todoController.todoUidList.value.todoList[todoIndex].endHour =
+            _todoController.defaultTime.value.endTime.hour;
+        _todoController.todoUidList.value.todoList[todoIndex].endMinute =
+            _todoController.defaultTime.value.endTime.minute;
+        _todoController.todoUidList.value.todoList[todoIndex].colorIndex =
+            _todoController.selectColorIndex.value;
+        _todoController.todoUidList.value.todoList[todoIndex].hourMinute =
+        '${_todoController.defaultValue.value.toInt() ~/ 60}h '
+            '${_todoController.defaultValue.value.toInt() % 60}m';
+        _todoController.todoUidList.value.todoList[todoIndex].ymd = DateTime(
+            _todoController.currentDateTime.value.year,
+            _todoController.currentDateTime.value.month,
+            _todoController.currentDateTime.value.day);
+        _chartController.makeRangeDate();
+      }
+      Get.off(() => Home());
+      Get.showSnackbar(GetBar(
+        title: 'UPDATE',
+        message: 'success!!',
+        duration: Duration(seconds: 2),
+        backgroundColor: successColor,
+        snackPosition: SnackPosition.BOTTOM,
+      ));
+    }).catchError(
+      (error) async => await Get.showSnackbar(
+        GetBar(
+          title: 'UPDATE',
+          message: 'ERROR!',
+          duration: Duration(seconds: 2),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: errorColor,
+        ),
+      ),
+    );
+  }
+
+  Future<void> addFireStore() async {
+    return await FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('todos')
+        .add({
+      'title': _todoController.titleTextController.value.text,
+      'startHour': _todoController.defaultTime.value.startTime.hour,
+      'startMinute': _todoController.defaultTime.value.startTime.minute,
+      'endHour': _todoController.defaultTime.value.endTime.hour,
+      'endMinute': _todoController.defaultTime.value.endTime.minute,
+      'uid': 'NULL',
+      'value': _todoController.defaultValue.value,
+      'color': _todoController.selectColorIndex.value,
+      'year': _todoController.currentDateTime.value.year,
+      'month': _todoController.currentDateTime.value.month,
+      'day': _todoController.currentDateTime.value.day,
+      'hourMinute': '${_todoController.defaultValue.value.toInt() ~/ 60}h '
+          '${_todoController.defaultValue.value.toInt() % 60}m'
+    }).then((value) {
+      _todoController.currentUid(value.id);
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('todos')
+          .doc(value.id)
+          .update({'uid': value.id});
+      var addTodoDto = TestTodo(
+          uid: _todoController.currentUid.value,
+          ymd: DateTime(
+              _todoController.currentDateTime.value.year,
+              _todoController.currentDateTime.value.month,
+              _todoController.currentDateTime.value.day),
+          title: _todoController.titleTextController.value.text,
+          startHour: _todoController.defaultTime.value.startTime.hour,
+          startMinute: _todoController.defaultTime.value.startTime.minute,
+          endHour: _todoController.defaultTime.value.endTime.hour,
+          endMinute: _todoController.defaultTime.value.endTime.minute,
+          value: _todoController.defaultValue.value,
+          colorIndex: _todoController.selectColorIndex.value,
+          hourMinute: '${_todoController.defaultValue.value.toInt() ~/ 60}h '
+              '${_todoController.defaultValue.value.toInt() % 60}m');
+      _todoController.loadTodoUidList.value.todoList.add(addTodoDto);
+      _todoController.todoUidCheckAdd(addTodoDto);
+      _todoController.setCurrentIndex(_todoController.currentDateTime.value);
+      _todoController.titleTextController.value.clear();
+      _chartController.makeRangeDate();
+      _listController.initSearchResult();
+      _listController.searchTitle('');
+      Get.offAll(() => Home());
+      Get.showSnackbar(GetBar(
+        title: 'SUCCESS',
+        message: '성공적으로 추가되었습니다.',
+        duration: Duration(seconds: 1),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: successColor,
+      ));
+    }).catchError(
+      (error) async => await Get.showSnackbar(
+        GetBar(
+          title: 'ERROR',
+          message: '로그인 정보를 확인하세요',
+          duration: Duration(seconds: 2),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: errorColor,
+        ),
       ),
     );
   }

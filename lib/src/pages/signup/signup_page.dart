@@ -328,7 +328,7 @@ class SignUpPage extends StatelessWidget {
       await Get.showSnackbar(GetBar(
         title: 'ERROR',
         message: setErrorMessage(e.code),
-        backgroundColor: Colors.redAccent,
+        backgroundColor: errorColor,
         duration: Duration(seconds: 2),
       ));
     } catch (e) {

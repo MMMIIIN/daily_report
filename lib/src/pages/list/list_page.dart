@@ -68,13 +68,12 @@ class _ListPageState extends State<ListPage> {
           }
         },
         cursorColor: primaryColor,
-        style: TextStyle(
-          color: primaryColor
-        ),
+        style: TextStyle(color: primaryColor),
         controller: _listController.searchTitleController.value,
         decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent)),
+              borderSide: BorderSide(color: Colors.transparent),
+            ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.transparent),
             ),
@@ -87,6 +86,7 @@ class _ListPageState extends State<ListPage> {
                     icon: Icon(
                       Icons.cancel_outlined,
                       size: 20,
+                      color: Colors.black,
                     ),
                     onPressed: () {
                       _listController.searchTerm('');
@@ -129,9 +129,9 @@ class _ListPageState extends State<ListPage> {
               ),
               date.weekday == 6 || date.weekday == 7
                   ? Text(
-                date.day.toString(),
-                style: TextStyle(color: Colors.red),
-              )
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.red),
+                    )
                   : Text(date.day.toString())
             ],
           ),
@@ -390,6 +390,7 @@ class _ListPageState extends State<ListPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        print('todoUid = $todoUid');
         return AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -519,14 +520,21 @@ class _ListPageState extends State<ListPage> {
         .then((value) {
       Get.back();
       Get.back();
+      _chartController.makeRangeDate();
+      Get.showSnackbar(GetBar(
+        duration: Duration(seconds: 2),
+        title: 'SUCCESS',
+        message: '성공적으로 삭제되었습니다.',
+        backgroundColor: successColor,
+      ));
     }).catchError(
-      (error) => Get.showSnackbar(
+      (error) async => await Get.showSnackbar(
         GetBar(
           title: 'DELETE',
           message: 'ERROR!',
           duration: Duration(seconds: 2),
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.redAccent,
+          backgroundColor: errorColor,
         ),
       ),
     );
@@ -535,7 +543,6 @@ class _ListPageState extends State<ListPage> {
   void todoDelete(String todoUid) {
     _todoController.loadTodoUidList.value.todoList
         .removeWhere((element) => element.uid == todoUid);
-
     _todoController.todoUidList.value.todoList.clear();
     _todoController.loadTodoUidList.value.todoList.forEach((element) {
       _todoController.todoUidCheckAdd(element);
