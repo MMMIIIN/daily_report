@@ -56,6 +56,7 @@ class _AddTodoState extends State<AddTodo> {
                 selectOfDate(),
                 titleField(),
                 Flexible(fit: FlexFit.tight, child: printTodo()),
+                makeRule(),
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
@@ -588,7 +589,7 @@ class _AddTodoState extends State<AddTodo> {
         _todoController.todoUidList.value.todoList[todoIndex].colorIndex =
             _todoController.selectColorIndex.value;
         _todoController.todoUidList.value.todoList[todoIndex].hourMinute =
-        '${_todoController.defaultValue.value.toInt() ~/ 60}h '
+            '${_todoController.defaultValue.value.toInt() ~/ 60}h '
             '${_todoController.defaultValue.value.toInt() % 60}m';
         _todoController.todoUidList.value.todoList[todoIndex].ymd = DateTime(
             _todoController.currentDateTime.value.year,
@@ -685,6 +686,71 @@ class _AddTodoState extends State<AddTodo> {
         ),
       ),
     );
+  }
+
+  Widget makeRule() {
+    return MaterialButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (_) => Dialog(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: Get.mediaQuery.size.height * 0.3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: primaryColor.withOpacity(0.2)),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.title,
+                              color: primaryColor,
+                            ),
+                            hintText: 'Title',
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                          ),
+                        ),
+                      ),
+                      colorSelect(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          MaterialButton(
+                            onPressed: () {},
+                            elevation: 0,
+                            color: primaryColor.withOpacity(0.4),
+                            child: Text(
+                              '취 소',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          MaterialButton(
+                            onPressed: () {},
+                            elevation: 0,
+                            color: primaryColor.withOpacity(0.9),
+                            child: Text(
+                              '추 가',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        child: Text('규칙 만들기'));
   }
 
   @override
