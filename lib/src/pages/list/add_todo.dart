@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
+import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
@@ -55,7 +56,7 @@ class _AddTodoState extends State<AddTodo> {
               children: [
                 selectOfDate(),
                 titleField(),
-                Flexible(fit: FlexFit.tight, child: printTodo()),
+                Obx(() => Flexible(fit: FlexFit.tight, child: printTodo())),
                 makeRule(),
                 Flexible(
                   child: Padding(
@@ -303,17 +304,32 @@ class _AddTodoState extends State<AddTodo> {
                 onTap: () {
                   _todoController.titleTextController.value.text =
                       _todoController.todoTitleList[index].title;
+                  _todoController.selectColorIndex(
+                      _todoController.todoTitleList[index].titleColor);
                 },
-                child: Card(
-                    color: primaryColor,
-                    child: Text(
-                      '${_todoController.todoTitleList[index].title}',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w200),
-                    )),
+                child: Container(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: colorList[_todoController
+                                .todoTitleList[index].titleColor]),
+                      ),
+                      Text(
+                        ' ${_todoController.todoTitleList[index].title}',
+                        style: TextStyle(
+                          fontSize: 16
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
-            }),
+            },
+        ),
       ),
     );
   }
@@ -690,8 +706,8 @@ class _AddTodoState extends State<AddTodo> {
 
   Widget makeRule() {
     return MaterialButton(
-        onPressed: () {
-          showDialog(
+        onPressed: () async {
+          await showDialog(
             context: context,
             builder: (_) => Dialog(
               child: Padding(
@@ -707,6 +723,8 @@ class _AddTodoState extends State<AddTodo> {
                             borderRadius: BorderRadius.circular(10),
                             color: primaryColor.withOpacity(0.2)),
                         child: TextField(
+                          controller:
+                              _todoController.makeRuleTitleController.value,
                           decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.title,
@@ -724,7 +742,9 @@ class _AddTodoState extends State<AddTodo> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           MaterialButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.back();
+                            },
                             elevation: 0,
                             color: primaryColor.withOpacity(0.4),
                             child: Text(
@@ -733,11 +753,22 @@ class _AddTodoState extends State<AddTodo> {
                             ),
                           ),
                           MaterialButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _todoController.addTodoTitle(
+                                TodoTitle(
+                                    title: _todoController
+                                        .makeRuleTitleController.value.text,
+                                    titleColor:
+                                        _todoController.selectColorIndex.value),
+                              );
+                              Get.back();
+                              _todoController.makeRuleTitleController.value
+                                  .clear();
+                            },
                             elevation: 0,
                             color: primaryColor.withOpacity(0.9),
                             child: Text(
-                              '추 가',
+                              '규칙추가',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),

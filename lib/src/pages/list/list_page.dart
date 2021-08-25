@@ -30,7 +30,7 @@ class _ListPageState extends State<ListPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(10),
         width: double.infinity,
         height: Get.mediaQuery.size.height * 0.85,
         color: Colors.transparent,
@@ -57,7 +57,7 @@ class _ListPageState extends State<ListPage> {
         borderRadius: BorderRadius.circular(15),
         color: isDarkMode
             ? Colors.white.withOpacity(0.9)
-            : primaryColor.withOpacity(0.4),
+            : primaryColor.withOpacity(0.1),
       ),
       child: TextField(
         onChanged: (text) {
@@ -276,11 +276,11 @@ class _ListPageState extends State<ListPage> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   width: Get.mediaQuery.size.width * 0.8,
-                  height: Get.mediaQuery.size.height * 0.08,
+                  height: Get.mediaQuery.size.height * 0.05,
                   decoration: BoxDecoration(
-                    color: isDarkMode
-                        ? darkPrimaryColor.withOpacity(0.2)
-                        : primaryColor.withOpacity(0.3),
+                    // color: isDarkMode
+                    //     ? darkPrimaryColor.withOpacity(0.2)
+                    //     : primaryColor.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Row(

@@ -16,12 +16,12 @@ class TodoController extends GetxController {
   final currentIndexList = [].obs;
   Rx<DateTime> currentDateTime = DateTime.now().obs;
   Rx<DateTime> selectDateTime = DateTime.now().obs;
-  final todoList = <Todo>[].obs;
   final Rx<TodoUidList> loadTodoUidList = TodoUidList(todoList: []).obs;
   final Rx<TodoUidList> todoUidList = TodoUidList(todoList: []).obs;
   Rx<TodoUidList> currentUidList = TodoUidList(todoList: []).obs;
   int valueSum = 0;
   var titleTextController = TextEditingController().obs;
+  var makeRuleTitleController = TextEditingController().obs;
   final todoTitleList = <TodoTitle>[].obs;
   RxString currentUid = ''.obs;
 
@@ -95,11 +95,6 @@ class TodoController extends GetxController {
     });
   }
 
-  void sortTodoList() {
-    todoList
-        .sort((a, b) => a.time.startTime.hour.compareTo(b.time.startTime.hour));
-  }
-
   void initDefaultValue() {
     defaultValue(
       getValue(
@@ -123,17 +118,8 @@ class TodoController extends GetxController {
     return result;
   }
 
-  void initTodoTitleList() {
-    for (var i = 0; i < loadTodoUidList.value.todoList.length; i++) {
-      addTodoTitle(loadTodoUidList.value.todoList[i].title);
-    }
-  }
-
-  void addTodoTitle(String text) {
-    var index = todoTitleList.indexWhere((element) => element.title == text);
-    if (index == -1) {
-      todoTitleList.add(TodoTitle(title: text));
-    }
+  void addTodoTitle(TodoTitle todoTitle) {
+    todoTitleList.add(todoTitle);
   }
 
   void initUidTodoList() async {
@@ -181,7 +167,6 @@ class TodoController extends GetxController {
     currentIndexList.clear();
     todoUidList.value.todoList.clear();
     todoTitleList.clear();
-    todoList.clear();
   }
 
   @override

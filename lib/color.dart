@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-Color primaryColor = Color(0xff34495e);
+// Color primaryColor = Color(0xff34495e);
+Color primaryColor = Color(0xff130f40);
 Color darkSelectColor = Color(0xff95afc0);
 Color darkPrimaryColor = Color(0xffecf0f1);
 Color darkTodayColor = Color(0xff535c68);

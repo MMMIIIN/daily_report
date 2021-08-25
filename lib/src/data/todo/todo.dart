@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 class Todo {
@@ -10,6 +11,7 @@ class Todo {
 class TodoTitle{
   String title;
   int index;
+  int titleColor;
 
-  TodoTitle({required this.title, this.index = 0});
+  TodoTitle({required this.title, this.index = 0, required this.titleColor});
 }
