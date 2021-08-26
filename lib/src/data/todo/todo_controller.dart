@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
+import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,6 +25,7 @@ class TodoController extends GetxController {
   var makeRuleTitleController = TextEditingController().obs;
   final todoTitleList = <TodoTitle>[].obs;
   RxString currentUid = ''.obs;
+  RxString makeRuleTitle = ''.obs;
 
   Rx<TimeRange> defaultTime = TimeRange(
           startTime: TimeOfDay(hour: 0, minute: 0),
@@ -169,10 +171,19 @@ class TodoController extends GetxController {
     todoTitleList.clear();
   }
 
+  void setMakeRuleTitle(String title){
+    makeRuleTitle(title);
+  }
+
+  void initTodoTitleList() async{
+    todoTitleList.addAll(await getTodoTitleData());
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     initUidTodoList();
+    initTodoTitleList();
   }
 }

@@ -7,6 +7,7 @@ import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
+import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -293,42 +294,108 @@ class _AddTodoState extends State<AddTodo> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 50,
-              mainAxisExtent: 30,
-            ),
-            itemCount: _todoController.todoTitleList.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  _todoController.titleTextController.value.text =
-                      _todoController.todoTitleList[index].title;
-                  _todoController.selectColorIndex(
-                      _todoController.todoTitleList[index].titleColor);
-                },
-                child: Container(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 50,
+            mainAxisExtent: 30,
+          ),
+          itemCount: _todoController.todoTitleList.length,
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: () {
+                _todoController.titleTextController.value.text =
+                    _todoController.todoTitleList[index].title;
+                _todoController.selectColorIndex(
+                    _todoController.todoTitleList[index].titleColor);
+              },
+              onLongPress: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Row(
+                      children: [
+                        Container(
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: colorList[_todoController
-                                .todoTitleList[index].titleColor]),
-                      ),
-                      Text(
-                        ' ${_todoController.todoTitleList[index].title}',
-                        style: TextStyle(
-                          fontSize: 16
+                                .todoTitleList[index].titleColor],
+                          ),
+                        ),
+                        Flexible(
+                          child: Text(
+                            ' ${_todoController.todoTitleList[index].title}',
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        MaterialButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          elevation: 0,
+                          color: primaryColor.withOpacity(0.4),
+                          child: Text(
+                            '취소',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        MaterialButton(
+                          onPressed: () {
+                            deleteTodoTitle(
+                                _todoController.todoTitleList[index].uid);
+                            _todoController.todoTitleList.removeWhere(
+                                (element) =>
+                                    element.uid ==
+                                    _todoController.todoTitleList[index].uid);
+                            Get.back();
+                          },
+                          elevation: 0,
+                          color: primaryColor,
+                          child: Text(
+                            '규칙 삭제',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: colorList[
+                              _todoController.todoTitleList[index].titleColor]),
+                    ),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Text(
+                          ' ${_todoController.todoTitleList[index].title}',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 16),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            },
+              ),
+            );
+          },
         ),
       ),
     );
@@ -723,6 +790,9 @@ class _AddTodoState extends State<AddTodo> {
                             borderRadius: BorderRadius.circular(10),
                             color: primaryColor.withOpacity(0.2)),
                         child: TextField(
+                          onChanged: (text) {
+                            _todoController.setMakeRuleTitle(text);
+                          },
                           controller:
                               _todoController.makeRuleTitleController.value,
                           decoration: InputDecoration(
@@ -753,17 +823,23 @@ class _AddTodoState extends State<AddTodo> {
                             ),
                           ),
                           MaterialButton(
-                            onPressed: () {
-                              _todoController.addTodoTitle(
+                            onPressed: () async {
+                              _todoController.makeRuleTitleController.value
+                                  .clear();
+                              await addTodoTitle(
                                 TodoTitle(
-                                    title: _todoController
-                                        .makeRuleTitleController.value.text,
+                                    title: _todoController.makeRuleTitle.value,
                                     titleColor:
                                         _todoController.selectColorIndex.value),
                               );
+                              _todoController.addTodoTitle(
+                                TodoTitle(
+                                    title: _todoController.makeRuleTitle.value,
+                                    titleColor:
+                                        _todoController.selectColorIndex.value,
+                                    uid: currentTodoTitleUid),
+                              );
                               Get.back();
-                              _todoController.makeRuleTitleController.value
-                                  .clear();
                             },
                             elevation: 0,
                             color: primaryColor.withOpacity(0.9),

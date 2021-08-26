@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
+import 'package:daily_report/src/data/todo/todo.dart';
+import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/login/login_page.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:daily_report/src/pages/signup/signup_page.dart';
@@ -9,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 final SettingsController _settingsController = Get.put(SettingsController());
+final TodoController _todoController = Get.put(TodoController());
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -46,23 +50,13 @@ class _SettingsPageState extends State<SettingsPage> {
             totalSwitches: 2,
             labels: ['v', 'v'],
             customTextStyles: [
-              TextStyle(
-                  color: isDarkMode
-                      ? Colors.transparent
-                      : Colors.white),
-              TextStyle(
-                  color: isDarkMode
-                      ? primaryColor
-                      : Colors.transparent)
+              TextStyle(color: isDarkMode ? Colors.transparent : Colors.white),
+              TextStyle(color: isDarkMode ? primaryColor : Colors.transparent)
             ],
             inactiveBgColor: isDarkMode
                 ? primaryColor.withOpacity(0.7)
                 : primaryColor.withOpacity(0.2),
-            activeBgColor: [
-              isDarkMode
-                  ? darkPrimaryColor
-                  : primaryColor
-            ],
+            activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
             initialLabelIndex: _settingsController.isDarkModeIndex.value,
             onToggle: (index) {
               _settingsController.setDarkModeIndex(index);
@@ -88,11 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
             inactiveBgColor: isDarkMode
                 ? primaryColor.withOpacity(0.7)
                 : primaryColor.withOpacity(0.2),
-            activeBgColor: [
-              isDarkMode
-                  ? darkPrimaryColor
-                  : primaryColor
-            ],
+            activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
             initialLabelIndex: _settingsController.isPercentOrHourIndex.value,
             onToggle: (index) {
               _settingsController.setPercentOrHourIndex(index);
@@ -115,11 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
             minHeight: 25,
             totalSwitches: 5,
             labels: ['5m', '10m', '15m', '20m', '30m'],
-            activeBgColor: [
-              isDarkMode
-                  ? darkPrimaryColor
-                  : primaryColor
-            ],
+            activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
             inactiveBgColor: isDarkMode
                 ? primaryColor.withOpacity(0.7)
                 : primaryColor.withOpacity(0.2),
@@ -201,9 +187,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Get.showSnackbar(GetBar(
                   title: 'SUCCESS',
                   message: '성공적으로 삭제되었습니다.',
-                  duration: Duration(
-                    seconds: 2
-                  ),
+                  duration: Duration(seconds: 2),
                   backgroundColor: Color(0xff1dd1a1),
                 ));
               },
@@ -211,16 +195,11 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             MaterialButton(
               onPressed: () {
-                Get.showSnackbar(GetBar(
-                  title: 'ERROR',
-                  message: 'ERROR',
-                  duration: Duration(
-                      seconds: 2
-                  ),
-                  backgroundColor: Color(0xffee5253),
-                ));
+                _todoController.todoTitleList.forEach((element) {
+                  print(element.uid);
+                });
               },
-              child: Text('forgot'),
+              child: Text('todoTitle'),
             ),
           ],
         ),
