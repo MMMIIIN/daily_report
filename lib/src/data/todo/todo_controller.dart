@@ -26,6 +26,7 @@ class TodoController extends GetxController {
   final todoTitleList = <TodoTitle>[].obs;
   RxString currentUid = ''.obs;
   RxString makeRuleTitle = ''.obs;
+  RxBool checkBoxBool = false.obs;
 
   Rx<TimeRange> defaultTime = TimeRange(
           startTime: TimeOfDay(hour: 0, minute: 0),
@@ -177,6 +178,10 @@ class TodoController extends GetxController {
 
   void initTodoTitleList() async{
     todoTitleList.addAll(await getTodoTitleData());
+  }
+
+  void initCheckBoxBool () {
+    checkBoxBool(false);
   }
 
   @override

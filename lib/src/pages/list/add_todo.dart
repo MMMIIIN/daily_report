@@ -30,6 +30,8 @@ final ChartController _chartController = Get.put(ChartController());
 final TodoController _todoController = Get.put(TodoController());
 final ListController _listController = Get.put(ListController());
 final SettingsController _settingsController = Get.put(SettingsController());
+var changeStartTime = _todoController.defaultTime.value.startTime;
+var changeEndTime = _todoController.defaultTime.value.endTime;
 
 class _AddTodoState extends State<AddTodo> {
   bool isDarkMode = GetStorage().read('isDarkMode');
@@ -307,6 +309,30 @@ class _AddTodoState extends State<AddTodo> {
                     _todoController.todoTitleList[index].title;
                 _todoController.selectColorIndex(
                     _todoController.todoTitleList[index].titleColor);
+                _todoController.todoTitleList[index].boolOfTime
+                    ? _todoController.setTime(
+                        TimeRange(
+                          startTime: TimeOfDay(
+                            hour: _todoController
+                                .todoTitleList[index].timeRange!.startTime.hour,
+                            minute: _todoController.todoTitleList[index]
+                                .timeRange!.startTime.minute,
+                          ),
+                          endTime: TimeOfDay(
+                            hour: _todoController
+                                .todoTitleList[index].timeRange!.endTime.hour,
+                            minute: _todoController
+                                .todoTitleList[index].timeRange!.endTime.minute,
+                          ),
+                        ),
+                      )
+                    : null;
+                _todoController.todoTitleList[index].boolOfTime
+                    ? _todoController.defaultValue(
+                        _todoController.getValue(DateTime.now(),
+                            _todoController.todoTitleList[index].timeRange!),
+                      )
+                    : null;
               },
               onLongPress: () {
                 showDialog(
@@ -402,99 +428,11 @@ class _AddTodoState extends State<AddTodo> {
   }
 
   Widget setTime(BuildContext context) {
-    var changeStartTime = _todoController.defaultTime.value.startTime;
-    var changeEndTime = _todoController.defaultTime.value.endTime;
     return InkWell(
       customBorder:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      onTap: () async {
-        await showDialog(
-          context: context,
-          builder: (_) => Padding(
-            padding: EdgeInsets.symmetric(vertical: 100),
-            child: Dialog(
-              child: Column(
-                children: [
-                  TimeRangePicker(
-                    hideButtons: true,
-                    clockRotation: 180,
-                    paintingStyle: PaintingStyle.fill,
-                    fromText: 'START',
-                    toText: 'END',
-                    interval: Duration(
-                        minutes:
-                            _settingsController.timePickerOfInterval.value),
-                    labels: ['0', '3', '6', '9', '12', '15', '18', '21']
-                        .asMap()
-                        .entries
-                        .map((e) {
-                      return ClockLabel.fromIndex(
-                          idx: e.key, length: 8, text: e.value);
-                    }).toList(),
-                    snap: true,
-                    start: _todoController.defaultTime.value.startTime,
-                    end: _todoController.defaultTime.value.endTime,
-                    onStartChange: (startTime) {
-                      changeStartTime = startTime;
-                    },
-                    onEndChange: (endTime) {
-                      changeEndTime = endTime;
-                    },
-                    ticks: 24,
-                    handlerRadius: 8,
-                    handlerColor: isDarkMode ? Colors.grey : primaryColor,
-                    backgroundColor: isDarkMode
-                        ? Colors.white.withOpacity(0.1)
-                        : primaryColor.withOpacity(0.1),
-                    strokeColor: isDarkMode
-                        ? Colors.white.withOpacity(0.9)
-                        : primaryColor.withOpacity(0.8),
-                    ticksColor: isDarkMode
-                        ? Colors.white.withOpacity(0.8)
-                        : primaryColor,
-                    labelOffset: 30,
-                    rotateLabels: false,
-                    padding: 60,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      MaterialButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        elevation: 0,
-                        color: primaryColor.withOpacity(0.4),
-                        child: Text(
-                          '취 소',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      MaterialButton(
-                        onPressed: () {
-                          _todoController.setTime(TimeRange(
-                              startTime: changeStartTime,
-                              endTime: changeEndTime));
-                          _todoController.defaultValue(_todoController.getValue(
-                              _todoController.currentDateTime.value,
-                              TimeRange(
-                                  startTime: changeStartTime,
-                                  endTime: changeEndTime)));
-                          Get.back();
-                        },
-                        color: primaryColor,
-                        child: Text(
-                          '확 인',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
+      onTap: () {
+        setTimeRange();
       },
       child: Container(
         height: Get.mediaQuery.size.height * 0.1,
@@ -774,13 +712,14 @@ class _AddTodoState extends State<AddTodo> {
   Widget makeRule() {
     return MaterialButton(
         onPressed: () async {
+          _todoController.initCheckBoxBool();
           await showDialog(
             context: context,
             builder: (_) => Dialog(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  height: Get.mediaQuery.size.height * 0.3,
+                  height: Get.mediaQuery.size.height * 0.4,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -808,6 +747,51 @@ class _AddTodoState extends State<AddTodo> {
                         ),
                       ),
                       colorSelect(),
+                      Obx(
+                        () => Row(
+                          children: [
+                            Checkbox(
+                              value: _todoController.checkBoxBool.value,
+                              onChanged: (check) {
+                                _todoController.checkBoxBool(check);
+                              },
+                            ),
+                            InkWell(
+                              onTap: _todoController.checkBoxBool.value
+                                  ? () {
+                                      setTimeRange();
+                                    }
+                                  : () {},
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                width: Get.mediaQuery.size.width * 0.6,
+                                height: Get.mediaQuery.size.height * 0.05,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: _todoController.checkBoxBool.value
+                                      ? primaryColor.withOpacity(0.2)
+                                      : primaryColor.withOpacity(0.05),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                        '${_todoController.defaultTime.value.startTime.hour} : '
+                                        '${_todoController.defaultTime.value.startTime.minute}'),
+                                    Text(' ~ '),
+                                    Text(
+                                        '${_todoController.defaultTime.value.endTime.hour} : '
+                                        '${_todoController.defaultTime.value.endTime.minute}'),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -826,20 +810,78 @@ class _AddTodoState extends State<AddTodo> {
                             onPressed: () async {
                               _todoController.makeRuleTitleController.value
                                   .clear();
+                              // _todoController.checkBoxBool.value
+                              //     ? await addTodoTitleTimeRange(
+                              //         TodoTitle(
+                              //             title: _todoController
+                              //                 .makeRuleTitle.value,
+                              //             titleColor: _todoController
+                              //                 .selectColorIndex.value,
+                              //             timeRange:
+                              //                 _todoController.defaultTime.value,
+                              //             boolOfTime: true),
+                              //       )
+                              //     : await addTodoTitle(
+                              //         TodoTitle(
+                              //           title:
+                              //               _todoController.makeRuleTitle.value,
+                              //           titleColor: _todoController
+                              //               .selectColorIndex.value,
+                              //         ),
+                              //       );
                               await addTodoTitle(
                                 TodoTitle(
-                                    title: _todoController.makeRuleTitle.value,
-                                    titleColor:
-                                        _todoController.selectColorIndex.value),
+                                  title: _todoController.makeRuleTitle.value,
+                                  titleColor:
+                                      _todoController.selectColorIndex.value,
+                                  boolOfTime:
+                                      _todoController.checkBoxBool.value,
+                                  timeRange: _todoController.checkBoxBool.value
+                                      ? _todoController.defaultTime.value
+                                      : TimeRange(
+                                          startTime:
+                                              TimeOfDay(hour: 0, minute: 0),
+                                          endTime:
+                                              TimeOfDay(hour: 1, minute: 0),
+                                        ),
+                                ),
                               );
                               _todoController.addTodoTitle(
                                 TodoTitle(
                                     title: _todoController.makeRuleTitle.value,
                                     titleColor:
                                         _todoController.selectColorIndex.value,
-                                    uid: currentTodoTitleUid),
+                                    uid: currentTodoTitleUid,
+                                    timeRange:
+                                        _todoController.checkBoxBool.value
+                                            ? TimeRange(
+                                                startTime: TimeOfDay(
+                                                    hour: _todoController
+                                                        .defaultTime
+                                                        .value
+                                                        .startTime
+                                                        .hour,
+                                                    minute: _todoController
+                                                        .defaultTime
+                                                        .value
+                                                        .startTime
+                                                        .minute),
+                                                endTime: TimeOfDay(
+                                                    hour: _todoController
+                                                        .defaultTime
+                                                        .value
+                                                        .endTime
+                                                        .hour,
+                                                    minute: _todoController
+                                                        .defaultTime
+                                                        .value
+                                                        .endTime
+                                                        .minute),
+                                              )
+                                            : null,
+                                    boolOfTime:
+                                        _todoController.checkBoxBool.value),
                               );
-                              Get.back();
                             },
                             elevation: 0,
                             color: primaryColor.withOpacity(0.9),
@@ -858,6 +900,93 @@ class _AddTodoState extends State<AddTodo> {
           );
         },
         child: Text('규칙 만들기'));
+  }
+
+  void setTimeRange() async {
+    return await showDialog(
+      context: context,
+      builder: (_) => Padding(
+        padding: EdgeInsets.symmetric(vertical: 100),
+        child: Dialog(
+          child: Column(
+            children: [
+              TimeRangePicker(
+                hideButtons: true,
+                clockRotation: 180,
+                paintingStyle: PaintingStyle.fill,
+                fromText: 'START',
+                toText: 'END',
+                interval: Duration(
+                    minutes: _settingsController.timePickerOfInterval.value),
+                labels: ['0', '3', '6', '9', '12', '15', '18', '21']
+                    .asMap()
+                    .entries
+                    .map((e) {
+                  return ClockLabel.fromIndex(
+                      idx: e.key, length: 8, text: e.value);
+                }).toList(),
+                snap: true,
+                start: _todoController.defaultTime.value.startTime,
+                end: _todoController.defaultTime.value.endTime,
+                onStartChange: (startTime) {
+                  changeStartTime = startTime;
+                },
+                onEndChange: (endTime) {
+                  changeEndTime = endTime;
+                },
+                ticks: 24,
+                handlerRadius: 8,
+                handlerColor: isDarkMode ? Colors.grey : primaryColor,
+                backgroundColor: isDarkMode
+                    ? Colors.white.withOpacity(0.1)
+                    : primaryColor.withOpacity(0.1),
+                strokeColor: isDarkMode
+                    ? Colors.white.withOpacity(0.9)
+                    : primaryColor.withOpacity(0.8),
+                ticksColor:
+                    isDarkMode ? Colors.white.withOpacity(0.8) : primaryColor,
+                labelOffset: 30,
+                rotateLabels: false,
+                padding: 60,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MaterialButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    elevation: 0,
+                    color: primaryColor.withOpacity(0.4),
+                    child: Text(
+                      '취 소',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  MaterialButton(
+                    onPressed: () {
+                      _todoController.setTime(TimeRange(
+                          startTime: changeStartTime, endTime: changeEndTime));
+                      _todoController.defaultValue(_todoController.getValue(
+                          _todoController.currentDateTime.value,
+                          TimeRange(
+                              startTime: changeStartTime,
+                              endTime: changeEndTime)));
+                      Get.back();
+                    },
+                    color: primaryColor,
+                    child: Text(
+                      '확 인',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override

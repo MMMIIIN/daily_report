@@ -210,142 +210,151 @@ class _ListPageState extends State<ListPage> {
   Widget showListView() {
     return Expanded(
       child: ListView.builder(
-          itemCount: _listController.searchTodoList.value.todoList.isEmpty
-              ? _listController.searchResult.length
-              : _listController.searchTodoList.value.todoList.length,
-          itemBuilder: (context, index) {
-            var currentTimeRange = TimeRange(
-                startTime: TimeOfDay(
-                    hour: _listController.searchTodoList.value.todoList.isEmpty
-                        ? _listController.searchResult[index].startHour
-                        : _listController
-                            .searchTodoList.value.todoList[index].startHour,
-                    minute:
-                        _listController.searchTodoList.value.todoList.isEmpty
-                            ? _listController.searchResult[index].startMinute
-                            : _listController.searchTodoList.value
-                                .todoList[index].startMinute),
-                endTime: TimeOfDay(
-                    hour: _listController.searchTodoList.value.todoList.isEmpty
-                        ? _listController.searchResult[index].endHour
-                        : _listController
-                            .searchTodoList.value.todoList[index].endHour,
-                    minute:
-                        _listController.searchTodoList.value.todoList.isEmpty
-                            ? _listController.searchResult[index].endMinute
-                            : _listController.searchTodoList.value
-                                .todoList[index].endMinute));
-            var currentTitle = _listController
-                    .searchTodoList.value.todoList.isEmpty
-                ? _listController.searchResult[index].title
-                : _listController.searchTodoList.value.todoList[index].title;
-            var currentColorIndex =
-                _listController.searchTodoList.value.todoList.isEmpty
-                    ? _listController.searchResult[index].colorIndex
-                    : _listController
-                        .searchTodoList.value.todoList[index].colorIndex;
-            var currentDateTime = DateTime(
-                _listController.searchTodoList.value.todoList.isEmpty
-                    ? _listController.searchResult[index].ymd.year
-                    : _listController
-                        .searchTodoList.value.todoList[index].ymd.year,
-                _listController.searchTodoList.value.todoList.isEmpty
-                    ? _listController.searchResult[index].ymd.month
-                    : _listController
-                        .searchTodoList.value.todoList[index].ymd.month,
-                _listController.searchTodoList.value.todoList.isEmpty
-                    ? _listController.searchResult[index].ymd.day
-                    : _listController
-                        .searchTodoList.value.todoList[index].ymd.day);
-            var todoUid = _listController.searchTodoList.value.todoList.isEmpty
-                ? _listController.searchResult[index].uid
-                : _listController.searchTodoList.value.todoList[index].uid;
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: InkWell(
-                customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                onTap: () {
-                  _todoController.setTime(
-                    currentTimeRange,
-                  );
-                  _todoController.currentDateTime(currentDateTime);
-                  todoDialog(context, currentTitle, currentDateTime,
-                      currentTimeRange, currentColorIndex, todoUid);
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  width: Get.mediaQuery.size.width * 0.8,
-                  height: Get.mediaQuery.size.height * 0.05,
-                  decoration: BoxDecoration(
-                    // color: isDarkMode
-                    //     ? darkPrimaryColor.withOpacity(0.2)
-                    //     : primaryColor.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        width: Get.mediaQuery.size.width * 0.55,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  width: 16,
-                                  height: 16,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: colorList[currentColorIndex]),
-                                ),
-                                SizedBox(
-                                    width: Get.mediaQuery.size.width * 0.03),
-                                Text('${currentDateTime.year}.'
-                                    '${currentDateTime.month}.'
-                                    '${currentDateTime.day}'
-                                    ' ${getOfDay(currentDateTime.weekday)}'),
-                              ],
-                            ),
-                            SizedBox(
-                              width: Get.mediaQuery.size.width * 0.07,
-                            ),
-                            Flexible(
-                              child: Text(
-                                currentTitle,
-                                overflow: TextOverflow.ellipsis,
+        itemCount: _listController.searchTodoList.value.todoList.isEmpty
+            ? _listController.searchResult.length
+            : _listController.searchTodoList.value.todoList.length,
+        itemBuilder: (context, index) {
+          var currentHourMinute = _listController
+                  .searchTodoList.value.todoList.isEmpty
+              ? _listController.searchResult[index].hourMinute
+              : _listController.searchTodoList.value.todoList[index].hourMinute;
+          var currentValue =
+              _listController.searchTodoList.value.todoList.isEmpty
+                  ? _listController.searchResult[index].value
+                  : _listController.searchTodoList.value.todoList[index].value;
+          var currentTimeRange = TimeRange(
+              startTime: TimeOfDay(
+                  hour: _listController.searchTodoList.value.todoList.isEmpty
+                      ? _listController.searchResult[index].startHour
+                      : _listController
+                          .searchTodoList.value.todoList[index].startHour,
+                  minute: _listController.searchTodoList.value.todoList.isEmpty
+                      ? _listController.searchResult[index].startMinute
+                      : _listController
+                          .searchTodoList.value.todoList[index].startMinute),
+              endTime: TimeOfDay(
+                  hour: _listController.searchTodoList.value.todoList.isEmpty
+                      ? _listController.searchResult[index].endHour
+                      : _listController
+                          .searchTodoList.value.todoList[index].endHour,
+                  minute: _listController.searchTodoList.value.todoList.isEmpty
+                      ? _listController.searchResult[index].endMinute
+                      : _listController
+                          .searchTodoList.value.todoList[index].endMinute));
+          var currentTitle =
+              _listController.searchTodoList.value.todoList.isEmpty
+                  ? _listController.searchResult[index].title
+                  : _listController.searchTodoList.value.todoList[index].title;
+          var currentColorIndex = _listController
+                  .searchTodoList.value.todoList.isEmpty
+              ? _listController.searchResult[index].colorIndex
+              : _listController.searchTodoList.value.todoList[index].colorIndex;
+          var currentDateTime = DateTime(
+              _listController.searchTodoList.value.todoList.isEmpty
+                  ? _listController.searchResult[index].ymd.year
+                  : _listController
+                      .searchTodoList.value.todoList[index].ymd.year,
+              _listController.searchTodoList.value.todoList.isEmpty
+                  ? _listController.searchResult[index].ymd.month
+                  : _listController
+                      .searchTodoList.value.todoList[index].ymd.month,
+              _listController.searchTodoList.value.todoList.isEmpty
+                  ? _listController.searchResult[index].ymd.day
+                  : _listController
+                      .searchTodoList.value.todoList[index].ymd.day);
+          var todoUid = _listController.searchTodoList.value.todoList.isEmpty
+              ? _listController.searchResult[index].uid
+              : _listController.searchTodoList.value.todoList[index].uid;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: InkWell(
+              customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              onTap: () {
+                _todoController.setTime(
+                  currentTimeRange,
+                );
+                _todoController.currentDateTime(currentDateTime);
+                todoDialog(context, currentTitle, currentDateTime,
+                    currentTimeRange, currentColorIndex, todoUid);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                width: Get.mediaQuery.size.width * 0.8,
+                height: Get.mediaQuery.size.height * 0.05,
+                decoration: BoxDecoration(
+                  // color: isDarkMode
+                  //     ? darkPrimaryColor.withOpacity(0.2)
+                  //     : primaryColor.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 10),
+                      width: Get.mediaQuery.size.width * 0.6,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: 16,
+                                height: 16,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: colorList[currentColorIndex]),
                               ),
+                              SizedBox(width: Get.mediaQuery.size.width * 0.03),
+                              Text('${currentDateTime.year}.'
+                                  '${currentDateTime.month}.'
+                                  '${currentDateTime.day}'
+                                  ' ${getOfDay(currentDateTime.weekday)}'),
+                            ],
+                          ),
+                          SizedBox(
+                            width: Get.mediaQuery.size.width * 0.07,
+                          ),
+                          Flexible(
+                            child: Text(
+                              currentTitle,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      // Text(currentTitle),
-                      Container(
-                        width: Get.mediaQuery.size.width * 0.30,
-                        child: Row(
-                          children: [
-                            Text(
-                              '${currentTimeRange.startTime.hour} : '
-                              '${currentTimeRange.startTime.minute}',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            SizedBox(width: 20),
-                            Text(
-                                '${currentTimeRange.endTime.hour} : '
-                                '${currentTimeRange.endTime.minute}',
-                                style: TextStyle(fontSize: 14))
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    // Text(currentTitle),
+                    Container(
+                      width: Get.mediaQuery.size.width * 0.2,
+                      child: Row(
+                        children: [
+                          // Text(
+                          //   '${currentTimeRange.startTime.hour} : '
+                          //   '${currentTimeRange.startTime.minute}',
+                          //   style: TextStyle(fontSize: 14),
+                          // ),
+                          // SizedBox(width: 20),
+                          // Text(
+                          //     '${currentTimeRange.endTime.hour} : '
+                          //     '${currentTimeRange.endTime.minute}',
+                          //     style: TextStyle(fontSize: 14))
+                          Text('${currentValue ~/ 60}시간 '),
+                          currentValue & 60 != 0
+                              ? Text('')
+                              : Text('${currentValue % 60}분')
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
-            );
-          }),
+            ),
+          );
+        },
+      ),
     );
   }
 

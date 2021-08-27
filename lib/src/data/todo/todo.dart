@@ -7,10 +7,17 @@ class Todo {
   Todo({required this.title, required this.time});
 }
 
-class TodoTitle{
+class TodoTitle {
+  String uid;
   String title;
   int titleColor;
-  String uid;
+  TimeRange? timeRange;
+  bool boolOfTime;
 
-  TodoTitle({required this.title, this.uid = 'null', required this.titleColor});
+  TodoTitle(
+      {required this.title,
+      this.uid = 'null',
+      required this.titleColor,
+      this.timeRange,
+      this.boolOfTime = false});
 }
