@@ -6,6 +6,7 @@ class SettingsController extends GetxController {
   RxInt isPercentOrHourIndex = 0.obs;
   RxInt isTimePickerTimeIndex = 1.obs;
   RxInt timePickerOfInterval = 10.obs;
+  RxInt listPageIndex = 0.obs;
 
   void setDarkModeIndex(int index) {
     isDarkModeIndex(index);

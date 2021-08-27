@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
-import 'package:daily_report/src/data/todo/todo.dart';
-import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/login/login_page.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:daily_report/src/pages/signup/signup_page.dart';
@@ -12,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 final SettingsController _settingsController = Get.put(SettingsController());
-final TodoController _todoController = Get.put(TodoController());
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -168,6 +164,7 @@ class _SettingsPageState extends State<SettingsPage> {
             userInfo(),
             darkMode(),
             showPercentOrHour(),
+            listPageSelect(),
             timePickerOfTime(),
             logoutButton(),
             MaterialButton(
@@ -187,19 +184,51 @@ class _SettingsPageState extends State<SettingsPage> {
                 Get.showSnackbar(GetBar(
                   title: 'SUCCESS',
                   message: '성공적으로 삭제되었습니다.',
-                  duration: Duration(seconds: 2),
+                  duration: Duration(seconds: 1),
                   backgroundColor: Color(0xff1dd1a1),
                 ));
               },
-              child: Text('forgot'),
+              child: Text('snackBar'),
             ),
-            MaterialButton(
-              onPressed: () {
-                _todoController.todoTitleList.forEach((element) {
-                  print(element.uid);
-                });
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget listPageSelect() {
+    return Obx(
+      () => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('리스트 시간 표시'),
+            ToggleSwitch(
+              minWidth: 40,
+              minHeight: 30,
+              totalSwitches: 2,
+              labels: [':', 'h'],
+              customTextStyles: [
+                TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: _settingsController.listPageIndex.value == 0
+                        ? Colors.white
+                        : Colors.black),
+                TextStyle(
+                  fontSize: 14,
+                    color: _settingsController.listPageIndex.value == 0
+                        ? primaryColor
+                        : Colors.white),
+              ],
+              inactiveBgColor: isDarkMode
+                  ? primaryColor.withOpacity(0.7)
+                  : primaryColor.withOpacity(0.2),
+              activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
+              initialLabelIndex: _settingsController.listPageIndex.value,
+              onToggle: (index) {
+                _settingsController.listPageIndex(index);
               },
-              child: Text('todoTitle'),
             ),
           ],
         ),

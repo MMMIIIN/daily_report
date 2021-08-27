@@ -5,6 +5,7 @@ import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
+import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,7 @@ class ListPage extends StatefulWidget {
 final TodoController _todoController = Get.put(TodoController());
 final ListController _listController = Get.put(ListController());
 final ChartController _chartController = Get.put(ChartController());
+final SettingsController _settingsController = Get.put(SettingsController());
 
 class _ListPageState extends State<ListPage> {
   int touchedIndex = -1;
@@ -283,17 +285,14 @@ class _ListPageState extends State<ListPage> {
                 width: Get.mediaQuery.size.width * 0.8,
                 height: Get.mediaQuery.size.height * 0.05,
                 decoration: BoxDecoration(
-                  // color: isDarkMode
-                  //     ? darkPrimaryColor.withOpacity(0.2)
-                  //     : primaryColor.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
+                      // color: Colors.greenAccent,
                       padding: EdgeInsets.only(left: 10),
-                      width: Get.mediaQuery.size.width * 0.6,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -314,40 +313,49 @@ class _ListPageState extends State<ListPage> {
                                   ' ${getOfDay(currentDateTime.weekday)}'),
                             ],
                           ),
-                          SizedBox(
-                            width: Get.mediaQuery.size.width * 0.07,
-                          ),
-                          Flexible(
-                            child: Text(
-                              currentTitle,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
                         ],
                       ),
                     ),
-                    // Text(currentTitle),
-                    Container(
-                      width: Get.mediaQuery.size.width * 0.2,
-                      child: Row(
-                        children: [
-                          // Text(
-                          //   '${currentTimeRange.startTime.hour} : '
-                          //   '${currentTimeRange.startTime.minute}',
-                          //   style: TextStyle(fontSize: 14),
-                          // ),
-                          // SizedBox(width: 20),
-                          // Text(
-                          //     '${currentTimeRange.endTime.hour} : '
-                          //     '${currentTimeRange.endTime.minute}',
-                          //     style: TextStyle(fontSize: 14))
-                          Text('${currentValue ~/ 60}시간 '),
-                          currentValue & 60 != 0
-                              ? Text('')
-                              : Text('${currentValue % 60}분')
-                        ],
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text(
+                          currentTitle,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    )
+                    ),
+                    _settingsController.listPageIndex.value == 0
+                        ? Container(
+                            width: Get.mediaQuery.size.width * 0.3,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${currentTimeRange.startTime.hour.toString().length < 2 ? '0${currentTimeRange.startTime.hour} : ' : '${currentTimeRange.startTime.hour} : '}'
+                                  '${currentTimeRange.startTime.minute.toString() == '0' ? '00' : currentTimeRange.startTime.minute}',
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                SizedBox(width: 20),
+                                Text(
+                                    '${currentTimeRange.endTime.hour.toString().length < 2 ? '0${currentTimeRange.endTime.hour} : ' : '${currentTimeRange.endTime.hour} : '}'
+                                    '${currentTimeRange.endTime.minute.toString() == '0' ? '00' : currentTimeRange.endTime.minute}',
+                                    style: TextStyle(fontSize: 14))
+                              ],
+                            ),
+                          )
+                        : Container(
+                            width: Get.mediaQuery.size.width * 0.2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('${currentValue ~/ 60}시간 '),
+                                currentValue & 60 != 0
+                                    ? Text('')
+                                    : Text('${currentValue % 60}분')
+                              ],
+                            ),
+                          )
                   ],
                 ),
               ),
