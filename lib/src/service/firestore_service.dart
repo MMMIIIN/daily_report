@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
+import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -82,4 +83,119 @@ void deleteTodoTitle(String todoUid) {
           ),
         ),
       );
+}
+
+Future<void> todoFirebaseDelete(String todoUid) async {
+  await FirebaseFirestore.instance
+      .collection('user')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('todos')
+      .doc(todoUid)
+      .delete()
+      .then((value) {
+    Get.back();
+    Get.back();
+    Get.showSnackbar(GetBar(
+      duration: Duration(seconds: 2),
+      title: 'SUCCESS',
+      message: '성공적으로 삭제되었습니다.',
+      backgroundColor: successColor,
+    ));
+  }).catchError(
+        (error) async => await Get.showSnackbar(
+      GetBar(
+        title: 'DELETE',
+        message: 'ERROR!',
+        duration: Duration(seconds: 2),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: errorColor,
+      ),
+    ),
+  );
+}
+
+Future<void> addFireStore(TestTodo todo) async {
+  return await FirebaseFirestore.instance
+      .collection('user')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('todos')
+      .add({
+    'title': todo.title,
+    'startHour': todo.startHour,
+    'startMinute': todo.startMinute,
+    'endHour': todo.endHour,
+    'endMinute': todo.endMinute,
+    'uid': 'NULL',
+    'value': todo.value,
+    'color': todo.colorIndex,
+    'year': todo.ymd.year,
+    'month': todo.ymd.month,
+    'day': todo.ymd.day,
+    'hourMinute': todo.hourMinute
+  }).then((value) {
+    // _todoController.currentUid(value.id);
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('todos')
+        .doc(value.id)
+        .update({'uid': value.id});
+    Get.showSnackbar(GetBar(
+      title: 'SUCCESS',
+      message: '성공적으로 추가되었습니다.',
+      duration: Duration(seconds: 1),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: successColor,
+    ));
+  }).catchError(
+        (error) async => await Get.showSnackbar(
+      GetBar(
+        title: 'ERROR',
+        message: '로그인 정보를 확인하세요',
+        duration: Duration(seconds: 2),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: errorColor,
+      ),
+    ),
+  );
+}
+
+Future<void> updateFireStore(String uid, TestTodo todo) async {
+  return await FirebaseFirestore.instance
+      .collection('user')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('todos')
+      .doc(uid)
+      .update({
+    'title': todo.title,
+    'startHour': todo.startHour,
+    'startMinute': todo.startMinute,
+    'endHour': todo.endHour,
+    'endMinute': todo.endMinute,
+    'uid': todo.uid,
+    'value': todo.value,
+    'color': todo.colorIndex,
+    'year': todo.ymd.year,
+    'month': todo.ymd.month,
+    'day': todo.ymd.day,
+    'hourMinute': todo.hourMinute
+  }).then((value) {
+    Get.showSnackbar(GetBar(
+      title: 'UPDATE',
+      message: 'success!!',
+      duration: Duration(seconds: 2),
+      backgroundColor: successColor,
+      snackPosition: SnackPosition.BOTTOM,
+    ));
+  }).catchError(
+        (error) async => await Get.showSnackbar(
+      GetBar(
+        title: 'UPDATE',
+        message: 'ERROR!',
+        duration: Duration(seconds: 2),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: errorColor,
+      ),
+    ),
+  );
 }

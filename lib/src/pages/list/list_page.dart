@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
@@ -6,7 +5,7 @@ import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -455,12 +454,16 @@ class _ListPageState extends State<ListPage> {
                               ),
                               MaterialButton(
                                 color: primaryColor,
-                                onPressed: () {
-                                  todoFirebaseDelete(todoUid);
-                                  todoDelete(todoUid);
+                                onPressed: () async {
+                                  await todoFirebaseDelete(todoUid);
+                                  _todoController.todoDelete(todoUid);
                                   _chartController.makeRangeDate();
-                                  _listController.setSearchTodoList(
-                                      _listController.selectedDays);
+                                  _listController.initSearchResult();
+                                  _listController.searchTitle('');
+                                  if (_listController.selectedDays.isNotEmpty) {
+                                    _listController.setSearchTodoList(
+                                        _listController.selectedDays);
+                                  }
                                   if (_listController
                                       .searchTodoList.value.todoList.isEmpty) {
                                     _listController.selectedDays.clear();
@@ -525,44 +528,5 @@ class _ListPageState extends State<ListPage> {
         );
       },
     );
-  }
-
-  void todoFirebaseDelete(String todoUid) {
-    FirebaseFirestore.instance
-        .collection('user')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('todos')
-        .doc(todoUid)
-        .delete()
-        .then((value) {
-      Get.back();
-      Get.back();
-      _chartController.makeRangeDate();
-      Get.showSnackbar(GetBar(
-        duration: Duration(seconds: 2),
-        title: 'SUCCESS',
-        message: '성공적으로 삭제되었습니다.',
-        backgroundColor: successColor,
-      ));
-    }).catchError(
-      (error) async => await Get.showSnackbar(
-        GetBar(
-          title: 'DELETE',
-          message: 'ERROR!',
-          duration: Duration(seconds: 2),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: errorColor,
-        ),
-      ),
-    );
-  }
-
-  void todoDelete(String todoUid) {
-    _todoController.loadTodoUidList.value.todoList
-        .removeWhere((element) => element.uid == todoUid);
-    _todoController.todoUidList.value.todoList.clear();
-    _todoController.loadTodoUidList.value.todoList.forEach((element) {
-      _todoController.todoUidCheckAdd(element);
-    });
   }
 }

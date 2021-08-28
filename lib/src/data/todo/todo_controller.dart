@@ -35,6 +35,14 @@ class TodoController extends GetxController {
   RxInt defaultValue = 0.obs;
   RxInt selectColorIndex = 0.obs;
 
+  void addTodo(TestTodo todo) {
+    loadTodoUidList.value.todoList.add(todo);
+    todoUidCheckAdd(todo);
+    setCurrentIndex(currentDateTime.value);
+
+    titleTextController.value.clear();
+  }
+
   void todoUidCheckAdd(TestTodo data) {
     var addIndex = todoUidList.value.todoList.indexWhere(
         (element) => element.ymd == data.ymd && element.title == data.title);
@@ -182,6 +190,15 @@ class TodoController extends GetxController {
 
   void initCheckBoxBool () {
     checkBoxBool(false);
+  }
+
+  void todoDelete(String todoUid) {
+    loadTodoUidList.value.todoList
+        .removeWhere((element) => element.uid == todoUid);
+    todoUidList.value.todoList.clear();
+    loadTodoUidList.value.todoList.forEach((element) {
+      todoUidCheckAdd(element);
+    });
   }
 
   @override
