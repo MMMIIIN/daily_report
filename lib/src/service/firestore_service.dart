@@ -10,6 +10,7 @@ import 'package:time_range_picker/time_range_picker.dart';
 final userUid = FirebaseAuth.instance.currentUser!.uid;
 final userTodo = FirebaseFirestore.instance.collection('user').doc(userUid);
 String currentTodoTitleUid = '';
+String currentTodoUid = '';
 
 Future<void> addTodoTitle(TodoTitle todoTitle) async {
   await userTodo.collection('todoTitle').add({
@@ -102,7 +103,7 @@ Future<void> todoFirebaseDelete(String todoUid) async {
       backgroundColor: successColor,
     ));
   }).catchError(
-        (error) async => await Get.showSnackbar(
+    (error) async => await Get.showSnackbar(
       GetBar(
         title: 'DELETE',
         message: 'ERROR!',
@@ -133,13 +134,15 @@ Future<void> addFireStore(TestTodo todo) async {
     'day': todo.ymd.day,
     'hourMinute': todo.hourMinute
   }).then((value) {
-    // _todoController.currentUid(value.id);
+    currentTodoUid = value.id;
     FirebaseFirestore.instance
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('todos')
         .doc(value.id)
-        .update({'uid': value.id});
+        .update({'uid': value.id})
+        .then((value) => print('update success!'))
+        .catchError((error) => print(error));
     Get.showSnackbar(GetBar(
       title: 'SUCCESS',
       message: '성공적으로 추가되었습니다.',
@@ -148,7 +151,7 @@ Future<void> addFireStore(TestTodo todo) async {
       backgroundColor: successColor,
     ));
   }).catchError(
-        (error) async => await Get.showSnackbar(
+    (error) async => await Get.showSnackbar(
       GetBar(
         title: 'ERROR',
         message: '로그인 정보를 확인하세요',
@@ -160,12 +163,12 @@ Future<void> addFireStore(TestTodo todo) async {
   );
 }
 
-Future<void> updateFireStore(String uid, TestTodo todo) async {
+Future<void> updateFireStore(TestTodo todo) async {
   return await FirebaseFirestore.instance
       .collection('user')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection('todos')
-      .doc(uid)
+      .doc(todo.uid)
       .update({
     'title': todo.title,
     'startHour': todo.startHour,
@@ -188,7 +191,7 @@ Future<void> updateFireStore(String uid, TestTodo todo) async {
       snackPosition: SnackPosition.BOTTOM,
     ));
   }).catchError(
-        (error) async => await Get.showSnackbar(
+    (error) async => await Get.showSnackbar(
       GetBar(
         title: 'UPDATE',
         message: 'ERROR!',

@@ -290,7 +290,6 @@ class _ListPageState extends State<ListPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      // color: Colors.greenAccent,
                       padding: EdgeInsets.only(left: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -458,8 +457,13 @@ class _ListPageState extends State<ListPage> {
                                   await todoFirebaseDelete(todoUid);
                                   _todoController.todoDelete(todoUid);
                                   _chartController.makeRangeDate();
-                                  _listController.initSearchResult();
-                                  _listController.searchTitle('');
+                                  if (_listController
+                                      .searchTerm.value.isEmpty) {
+                                    print('_listController.searchTitle('') =');
+                                    _listController.searchTitle('');
+                                  } else if(_listController.searchTerm.value.isNotEmpty){
+                                    _listController.searchTitle(_listController.searchTerm.value);
+                                  }
                                   if (_listController.selectedDays.isNotEmpty) {
                                     _listController.setSearchTodoList(
                                         _listController.selectedDays);
