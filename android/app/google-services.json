@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "727134605762",
+    "project_id": "daily-report-3225a",
+    "storage_bucket": "daily-report-3225a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727134605762:android:9b38816dc8747ef323465b",
+        "android_client_info": {
+          "package_name": "com.example.daily_report"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727134605762-dcruk8ro7vg1leb8uj5epk0aqv7dffa0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daily_report",
+            "certificate_hash": "fb46502aa4a5f0e8e797032ceddf4eedd7541042"
+          }
+        },
+        {
+          "client_id": "727134605762-gaukas19avkqp7phpff1fccrpcs72euj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvY-umaQuBtP_BDzer8zGQgtoQwmk5Ols"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "727134605762-gaukas19avkqp7phpff1fccrpcs72euj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "727134605762-ibdg4a5k3gmhgn0qftgugk30famn8j8p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.dailyReport"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
