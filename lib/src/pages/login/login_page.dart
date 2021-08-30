@@ -1,20 +1,50 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
-import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/error/error_handling.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/login/controller/login_controller.dart';
 import 'package:daily_report/src/pages/signup/signup_page.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatelessWidget {
   final LoginController _loginController = Get.put(LoginController());
-  final TodoController _todoController = Get.put(TodoController());
 
   final emailFocus = FocusNode();
   final passwordFocus = FocusNode();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(15),
+          child: SingleChildScrollView(
+            child: Container(
+              height: context.mediaQuery.size.height * 0.8,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  customImage(),
+                  Column(
+                    children: [
+                      emailField(context),
+                      passwordField(context),
+                      forgotPassword(context),
+                    ],
+                  ),
+                  Column(
+                    children: [loginButton(context), signUpText()],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget customImage() {
     return Container(
@@ -46,7 +76,7 @@ class LoginPage extends StatelessWidget {
             Icon(IconsDB.mail_outlined),
             Container(
               padding: EdgeInsets.only(left: 5),
-              width: Get.mediaQuery.size.width * 0.8,
+              width: context.mediaQuery.size.width * 0.8,
               child: TextField(
                 focusNode: emailFocus,
                 onChanged: (text) {
@@ -54,7 +84,7 @@ class LoginPage extends StatelessWidget {
                   _loginController.setCheckEmail();
                 },
                 textInputAction: TextInputAction.next,
-                autofocus: true,
+                // autofocus: true,
                 onSubmitted: (_) =>
                     FocusScope.of(context).requestFocus(passwordFocus),
                 obscureText: false,
@@ -97,7 +127,7 @@ class LoginPage extends StatelessWidget {
             Icon(IconsDB.locked_outlined),
             Container(
               padding: EdgeInsets.only(left: 5),
-              width: Get.mediaQuery.size.width * 0.8,
+              width: context.mediaQuery.size.width * 0.8,
               child: TextField(
                 focusNode: passwordFocus,
                 onChanged: (text) {
@@ -145,7 +175,7 @@ class LoginPage extends StatelessWidget {
                         style: TextStyle(fontSize: 18),
                       ),
                       content: Container(
-                        height: Get.mediaQuery.size.height * 0.2,
+                        height: context.mediaQuery.size.height * 0.2,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -165,7 +195,7 @@ class LoginPage extends StatelessWidget {
                                   ),
                                   Container(
                                     padding: EdgeInsets.only(left: 10),
-                                    width: Get.mediaQuery.size.width * 0.55,
+                                    width: context.mediaQuery.size.width * 0.55,
                                     child: TextField(
                                       controller: _loginController
                                           .forgotEmailController.value,
@@ -198,7 +228,8 @@ class LoginPage extends StatelessWidget {
                                 MaterialButton(
                                   onPressed: () {
                                     Get.back();
-                                    _loginController.forgotEmailController.value.clear();
+                                    _loginController.forgotEmailController.value
+                                        .clear();
                                     _loginController.forgotPasswordEmail('');
                                   },
                                   elevation: 0,
@@ -236,15 +267,15 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget loginButton() {
+  Widget loginButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
         logIn(_loginController.loginEmail.value,
             _loginController.loginPassword.value);
       },
       child: Container(
-        width: double.infinity,
-        height: Get.mediaQuery.size.height * 0.07,
+        // width: Get.mediaQuery.size.width,
+        height: context.mediaQuery.size.height * 0.07,
         decoration: BoxDecoration(
           color: primaryColor,
           borderRadius: BorderRadius.circular(10),
@@ -268,7 +299,7 @@ class LoginPage extends StatelessWidget {
       )
           .then((value) {
         Get.off(() => Home());
-        _todoController.initUidTodoList();
+        // _todoController.initUidTodoList();
         _loginController.clearTextField();
       });
     } on FirebaseAuthException catch (e) {
@@ -324,39 +355,6 @@ class LoginPage extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Obx(
-            () => Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                customImage(),
-                SizedBox(
-                  height: Get.mediaQuery.size.height * 0.1,
-                ),
-                emailField(context),
-                passwordField(context),
-                forgotPassword(context),
-                SizedBox(
-                  height: Get.mediaQuery.size.height * 0.1,
-                ),
-                loginButton(),
-                SizedBox(
-                  height: Get.mediaQuery.size.height * 0.02,
-                ),
-                signUpText(),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

@@ -15,6 +15,63 @@ class SignUpPage extends StatelessWidget {
   final passwordFocus = FocusNode();
   final passwordCheckFocus = FocusNode();
 
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: InkWell(
+          customBorder:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          onTap: () {
+            Get.back();
+          },
+          child: Container(
+            width: 20,
+            height: 20,
+            child: Center(
+              child: Text(
+                '<',
+                style: TextStyle(
+                    color: primaryColor,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Obx(
+                () => SingleChildScrollView(
+              child: Column(
+                children: [
+                  customImage(),
+                  SizedBox(
+                    height: Get.mediaQuery.size.height * 0.03,
+                  ),
+                  nameField(context),
+                  signupEmailField(context),
+                  signupPasswordField(context),
+                  passwordCheckField(context),
+                  genderSwitch(),
+                  SizedBox(
+                    height: Get.mediaQuery.size.height * 0.05,
+                  ),
+                  signUpButton()
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget customImage() {
     return Container(
       width: 180,
@@ -334,61 +391,5 @@ class SignUpPage extends StatelessWidget {
     } catch (e) {
       print(e);
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: InkWell(
-          customBorder:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-          onTap: () {
-            Get.back();
-          },
-          child: Container(
-            width: 20,
-            height: 20,
-            child: Center(
-              child: Text(
-                '<',
-                style: TextStyle(
-                    color: primaryColor,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Obx(
-            () => SingleChildScrollView(
-              child: Column(
-                children: [
-                  customImage(),
-                  SizedBox(
-                    height: Get.mediaQuery.size.height * 0.03,
-                  ),
-                  nameField(context),
-                  signupEmailField(context),
-                  signupPasswordField(context),
-                  passwordCheckField(context),
-                  genderSwitch(),
-                  SizedBox(
-                    height: Get.mediaQuery.size.height * 0.05,
-                  ),
-                  signUpButton()
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
