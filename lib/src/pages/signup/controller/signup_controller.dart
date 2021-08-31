@@ -1,6 +1,8 @@
+import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+final TodoController _todoController = Get.put(TodoController());
 class SignUpController extends GetxController{
   var signupNameController = TextEditingController().obs;
   var signupEmailController = TextEditingController().obs;
@@ -73,5 +75,10 @@ class SignUpController extends GetxController{
     } else {
       allCheck(false);
     }
+  }
+
+  void intiDataSet() {
+    _todoController.initData();
+    _todoController.setCurrentIndex(DateTime.now());
   }
 }

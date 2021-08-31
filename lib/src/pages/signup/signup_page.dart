@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
-import 'package:daily_report/src/error/error_handling.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/signup/controller/signup_controller.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -17,14 +15,13 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: InkWell(
           customBorder:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
           onTap: () {
             Get.back();
           },
@@ -47,7 +44,7 @@ class SignUpPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Obx(
-                () => SingleChildScrollView(
+            () => SingleChildScrollView(
               child: Column(
                 children: [
                   customImage(),
@@ -336,8 +333,15 @@ class SignUpPage extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         _signUpController.allCheck.value
-            ? signUp(_signUpController.signupEmail.value,
-                _signUpController.signupPassword.value)
+            ? firebaseAuthSignUp(
+                    _signUpController.signupEmail.value,
+                    _signUpController.signupPassword.value,
+                    _signUpController.signupName.value,
+                    _signUpController.genderIndex.value)
+                .then((value) {
+                  _signUpController.intiDataSet();
+                Get.off(() => Home());
+              })
             : null;
       },
       child: Container(
@@ -357,39 +361,5 @@ class SignUpPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void signUp(String userEmail, String userPw) async {
-    try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-        email: userEmail,
-        password: userPw,
-      )
-          .then((value) {
-        FirebaseAuth.instance.currentUser!
-            .updateDisplayName(_signUpController.signupName.value);
-        FirebaseFirestore.instance
-            .collection('user')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .collection('info')
-            .doc()
-            .set({
-          'gender': _signUpController.genderIndex.value,
-          'name': _signUpController.signupName.value
-        });
-        Get.off(() => Home());
-      });
-    } on FirebaseAuthException catch (e) {
-      print(e.code);
-      await Get.showSnackbar(GetBar(
-        title: 'ERROR',
-        message: setErrorMessage(e.code),
-        backgroundColor: errorColor,
-        duration: Duration(seconds: 2),
-      ));
-    } catch (e) {
-      print(e);
-    }
   }
 }

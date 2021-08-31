@@ -180,15 +180,15 @@ class TodoController extends GetxController {
     todoTitleList.clear();
   }
 
-  void setMakeRuleTitle(String title){
+  void setMakeRuleTitle(String title) {
     makeRuleTitle(title);
   }
 
-  void initTodoTitleList() async{
+  void initTodoTitleList() async {
     todoTitleList.addAll(await getTodoTitleData());
   }
 
-  void initCheckBoxBool () {
+  void initCheckBoxBool() {
     checkBoxBool(false);
   }
 
@@ -201,11 +201,36 @@ class TodoController extends GetxController {
     });
   }
 
+  void initTodo() {
+    initUidTodoList();
+    initTodoTitleList();
+  }
+
+  void initData() {
+    var initData = TestTodo(
+        uid: 'initData',
+        ymd: DateTime.now(),
+        title: '회원가입',
+        startHour: DateTime.now().hour,
+        startMinute: DateTime.now().minute,
+        endHour: DateTime.now().hour + 1,
+        endMinute: DateTime.now().minute,
+        value: 60,
+        colorIndex: 0,
+        hourMinute: '1h 0m');
+    loadTodoUidList.value.todoList.add(initData);
+    todoUidList.value.todoList.add(initData);
+    todoTitleList
+        .add(TodoTitle(title: '꾹 눌러서 삭제', titleColor: 0, uid: 'initData'));
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    initUidTodoList();
-    initTodoTitleList();
+    if (FirebaseAuth.instance.currentUser != null) {
+      initUidTodoList();
+      initTodoTitleList();
+    }
   }
 }

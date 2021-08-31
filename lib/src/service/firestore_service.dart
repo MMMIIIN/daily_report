@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
+import 'package:daily_report/src/error/error_handling.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -133,17 +134,16 @@ Future<void> addFireStore(TestTodo todo) async {
     'month': todo.ymd.month,
     'day': todo.ymd.day,
     'hourMinute': todo.hourMinute
-  }).then((value) {
+  }).then((value) async{
     currentTodoUid = value.id;
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('todos')
         .doc(value.id)
         .update({'uid': value.id})
-        .then((value) => print('update success!'))
         .catchError((error) => print(error));
-    Get.showSnackbar(GetBar(
+    await Get.showSnackbar(GetBar(
       title: 'SUCCESS',
       message: '성공적으로 추가되었습니다.',
       duration: Duration(seconds: 1),
@@ -201,4 +201,66 @@ Future<void> updateFireStore(TestTodo todo) async {
       ),
     ),
   );
+}
+
+Future<void> firebaseAuthSignUp(
+    String userEmail, String userPw, String signupName, int genderIndex) async {
+  try {
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+      email: userEmail,
+      password: userPw,
+    )
+        .then((value) {
+      FirebaseAuth.instance.currentUser!.updateDisplayName(signupName);
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('info')
+          .doc()
+          .set({'gender': genderIndex, 'name': signupName});
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('todoTitle')
+          .doc('initData')
+          .set({
+        'boolOfTime': false,
+        'endHour': 1,
+        'endMinute': 0,
+        'startHour': 0,
+        'startMinute': 0,
+        'title': '꾹 눌러서 삭제',
+        'titleColorIndex': 0,
+        'uid': 'initData'
+      });
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('todos')
+          .doc('initData')
+          .set({
+        'uid': 'initData',
+        'year': DateTime.now().year,
+        'month': DateTime.now().month,
+        'day': DateTime.now().day,
+        'title': '회원가입',
+        'startHour': DateTime.now().hour,
+        'startMinute': DateTime.now().minute,
+        'endHour': DateTime.now().hour + 1,
+        'endMinute': DateTime.now().minute,
+        'value': 60,
+        'colorIndex': 0
+      });
+    });
+  } on FirebaseAuthException catch (e) {
+    await Get.showSnackbar(GetBar(
+      title: 'ERROR',
+      message: setErrorMessage(e.code),
+      backgroundColor: errorColor,
+      duration: Duration(seconds: 2),
+    ));
+  } catch (e) {
+    print(e);
+  }
 }
