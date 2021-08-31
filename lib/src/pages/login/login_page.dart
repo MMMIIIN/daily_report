@@ -274,7 +274,7 @@ class LoginPage extends StatelessWidget {
             _loginController.loginPassword.value);
       },
       child: Container(
-        // width: Get.mediaQuery.size.width,
+        
         height: context.mediaQuery.size.height * 0.07,
         decoration: BoxDecoration(
           color: primaryColor,

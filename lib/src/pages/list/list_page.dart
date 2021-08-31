@@ -33,7 +33,7 @@ class _ListPageState extends State<ListPage> {
       child: Container(
         padding: EdgeInsets.all(10),
         width: double.infinity,
-        height: Get.mediaQuery.size.height * 0.85,
+        height: context.mediaQuery.size.height * 0.85,
         color: Colors.transparent,
         child: Obx(
           () => Column(
@@ -53,7 +53,7 @@ class _ListPageState extends State<ListPage> {
 
   Widget searchWidget() {
     return Container(
-      height: Get.mediaQuery.size.height * 0.06,
+      height: context.mediaQuery.size.height * 0.06,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: isDarkMode
@@ -281,8 +281,8 @@ class _ListPageState extends State<ListPage> {
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                width: Get.mediaQuery.size.width * 0.8,
-                height: Get.mediaQuery.size.height * 0.05,
+                width: context.mediaQuery.size.width * 0.8,
+                height: context.mediaQuery.size.height * 0.05,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -304,7 +304,7 @@ class _ListPageState extends State<ListPage> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: colorList[currentColorIndex]),
                               ),
-                              SizedBox(width: Get.mediaQuery.size.width * 0.03),
+                              SizedBox(width: context.mediaQuery.size.width * 0.03),
                               Text('${currentDateTime.year}.'
                                   '${currentDateTime.month}.'
                                   '${currentDateTime.day}'
@@ -325,7 +325,7 @@ class _ListPageState extends State<ListPage> {
                     ),
                     _settingsController.listPageIndex.value == 0
                         ? Container(
-                            width: Get.mediaQuery.size.width * 0.3,
+                            width: context.mediaQuery.size.width * 0.31,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -343,7 +343,7 @@ class _ListPageState extends State<ListPage> {
                             ),
                           )
                         : Container(
-                            width: Get.mediaQuery.size.width * 0.2,
+                            width: context.mediaQuery.size.width * 0.2,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -424,7 +424,7 @@ class _ListPageState extends State<ListPage> {
                   ),
                   SizedBox(width: 10),
                   Container(
-                    width: Get.mediaQuery.size.width * 0.4,
+                    width: context.mediaQuery.size.width * 0.4,
                     child: Text(
                       title,
                       overflow: TextOverflow.ellipsis,
@@ -484,7 +484,7 @@ class _ListPageState extends State<ListPage> {
             ],
           ),
           content: Container(
-            height: Get.mediaQuery.size.height * 0.1,
+            height: context.mediaQuery.size.height * 0.1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

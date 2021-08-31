@@ -65,9 +65,9 @@ class SettingsController extends GetxController {
   }
 
   void setInitStorage() {
-    var darkModeIndex = GetStorage().read('isDarkMode');
-    var percentOrHour = GetStorage().read('isPercentOrHour');
-    var interval = GetStorage().read('timePickerOfInterval');
+    var darkModeIndex = GetStorage().read('isDarkMode') ?? false;
+    var percentOrHour = GetStorage().read('isPercentOrHour') ?? false;
+    var interval = GetStorage().read('timePickerOfInterval') ?? 1;
     if (darkModeIndex) {
       isDarkModeIndex(1);
     } else {

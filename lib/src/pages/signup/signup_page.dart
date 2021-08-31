@@ -52,7 +52,7 @@ class SignUpPage extends StatelessWidget {
                 children: [
                   customImage(),
                   SizedBox(
-                    height: Get.mediaQuery.size.height * 0.03,
+                    height: context.mediaQuery.size.height * 0.03,
                   ),
                   nameField(context),
                   signupEmailField(context),
@@ -60,9 +60,9 @@ class SignUpPage extends StatelessWidget {
                   passwordCheckField(context),
                   genderSwitch(),
                   SizedBox(
-                    height: Get.mediaQuery.size.height * 0.05,
+                    height: context.mediaQuery.size.height * 0.05,
                   ),
-                  signUpButton()
+                  signUpButton(context)
                 ],
               ),
             ),
@@ -109,7 +109,7 @@ class SignUpPage extends StatelessWidget {
                   ),
             Container(
               padding: EdgeInsets.only(left: 5),
-              width: Get.mediaQuery.size.width * 0.8,
+              width: context.mediaQuery.size.width * 0.8,
               child: TextField(
                 onChanged: (text) {
                   _signUpController.setSignupName(text);
@@ -157,7 +157,7 @@ class SignUpPage extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.only(left: 5),
-              width: Get.mediaQuery.size.width * 0.8,
+              width: context.mediaQuery.size.width * 0.8,
               child: TextField(
                 onChanged: (text) {
                   _signUpController.setSignupEmail(text);
@@ -211,7 +211,7 @@ class SignUpPage extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.only(left: 5),
-              width: Get.mediaQuery.size.width * 0.8,
+              width: context.mediaQuery.size.width * 0.8,
               child: TextField(
                 focusNode: passwordFocus,
                 onChanged: (text) {
@@ -265,7 +265,7 @@ class SignUpPage extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.only(left: 5),
-              width: Get.mediaQuery.size.width * 0.8,
+              width: context.mediaQuery.size.width * 0.8,
               child: TextField(
                 focusNode: passwordCheckFocus,
                 onChanged: (text) {
@@ -332,7 +332,7 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  Widget signUpButton() {
+  Widget signUpButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
         _signUpController.allCheck.value
@@ -342,7 +342,7 @@ class SignUpPage extends StatelessWidget {
       },
       child: Container(
         width: double.infinity,
-        height: Get.mediaQuery.size.height * 0.07,
+        height: context.mediaQuery.size.height * 0.07,
         decoration: BoxDecoration(
           color: _signUpController.allCheck.value
               ? primaryColor

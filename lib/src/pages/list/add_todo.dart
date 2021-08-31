@@ -43,8 +43,8 @@ class _AddTodoState extends State<AddTodo> {
         padding: const EdgeInsets.all(15.0),
         child: Center(
           child: Container(
-            height: Get.mediaQuery.size.height * 0.85,
-            width: Get.mediaQuery.size.width * 0.99,
+            height: context.mediaQuery.size.height * 0.85,
+            width: context.mediaQuery.size.width * 0.99,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
@@ -243,7 +243,7 @@ class _AddTodoState extends State<AddTodo> {
         child: Obx(
               () =>
               Container(
-                width: Get.mediaQuery.size.width * 0.4,
+                width: context.mediaQuery.size.width * 0.4,
                 height: 30,
                 decoration: BoxDecoration(
                   color:
@@ -306,7 +306,7 @@ class _AddTodoState extends State<AddTodo> {
 
   Widget printTodo() {
     return Container(
-      height: Get.mediaQuery.size.height * 0.15,
+      height: context.mediaQuery.size.height * 0.15,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: GridView.builder(
@@ -452,7 +452,7 @@ class _AddTodoState extends State<AddTodo> {
         setTimeRange();
       },
       child: Container(
-        height: Get.mediaQuery.size.height * 0.1,
+        height: context.mediaQuery.size.height * 0.1,
         decoration: BoxDecoration(
             color:
             isDarkMode ? darkPrimaryColor.withOpacity(0.9) : primaryColor,
@@ -499,7 +499,7 @@ class _AddTodoState extends State<AddTodo> {
 
   Widget colorSelect() {
     return Container(
-      height: Get.mediaQuery.size.height * 0.05,
+      height: context.mediaQuery.size.height * 0.05,
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -666,7 +666,7 @@ class _AddTodoState extends State<AddTodo> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      height: Get.mediaQuery.size.height * 0.4,
+                      height: context.mediaQuery.size.height * 0.4,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -715,8 +715,8 @@ class _AddTodoState extends State<AddTodo> {
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Container(
-                                        width: Get.mediaQuery.size.width * 0.6,
-                                        height: Get.mediaQuery.size.height *
+                                        width: context.mediaQuery.size.width * 0.6,
+                                        height: context.mediaQuery.size.height *
                                             0.05,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(

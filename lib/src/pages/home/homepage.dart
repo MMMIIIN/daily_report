@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
             margin: const EdgeInsets.all(4),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: isDarkMode ? darkTodayColor : Color(0xff95afc0),
+                color: isDarkMode ? darkTodayColor : Color(0xffadb5bd),
                 borderRadius: BorderRadius.circular(10)),
             child: Column(
               children: [
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                 date.weekday == 6 || date.weekday == 7
                     ? Text(
                         date.day.toString(),
-                        style: TextStyle(color: Colors.red),
+                        style: TextStyle(color: Colors.white),
                       )
                     : Text(date.day.toString())
               ],
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                   height: 7,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: isDarkMode ? Colors.white : Colors.black87),
+                      color: isDarkMode ? Colors.white : Color(0xff212529)),
                 ),
               );
             }

@@ -74,7 +74,7 @@ class _ChartPageState extends State<ChartPage> {
         Get.to(() => SelectDatePage());
       },
       child: Container(
-        width: Get.mediaQuery.size.width * 0.6,
+        width: context.mediaQuery.size.width * 0.6,
         height: 50,
         decoration: BoxDecoration(
             border: Border.all(
