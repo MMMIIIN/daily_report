@@ -109,29 +109,53 @@ class _ListPageState extends State<ListPage> {
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: isDarkMode ? darkSelectColor : primaryColor,
+              color: isDarkMode
+                  ? Color(0xff95afc0)
+                  : primaryColor.withOpacity(0.9),
               borderRadius: BorderRadius.circular(10)),
-          child: Text(
-            date.day.toString(),
-            style: TextStyle(color: Colors.white),
-          ),
+          child: date.year == DateTime.now().year &&
+                  date.month == DateTime.now().month &&
+                  date.day == DateTime.now().day
+              ? Column(
+                  children: [
+                    Text(
+                      'today',
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    ),
+                    date.weekday == 6 || date.weekday == 7
+                        ? Text(
+                            date.day.toString(),
+                            style: TextStyle(color: Colors.redAccent),
+                          )
+                        : Text(
+                            date.day.toString(),
+                            style: TextStyle(color: Colors.white),
+                          )
+                  ],
+                )
+              : date.weekday == 6 || date.weekday == 7
+                  ? Text(
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.redAccent),
+                    )
+                  : Text(
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.white),
+                    ),
         ),
         todayBuilder: (context, date, events) => Container(
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: isDarkMode ? darkTodayColor : Color(0xff95afc0),
-              borderRadius: BorderRadius.circular(10)),
           child: Column(
             children: [
               Text(
                 'today',
-                style: TextStyle(fontSize: 10, color: Colors.white),
+                style: TextStyle(fontSize: 10, color: Colors.red),
               ),
               date.weekday == 6 || date.weekday == 7
                   ? Text(
                       date.day.toString(),
-                      style: TextStyle(color: Colors.red),
+                      style: TextStyle(color: Colors.white),
                     )
                   : Text(date.day.toString())
             ],
@@ -304,7 +328,8 @@ class _ListPageState extends State<ListPage> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: colorList[currentColorIndex]),
                               ),
-                              SizedBox(width: context.mediaQuery.size.width * 0.03),
+                              SizedBox(
+                                  width: context.mediaQuery.size.width * 0.03),
                               Text('${currentDateTime.year}.'
                                   '${currentDateTime.month}.'
                                   '${currentDateTime.day}'
@@ -459,10 +484,12 @@ class _ListPageState extends State<ListPage> {
                                   _chartController.makeRangeDate();
                                   if (_listController
                                       .searchTerm.value.isEmpty) {
-                                    print('_listController.searchTitle('') =');
+                                    print('_listController.searchTitle(' ') =');
                                     _listController.searchTitle('');
-                                  } else if(_listController.searchTerm.value.isNotEmpty){
-                                    _listController.searchTitle(_listController.searchTerm.value);
+                                  } else if (_listController
+                                      .searchTerm.value.isNotEmpty) {
+                                    _listController.searchTitle(
+                                        _listController.searchTerm.value);
                                   }
                                   if (_listController.selectedDays.isNotEmpty) {
                                     _listController.setSearchTodoList(

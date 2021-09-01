@@ -31,22 +31,21 @@ class _SelectDatePageState extends State<SelectDatePage> {
   Widget tableCalendar() {
     return TableCalendar(
       calendarBuilders: CalendarBuilders(
-        todayBuilder: (context, date, _) => Container(
+        todayBuilder: (context, date, events) => Container(
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: isDarkMode ? darkTodayColor : Color(0xff95afc0),
-              borderRadius: BorderRadius.circular(10)),
           child: Column(
             children: [
               Text(
                 'today',
-                style: TextStyle(fontSize: 11),
+                style: TextStyle(fontSize: 10, color: Colors.red),
               ),
-              Text(
+              date.weekday == 6 || date.weekday == 7
+                  ? Text(
                 date.day.toString(),
                 style: TextStyle(color: Colors.white),
-              ),
+              )
+                  : Text(date.day.toString())
             ],
           ),
         ),
@@ -56,7 +55,32 @@ class _SelectDatePageState extends State<SelectDatePage> {
           decoration: BoxDecoration(
               color: isDarkMode ? darkSelectColor : primaryColor,
               borderRadius: BorderRadius.circular(10)),
-          child: Text(
+          child: date.year == DateTime.now().year &&
+              date.month == DateTime.now().month &&
+              date.day == DateTime.now().day
+              ? Column(
+            children: [
+              Text(
+                'today',
+                style: TextStyle(fontSize: 10, color: Colors.white),
+              ),
+              date.weekday == 6 || date.weekday == 7
+                  ? Text(
+                date.day.toString(),
+                style: TextStyle(color: Colors.redAccent),
+              )
+                  : Text(
+                date.day.toString(),
+                style: TextStyle(color: Colors.white),
+              )
+            ],
+          )
+              : date.weekday == 6 || date.weekday == 7
+              ? Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.redAccent),
+          )
+              : Text(
             date.day.toString(),
             style: TextStyle(color: Colors.white),
           ),
@@ -67,7 +91,32 @@ class _SelectDatePageState extends State<SelectDatePage> {
           decoration: BoxDecoration(
               color: isDarkMode ? darkSelectColor : primaryColor,
               borderRadius: BorderRadius.circular(10)),
-          child: Text(
+          child: date.year == DateTime.now().year &&
+              date.month == DateTime.now().month &&
+              date.day == DateTime.now().day
+              ? Column(
+            children: [
+              Text(
+                'today',
+                style: TextStyle(fontSize: 10, color: Colors.white),
+              ),
+              date.weekday == 6 || date.weekday == 7
+                  ? Text(
+                date.day.toString(),
+                style: TextStyle(color: Colors.redAccent),
+              )
+                  : Text(
+                date.day.toString(),
+                style: TextStyle(color: Colors.white),
+              )
+            ],
+          )
+              : date.weekday == 6 || date.weekday == 7
+              ? Text(
+            date.day.toString(),
+            style: TextStyle(color: Colors.redAccent),
+          )
+              : Text(
             date.day.toString(),
             style: TextStyle(color: Colors.white),
           ),
@@ -96,7 +145,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
         markerBuilder: (context, date, _) {
           if (_.isNotEmpty) {
             return Padding(
-              padding: const EdgeInsets.only(bottom: 2.0),
+              padding: const EdgeInsets.only(bottom: 5.0),
               child: Container(
                 width: 7,
                 height: 7,

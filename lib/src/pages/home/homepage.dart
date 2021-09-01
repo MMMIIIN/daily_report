@@ -33,6 +33,21 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: SafeArea(
+        child: Column(
+          children: [
+            showCalendar(),
+            showChart(),
+            showChartList(),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget showCalendar() {
     return Obx(
       () => TableCalendar(
@@ -41,24 +56,48 @@ class _HomePageState extends State<HomePage> {
             margin: const EdgeInsets.all(4),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: isDarkMode ? Color(0xff95afc0) : primaryColor,
+                color: isDarkMode
+                    ? Color(0xff95afc0)
+                    : primaryColor.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(10)),
-            child: Text(
-              date.day.toString(),
-              style: TextStyle(color: Colors.white),
-            ),
+            child: date.year == DateTime.now().year &&
+                    date.month == DateTime.now().month &&
+                    date.day == DateTime.now().day
+                ? Column(
+                    children: [
+                      Text(
+                        'today',
+                        style: TextStyle(fontSize: 10, color: Colors.white),
+                      ),
+                      date.weekday == 6 || date.weekday == 7
+                          ? Text(
+                              date.day.toString(),
+                              style: TextStyle(color: Colors.redAccent),
+                            )
+                          : Text(
+                              date.day.toString(),
+                              style: TextStyle(color: Colors.white),
+                            )
+                    ],
+                  )
+                : date.weekday == 6 || date.weekday == 7
+                    ? Text(
+                        date.day.toString(),
+                        style: TextStyle(color: Colors.redAccent),
+                      )
+                    : Text(
+                        date.day.toString(),
+                        style: TextStyle(color: Colors.white),
+                      ),
           ),
           todayBuilder: (context, date, events) => Container(
             margin: const EdgeInsets.all(4),
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: isDarkMode ? darkTodayColor : Color(0xffadb5bd),
-                borderRadius: BorderRadius.circular(10)),
             child: Column(
               children: [
                 Text(
                   'today',
-                  style: TextStyle(fontSize: 10, color: Colors.white),
+                  style: TextStyle(fontSize: 10, color: Colors.red),
                 ),
                 date.weekday == 6 || date.weekday == 7
                     ? Text(
@@ -151,11 +190,11 @@ class _HomePageState extends State<HomePage> {
                   }),
                   startDegreeOffset: 270,
                   sectionsSpace: 4,
-                  centerSpaceRadius: 40,
+                  centerSpaceRadius: 60,
                   sections: List<PieChartSectionData>.generate(
                       _todoController.currentIndexList.length, (index) {
                     final isTouched = index == touchedIndex;
-                    final radius = isTouched ? 70.0 : 50.0;
+                    final radius = isTouched ? 80.0 : 60.0;
                     final title = isTouched
                         ? _todoController
                             .currentUidList.value.todoList[index].title
@@ -231,21 +270,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 )
               : Container()),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: SafeArea(
-        child: Column(
-          children: [
-            showCalendar(),
-            showChart(),
-            showChartList(),
-          ],
-        ),
-      ),
     );
   }
 }

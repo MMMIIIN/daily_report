@@ -101,50 +101,62 @@ class _AddTodoState extends State<AddTodo> {
                           children: [
                             TableCalendar(
                                 calendarBuilders: CalendarBuilders(
-                                  selectedBuilder: (context, date, events) =>
-                                      Container(
-                                        margin: const EdgeInsets.all(4),
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            color: isDarkMode
-                                                ? darkPrimaryColor
-                                                : primaryColor,
-                                            borderRadius: BorderRadius.circular(
-                                                10)),
-                                        child: Text(
+                                  selectedBuilder: (context, date, events) => Container(
+                                    margin: const EdgeInsets.all(4),
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: isDarkMode
+                                            ? Color(0xff95afc0)
+                                            : primaryColor.withOpacity(0.9),
+                                        borderRadius: BorderRadius.circular(10)),
+                                    child: date.year == DateTime.now().year &&
+                                        date.month == DateTime.now().month &&
+                                        date.day == DateTime.now().day
+                                        ? Column(
+                                      children: [
+                                        Text(
+                                          'today',
+                                          style: TextStyle(fontSize: 10, color: Colors.white),
+                                        ),
+                                        date.weekday == 6 || date.weekday == 7
+                                            ? Text(
+                                          date.day.toString(),
+                                          style: TextStyle(color: Colors.redAccent),
+                                        )
+                                            : Text(
                                           date.day.toString(),
                                           style: TextStyle(color: Colors.white),
+                                        )
+                                      ],
+                                    )
+                                        : date.weekday == 6 || date.weekday == 7
+                                        ? Text(
+                                      date.day.toString(),
+                                      style: TextStyle(color: Colors.redAccent),
+                                    )
+                                        : Text(
+                                      date.day.toString(),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  todayBuilder: (context, date, events) => Container(
+                                    margin: const EdgeInsets.all(4),
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'today',
+                                          style: TextStyle(fontSize: 10, color: Colors.red),
                                         ),
-                                      ),
-                                  todayBuilder: (context, date, events) =>
-                                      Container(
-                                        margin: const EdgeInsets.all(4),
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            color: isDarkMode
-                                                ? darkTodayColor
-                                                : Color(0xff95afc0),
-                                            borderRadius: BorderRadius.circular(
-                                                10)),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              'today',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                            date.weekday == 6 ||
-                                                date.weekday == 7
-                                                ? Text(
-                                              date.day.toString(),
-                                              style: TextStyle(
-                                                  color: Colors.red),
-                                            )
-                                                : Text(date.day.toString())
-                                          ],
-                                        ),
-                                      ),
+                                        date.weekday == 6 || date.weekday == 7
+                                            ? Text(
+                                          date.day.toString(),
+                                          style: TextStyle(color: Colors.white),
+                                        )
+                                            : Text(date.day.toString())
+                                      ],
+                                    ),
+                                  ),
                                   markerBuilder: (context, date, _) {
                                     if (isDarkMode && _.isNotEmpty) {
                                       return Padding(
