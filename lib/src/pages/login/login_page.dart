@@ -1,16 +1,14 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
-import 'package:daily_report/src/error/error_handling.dart';
-import 'package:daily_report/src/pages/home.dart';
+import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:daily_report/src/pages/login/controller/login_controller.dart';
 import 'package:daily_report/src/pages/signup/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+final LoginController _loginController = Get.put(LoginController());
 
 class LoginPage extends StatelessWidget {
-  final LoginController _loginController = Get.put(LoginController());
-
   final emailFocus = FocusNode();
   final passwordFocus = FocusNode();
 
@@ -35,7 +33,9 @@ class LoginPage extends StatelessWidget {
                     ],
                   ),
                   Column(
-                    children: [loginButton(context), signUpText()],
+                    children: [loginButton(context),
+                      SizedBox(height: 10),
+                      signUpText()],
                   )
                 ],
               ),
@@ -241,7 +241,7 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 MaterialButton(
                                   onPressed: () {
-                                    forgotUserPassword(_loginController
+                                    firebaseForgotUserPassword(_loginController
                                         .forgotPasswordEmail.value);
                                   },
                                   elevation: 0,
@@ -270,11 +270,10 @@ class LoginPage extends StatelessWidget {
   Widget loginButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        logIn(_loginController.loginEmail.value,
+        firebaseLogIn(_loginController.loginEmail.value,
             _loginController.loginPassword.value);
       },
       child: Container(
-        
         height: context.mediaQuery.size.height * 0.07,
         decoration: BoxDecoration(
           color: primaryColor,
@@ -290,53 +289,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void logIn(String userId, String userPw) async {
-    try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-        email: userId,
-        password: userPw,
-      )
-          .then((value) {
-        Get.off(() => Home());
-        // _todoController.initUidTodoList();
-        _loginController.clearTextField();
-      });
-    } on FirebaseAuthException catch (e) {
-      await Get.showSnackbar(GetBar(
-        title: 'ERROR',
-        message: setErrorMessage(e.code),
-        backgroundColor: errorColor,
-        duration: Duration(seconds: 2),
-      ));
-    }
-  }
-
-  void forgotUserPassword(String email) async {
-    try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: email)
-          .then((value) {
-        Get.off(() => LoginPage());
-        Get.showSnackbar(GetBar(
-          title: 'SUCCESS',
-          message: '메일이 발송되었습니다.',
-          duration: Duration(seconds: 2),
-          backgroundColor: successColor,
-        ));
-        _loginController.forgotEmailController.value.clear();
-        _loginController.forgotPasswordEmail('');
-      });
-    } on FirebaseAuthException catch (error) {
-      await Get.showSnackbar(GetBar(
-        title: 'ERROR',
-        message: setErrorMessage(error.code),
-        duration: Duration(seconds: 2),
-        backgroundColor: errorColor,
-      ));
-    }
-  }
-
   Widget signUpText() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -350,7 +302,7 @@ class LoginPage extends StatelessWidget {
             Get.to(() => SignUpPage());
           },
           child: Text(
-            '회원가입',
+            '빠른 회원가입',
             style: TextStyle(color: primaryColor, fontSize: 16),
           ),
         )

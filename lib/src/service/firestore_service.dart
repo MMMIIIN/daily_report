@@ -2,19 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
+import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/error/error_handling.dart';
+import 'package:daily_report/src/pages/home.dart';
+import 'package:daily_report/src/pages/list/controller/list_controller.dart';
+import 'package:daily_report/src/pages/login/controller/login_controller.dart';
+import 'package:daily_report/src/pages/login/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
-final userUid = FirebaseAuth.instance.currentUser!.uid;
-final userTodo = FirebaseFirestore.instance.collection('user').doc(userUid);
 String currentTodoTitleUid = '';
 String currentTodoUid = '';
 
+final TodoController _todoController = Get.put(TodoController());
+final LoginController _loginController = Get.put(LoginController());
+final ListController _listController = Get.put(ListController());
+
 Future<void> addTodoTitle(TodoTitle todoTitle) async {
-  await userTodo.collection('todoTitle').add({
+  await FirebaseFirestore.instance
+      .collection('user')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('todoTitle')
+      .add({
     'title': todoTitle.title,
     'titleColorIndex': todoTitle.titleColor,
     'uid': 'null',
@@ -50,7 +61,12 @@ Future<void> addTodoTitle(TodoTitle todoTitle) async {
 Future<List<TodoTitle>> getTodoTitleData() async {
   var todoTitleList = <TodoTitle>[];
   TodoTitle loadData;
-  await userTodo.collection('todoTitle').get().then(
+  await FirebaseFirestore.instance
+      .collection('user')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('todoTitle')
+      .get()
+      .then(
     (value) {
       value.docs.forEach(
         (data) {
@@ -73,7 +89,13 @@ Future<List<TodoTitle>> getTodoTitleData() async {
 }
 
 void deleteTodoTitle(String todoUid) {
-  userTodo.collection('todoTitle').doc(todoUid).delete().then(
+  FirebaseFirestore.instance
+      .collection('user')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('todoTitle')
+      .doc(todoUid)
+      .delete()
+      .then(
         (value) => Get.showSnackbar(
           GetBar(
             title: 'SUCCESS',
@@ -134,15 +156,14 @@ Future<void> addFireStore(TestTodo todo) async {
     'month': todo.ymd.month,
     'day': todo.ymd.day,
     'hourMinute': todo.hourMinute
-  }).then((value) async{
+  }).then((value) async {
     currentTodoUid = value.id;
     await FirebaseFirestore.instance
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('todos')
         .doc(value.id)
-        .update({'uid': value.id})
-        .catchError((error) => print(error));
+        .update({'uid': value.id}).catchError((error) => print(error));
     await Get.showSnackbar(GetBar(
       title: 'SUCCESS',
       message: '성공적으로 추가되었습니다.',
@@ -262,5 +283,55 @@ Future<void> firebaseAuthSignUp(
     ));
   } catch (e) {
     print(e);
+  }
+}
+
+Future<void> firebaseLogIn(String userId, String userPw) async {
+  try {
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+      email: userId,
+      password: userPw,
+    )
+        .then((value) async {
+      print('login Async');
+      await _todoController.initUidTodoList();
+      await _todoController.initTodoTitleList();
+      await _loginController.clearTextField();
+      await _listController.initSearchResult();
+      await Get.off(() => Home());
+    });
+  } on FirebaseAuthException catch (e) {
+    await Get.showSnackbar(GetBar(
+      title: 'ERROR',
+      message: setErrorMessage(e.code),
+      backgroundColor: errorColor,
+      duration: Duration(seconds: 2),
+    ));
+  }
+}
+
+void firebaseForgotUserPassword(String email) async {
+  try {
+    await FirebaseAuth.instance
+        .sendPasswordResetEmail(email: email)
+        .then((value) {
+      Get.off(() => LoginPage());
+      Get.showSnackbar(GetBar(
+        title: 'SUCCESS',
+        message: '메일이 발송되었습니다.',
+        duration: Duration(seconds: 2),
+        backgroundColor: successColor,
+      ));
+      _loginController.forgotEmailController.value.clear();
+      _loginController.forgotPasswordEmail('');
+    });
+  } on FirebaseAuthException catch (error) {
+    await Get.showSnackbar(GetBar(
+      title: 'ERROR',
+      message: setErrorMessage(error.code),
+      duration: Duration(seconds: 2),
+      backgroundColor: errorColor,
+    ));
   }
 }

@@ -39,7 +39,7 @@ class LoginController extends GetxController {
     }
   }
 
-  void clearTextField() {
+  Future<void> clearTextField() async{
     emailController.value.clear();
     passwordController.value.clear();
     loginEmail('');

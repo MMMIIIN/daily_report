@@ -12,7 +12,7 @@ class ListController extends GetxController {
   var searchTitleController = TextEditingController().obs;
   RxString searchTerm = ''.obs;
 
-  void initSearchResult() {
+  Future<void> initSearchResult() async{
     clearAllData();
     searchResult.addAll(searchTitle(''));
   }
