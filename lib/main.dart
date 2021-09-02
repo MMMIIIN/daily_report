@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
     return SimpleBuilder(builder: (_) {
       bool isDarkMode = appdata.read('isDarkMode');
       return GetMaterialApp(
+        // debugShowCheckedModeBanner: false,
         title: 'Daily Report',
         darkTheme: ThemeData(brightness: Brightness.dark, fontFamily: 'Hyemin'),
         theme: ThemeData(

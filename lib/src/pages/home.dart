@@ -26,69 +26,70 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (BuildContext context, AsyncSnapshot<User?> user) {
-          if (user.data == null) {
-            return LoginPage();
-          } else {
-            return StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection(
-                        'user/${FirebaseAuth.instance.currentUser!.uid}/todos')
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.none) {
-                    return Center(child: CircularProgressIndicator());
-                  } else {
-                    return Scaffold(
-                      body: Obx(() {
-                        switch (_homeController.currentIndex.value) {
-                          case 0:
-                            return HomePage();
-                          case 1:
-                            return ListPage();
-                          case 2:
-                            return ChartPage();
-                          case 3:
-                            return SettingsPage();
-                        }
-                        return Container();
-                      }),
-                      extendBody: true,
-                      floatingActionButtonLocation:
-                          FloatingActionButtonLocation.centerDocked,
-                      floatingActionButton: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(() => AddTodo(),
-                                transition: Transition.fade);
-                          },
-                          child: Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: isDarkMode
-                                    ? darkPrimaryColor
-                                    : primaryColor),
-                            child: Icon(
-                              Icons.add,
-                              color: isDarkMode ? Colors.black : Colors.white,
-                            ),
-                          ),
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (BuildContext context, AsyncSnapshot<User?> user) {
+        if (user.data == null) {
+          return LoginPage();
+        } else {
+          return StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection(
+                    'user/${FirebaseAuth.instance.currentUser!.uid}/todos')
+                .snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.none) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  body: Obx(() {
+                    switch (_homeController.currentIndex.value) {
+                      case 0:
+                        return HomePage();
+                      case 1:
+                        return ListPage();
+                      case 2:
+                        return ChartPage();
+                      case 3:
+                        return SettingsPage();
+                    }
+                    return Container();
+                  }),
+                  extendBody: true,
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.centerDocked,
+                  floatingActionButton: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(() => AddTodo(), transition: Transition.fade);
+                      },
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                isDarkMode ? darkPrimaryColor : primaryColor),
+                        child: Icon(
+                          Icons.add,
+                          color: isDarkMode ? Colors.black : Colors.white,
                         ),
                       ),
-                      bottomNavigationBar: BottomAppBar(
-                        shape: CircularNotchedRectangle(),
-                        child: Obx(
-                            () => isDarkMode ? darkModeRow() : lightModeRow()),
-                      ),
-                    );
-                  }
-                });
-          }
-        });
+                    ),
+                  ),
+                  bottomNavigationBar: BottomAppBar(
+                    shape: CircularNotchedRectangle(),
+                    child:
+                        Obx(() => isDarkMode ? darkModeRow() : lightModeRow()),
+                  ),
+                );
+              }
+            },
+          );
+        }
+      },
+    );
   }
 
   Widget darkModeRow() {
@@ -154,6 +155,7 @@ class _HomeState extends State<Home> {
                     ? IconsDB.home_filled
                     : IconsDB.home_outlined,
                 size: 22,
+                color: primaryColor,
               ),
               onPressed: () {
                 _homeController.changeTapMenu(0);
@@ -167,6 +169,7 @@ class _HomeState extends State<Home> {
                     ? IconsDB.menu_filled
                     : IconsDB.menu_outlined,
                 size: 24,
+                color: primaryColor,
               ),
               onPressed: () {
                 _homeController.changeTapMenu(1);
@@ -180,6 +183,7 @@ class _HomeState extends State<Home> {
                     ? IconsDB.pie_chart_filled
                     : IconsDB.pie_chart_outlined,
                 size: 24,
+                color: primaryColor,
               ),
               onPressed: () {
                 _homeController.changeTapMenu(2);
@@ -193,6 +197,7 @@ class _HomeState extends State<Home> {
                     ? IconsDB.settings_filled
                     : IconsDB.settings_outlined,
                 size: 24,
+                color: primaryColor,
               ),
               onPressed: () {
                 _homeController.changeTapMenu(3);

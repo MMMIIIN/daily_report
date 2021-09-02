@@ -74,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
             minWidth: 40,
             minHeight: 30,
             totalSwitches: 2,
-            labels: ['%', 'h'],
+            labels: ['%', '분'],
             inactiveBgColor: isDarkMode
                 ? primaryColor.withOpacity(0.7)
                 : primaryColor.withOpacity(0.2),
@@ -85,6 +85,46 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget listPageSelect() {
+    return Obx(
+          () => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('리스트 시간 표시'),
+            ToggleSwitch(
+              minWidth: 40,
+              minHeight: 30,
+              totalSwitches: 2,
+              labels: [':', '분'],
+              customTextStyles: [
+                TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: _settingsController.listPageIndex.value == 0
+                        ? Colors.white
+                        : Colors.black),
+                TextStyle(
+                    fontSize: 14,
+                    color: _settingsController.listPageIndex.value == 0
+                        ? primaryColor
+                        : Colors.white),
+              ],
+              inactiveBgColor: isDarkMode
+                  ? primaryColor.withOpacity(0.7)
+                  : primaryColor.withOpacity(0.2),
+              activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
+              initialLabelIndex: _settingsController.listPageIndex.value,
+              onToggle: (index) {
+                _settingsController.listPageIndex(index);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -189,46 +229,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 ));
               },
               child: Text('snackBar'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget listPageSelect() {
-    return Obx(
-      () => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('리스트 시간 표시'),
-            ToggleSwitch(
-              minWidth: 40,
-              minHeight: 30,
-              totalSwitches: 2,
-              labels: [':', 'h'],
-              customTextStyles: [
-                TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: _settingsController.listPageIndex.value == 0
-                        ? Colors.white
-                        : Colors.black),
-                TextStyle(
-                  fontSize: 14,
-                    color: _settingsController.listPageIndex.value == 0
-                        ? primaryColor
-                        : Colors.white),
-              ],
-              inactiveBgColor: isDarkMode
-                  ? primaryColor.withOpacity(0.7)
-                  : primaryColor.withOpacity(0.2),
-              activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
-              initialLabelIndex: _settingsController.listPageIndex.value,
-              onToggle: (index) {
-                _settingsController.listPageIndex(index);
-              },
             ),
           ],
         ),
