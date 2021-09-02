@@ -46,9 +46,14 @@ class ChartController extends GetxController {
 
   void setHourMinute() {
     for (var i = 0; i < checkChartPageList.value.todoList.length; i++) {
-      checkChartPageList.value.todoList[i].hourMinute =
-          '${checkChartPageList.value.todoList[i].value ~/ 60}h '
-          '${checkChartPageList.value.todoList[i].value % 60}m';
+      if (checkChartPageList.value.todoList[i].value % 60 == 0) {
+        checkChartPageList.value.todoList[i].hourMinute =
+            '${checkChartPageList.value.todoList[i].value ~/ 60}시간 ';
+      } else {
+        checkChartPageList.value.todoList[i].hourMinute =
+            '${checkChartPageList.value.todoList[i].value ~/ 60}시간 '
+            '${checkChartPageList.value.todoList[i].value % 60}분';
+      }
     }
   }
 

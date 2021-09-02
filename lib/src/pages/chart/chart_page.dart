@@ -42,7 +42,7 @@ class _ChartPageState extends State<ChartPage> {
                   toggleButton(),
                 ],
               ),
-              showChart(),
+              showChart(context),
               chartList(),
             ],
           ),
@@ -268,7 +268,7 @@ class _ChartPageState extends State<ChartPage> {
     );
   }
 
-  Widget showChart() {
+  Widget showChart(BuildContext context) {
     return GetBuilder<ChartController>(
       init: ChartController(),
       builder: (_) => Flexible(
@@ -292,7 +292,7 @@ class _ChartPageState extends State<ChartPage> {
                   }),
                   startDegreeOffset: 270,
                   sectionsSpace: 4,
-                  centerSpaceRadius: 130,
+                  centerSpaceRadius: context.mediaQuery.size.width / 3.5,
                   sections: List<PieChartSectionData>.generate(
                     _chartController.checkChartPageList.value.todoList.length,
                     (index) {

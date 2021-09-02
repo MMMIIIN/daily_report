@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                   }),
                   startDegreeOffset: 270,
                   sectionsSpace: 4,
-                  centerSpaceRadius: 60,
+                  centerSpaceRadius: 50,
                   sections: List<PieChartSectionData>.generate(
                       _todoController.currentIndexList.length, (index) {
                     final isTouched = index == touchedIndex;
@@ -260,8 +260,10 @@ class _HomePageState extends State<HomePage> {
                                       style: TextStyle(fontSize: 13),
                                       overflow: TextOverflow.ellipsis,
                                     )
-                                  : Text(
-                                      ' ${_todoController.currentUidList.value.todoList[index].hourMinute}')
+                                  :
+                              Text(' ${_todoController.currentUidList.value.todoList[index].hourMinute}')
+                              // Text('  ${_todoController.currentUidList.value.todoList[index].value ~/ 60}시간 '
+                              //     '${_todoController.currentUidList.value.todoList[index].value % 60}분')
                             ],
                           ),
                         ],
