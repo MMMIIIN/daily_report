@@ -239,10 +239,6 @@ class _ListPageState extends State<ListPage> {
             ? _listController.searchResult.length
             : _listController.searchTodoList.value.todoList.length,
         itemBuilder: (context, index) {
-          var currentHourMinute = _listController
-                  .searchTodoList.value.todoList.isEmpty
-              ? _listController.searchResult[index].hourMinute
-              : _listController.searchTodoList.value.todoList[index].hourMinute;
           var currentValue =
               _listController.searchTodoList.value.todoList.isEmpty
                   ? _listController.searchResult[index].value
@@ -373,7 +369,7 @@ class _ListPageState extends State<ListPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text('${currentValue ~/ 60}시간 '),
-                                currentValue & 60 != 0
+                                currentValue % 60 == 0
                                     ? Text('')
                                     : Text('${currentValue % 60}분')
                               ],
@@ -425,9 +421,9 @@ class _ListPageState extends State<ListPage> {
     });
   }
 
-  void todoDialog(BuildContext context, String title, DateTime dateTime,
-      TimeRange timeRange, int colorIndex, String todoUid) {
-    showDialog(
+  Future<void> todoDialog(BuildContext context, String title, DateTime dateTime,
+      TimeRange timeRange, int colorIndex, String todoUid) async {
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         print('todoUid = $todoUid');
@@ -479,28 +475,38 @@ class _ListPageState extends State<ListPage> {
                               MaterialButton(
                                 color: primaryColor,
                                 onPressed: () async {
-                                  await todoFirebaseDelete(todoUid);
                                   _todoController.todoDelete(todoUid);
-                                  _chartController.makeRangeDate();
-                                  if (_listController
-                                      .searchTerm.value.isEmpty) {
-                                    print('_listController.searchTitle(' ') =');
-                                    _listController.searchTitle('');
-                                  } else if (_listController
-                                      .searchTerm.value.isNotEmpty) {
-                                    _listController.searchTitle(
-                                        _listController.searchTerm.value);
-                                  }
-                                  if (_listController.selectedDays.isNotEmpty) {
-                                    _listController.setSearchTodoList(
-                                        _listController.selectedDays);
-                                  }
-                                  if (_listController
-                                      .searchTodoList.value.todoList.isEmpty) {
-                                    _listController.selectedDays.clear();
-                                  }
-                                  _todoController.setCurrentIndex(
-                                      _todoController.currentDateTime.value);
+                                  await todoFirebaseDelete(todoUid)
+                                      .then((value) {
+                                    _chartController.makeRangeDate();
+                                    if (_listController
+                                        .searchTerm.value.isEmpty) {
+                                      _listController.searchTitle('');
+                                    } else if (_listController
+                                        .searchTerm.value.isNotEmpty) {
+                                      _listController.searchTitle(
+                                          _listController.searchTerm.value);
+                                    }
+                                    if (_listController
+                                        .selectedDays.isNotEmpty) {
+                                      _listController.setSearchTodoList(
+                                          _listController.selectedDays);
+                                    }
+                                    if (_listController.searchTodoList.value
+                                        .todoList.isEmpty) {
+                                      _listController.selectedDays.clear();
+                                    }
+                                    _todoController.setCurrentIndex(
+                                        _todoController.currentDateTime.value);
+                                  });
+                                  Get.back();
+                                  Get.back();
+                                  await Get.showSnackbar(GetBar(
+                                    duration: Duration(seconds: 2),
+                                    title: 'SUCCESS',
+                                    message: '성공적으로 삭제되었습니다.',
+                                    backgroundColor: successColor,
+                                  ));
                                 },
                                 child: Text('삭제'),
                               ),

@@ -116,15 +116,8 @@ Future<void> todoFirebaseDelete(String todoUid) async {
       .collection('todos')
       .doc(todoUid)
       .delete()
-      .then((value) {
-    Get.back();
-    Get.back();
-    Get.showSnackbar(GetBar(
-      duration: Duration(seconds: 2),
-      title: 'SUCCESS',
-      message: '성공적으로 삭제되었습니다.',
-      backgroundColor: successColor,
-    ));
+      .then((value) async{
+
   }).catchError(
     (error) async => await Get.showSnackbar(
       GetBar(

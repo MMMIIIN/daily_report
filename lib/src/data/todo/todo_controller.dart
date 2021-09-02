@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
+import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ enum CATEGORY { DEFAULT, STUDY, SHOPPING, EXERCISE, SLEEP }
 final now = DateTime.now();
 final FirstDay = DateTime(2020, 1, 1);
 final LastDay = DateTime(now.year + 5, 12, 31);
+
+final ListController _listController = Get.put(ListController());
 
 class TodoController extends GetxController {
   final currentIndexList = [].obs;
@@ -55,9 +58,14 @@ class TodoController extends GetxController {
 
   void setHourMinute() {
     for (var i = 0; i < todoUidList.value.todoList.length; i++) {
-      todoUidList.value.todoList[i].hourMinute =
-          '${todoUidList.value.todoList[i].value ~/ 60}h '
-          '${todoUidList.value.todoList[i].value % 60}m';
+      if (todoUidList.value.todoList[i].value % 60 == 0) {
+        todoUidList.value.todoList[i].hourMinute =
+            '${todoUidList.value.todoList[i].value ~/ 60}시간 ';
+      } else {
+        todoUidList.value.todoList[i].hourMinute =
+            '${todoUidList.value.todoList[i].value ~/ 60}시간 '
+            '${todoUidList.value.todoList[i].value % 60}분';
+      }
     }
   }
 
@@ -133,7 +141,9 @@ class TodoController extends GetxController {
     todoTitleList.add(todoTitle);
   }
 
-  void initUidTodoList() async {
+  Future<void> initUidTodoList() async {
+    print('initUid');
+    print(FirebaseAuth.instance.currentUser!.uid);
     clearAllData();
     TestTodo sampleTodo;
     await FirebaseFirestore.instance
@@ -184,7 +194,7 @@ class TodoController extends GetxController {
     makeRuleTitle(title);
   }
 
-  void initTodoTitleList() async {
+  Future<void> initTodoTitleList() async {
     todoTitleList.addAll(await getTodoTitleData());
   }
 
@@ -192,13 +202,15 @@ class TodoController extends GetxController {
     checkBoxBool(false);
   }
 
-  void todoDelete(String todoUid) {
+  void todoDelete(String todoUid) async {
     loadTodoUidList.value.todoList
         .removeWhere((element) => element.uid == todoUid);
     todoUidList.value.todoList.clear();
     loadTodoUidList.value.todoList.forEach((element) {
       todoUidCheckAdd(element);
     });
+    print('todo내 서치');
+    _listController.searchTitle('');
   }
 
   void initTodo() {
@@ -217,7 +229,7 @@ class TodoController extends GetxController {
         endMinute: DateTime.now().minute,
         value: 60,
         colorIndex: 0,
-        hourMinute: '1h 0m');
+        hourMinute: '1시간 0분');
     loadTodoUidList.value.todoList.add(initData);
     todoUidList.value.todoList.add(initData);
     todoTitleList
