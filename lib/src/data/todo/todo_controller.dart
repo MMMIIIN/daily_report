@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:daily_report/src/service/firestore_service.dart';
@@ -26,9 +25,11 @@ class TodoController extends GetxController {
   int valueSum = 0;
   var titleTextController = TextEditingController().obs;
   var makeRuleTitleController = TextEditingController().obs;
+  var memoController = TextEditingController().obs;
   final todoTitleList = <TodoTitle>[].obs;
   RxString currentUid = ''.obs;
   RxString makeRuleTitle = ''.obs;
+  RxString memoText = ''.obs;
   RxBool checkBoxBool = false.obs;
 
   Rx<TimeRange> defaultTime = TimeRange(

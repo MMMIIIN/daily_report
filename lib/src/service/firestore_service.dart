@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
-import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/error/error_handling.dart';
@@ -138,6 +137,7 @@ Future<void> addFireStore(TestTodo todo) async {
       .collection('todos')
       .add({
     'title': todo.title,
+    'memoText': todo.memoText,
     'startHour': todo.startHour,
     'startMinute': todo.startMinute,
     'endHour': todo.endHour,

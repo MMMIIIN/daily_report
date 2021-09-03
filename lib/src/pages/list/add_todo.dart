@@ -1,5 +1,4 @@
 import 'package:daily_report/color.dart';
-import 'package:daily_report/src/data/todo/chart_date_data.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
@@ -56,6 +55,7 @@ class _AddTodoState extends State<AddTodo> {
                 selectOfDate(),
                 titleField(),
                 Obx(() => printTodo()),
+                memoField(context),
                 makeRule(),
                 Flexible(
                   child: Padding(
@@ -449,6 +449,26 @@ class _AddTodoState extends State<AddTodo> {
     );
   }
 
+  Widget memoField(BuildContext context) {
+    return Container(
+      width: context.mediaQuery.size.width * 0.85,
+      decoration: BoxDecoration(
+          color: primaryColor.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+          onChanged: (text) {
+            _todoController.memoText(text);
+          },
+          controller: _todoController.memoController.value,
+          maxLines: 2,
+          cursorColor: primaryColor,
+        ),
+      ),
+    );
+  }
+
   Widget setTime(BuildContext context) {
     return InkWell(
       customBorder:
@@ -626,6 +646,7 @@ class _AddTodoState extends State<AddTodo> {
                             _todoController.currentDateTime.value.month,
                             _todoController.currentDateTime.value.day),
                         title: _todoController.titleTextController.value.text,
+                        memoText: _todoController.memoText.value,
                         startHour:
                             _todoController.defaultTime.value.startTime.hour,
                         startMinute:
@@ -638,7 +659,7 @@ class _AddTodoState extends State<AddTodo> {
                         hourMinute: _todoController.defaultValue.value % 60 == 0
                             ? '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
                             : '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
-                            '${_todoController.defaultValue.value.toInt() % 60}분');
+                                '${_todoController.defaultValue.value.toInt() % 60}분');
                     await addFireStore(todoAddDto);
                     _todoController.addTodo(todoAddDto..uid = currentTodoUid);
                     _chartController.makeRangeDate();
