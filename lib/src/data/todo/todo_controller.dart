@@ -158,6 +158,7 @@ class TodoController extends GetxController {
             uid: element['uid'],
             ymd: DateTime(element['year'], element['month'], element['day']),
             title: element['title'],
+            memoText: element['memoText'],
             startHour: element['startHour'],
             startMinute: element['startMinute'],
             endHour: element['endHour'],
@@ -169,6 +170,7 @@ class TodoController extends GetxController {
             uid: sampleTodo.uid,
             ymd: sampleTodo.ymd,
             title: sampleTodo.title,
+            memoText: sampleTodo.memoText,
             startHour: sampleTodo.startHour,
             startMinute: sampleTodo.startMinute,
             endHour: sampleTodo.endHour,
@@ -235,6 +237,11 @@ class TodoController extends GetxController {
     todoUidList.value.todoList.add(initData);
     todoTitleList
         .add(TodoTitle(title: '꾹 눌러서 삭제', titleColor: 0, uid: 'initData'));
+  }
+
+  void clearMemoController() {
+    memoText('');
+    memoController.value.clear();
   }
 
   @override

@@ -55,8 +55,8 @@ class _AddTodoState extends State<AddTodo> {
                 selectOfDate(),
                 titleField(),
                 Obx(() => printTodo()),
-                memoField(context),
                 makeRule(),
+                memoField(context),
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
@@ -153,7 +153,7 @@ class _AddTodoState extends State<AddTodo> {
                                 date.weekday == 6 || date.weekday == 7
                                     ? Text(
                                         date.day.toString(),
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: Colors.redAccent),
                                       )
                                     : Text(date.day.toString())
                               ],
@@ -464,6 +464,9 @@ class _AddTodoState extends State<AddTodo> {
           controller: _todoController.memoController.value,
           maxLines: 2,
           cursorColor: primaryColor,
+          decoration: InputDecoration(
+            hintText: '메모'
+          ),
         ),
       ),
     );
@@ -625,6 +628,7 @@ class _AddTodoState extends State<AddTodo> {
                       _todoController.todoUidList.value.todoList[todoIndex]
                           .ymd = todoUpdateDto.ymd;
                       _chartController.makeRangeDate();
+                      _todoController.clearMemoController();
                       await Get.off(() => Home());
                     }
                   },
@@ -665,6 +669,7 @@ class _AddTodoState extends State<AddTodo> {
                     _chartController.makeRangeDate();
                     await _listController.initSearchResult();
                     _listController.searchTitle('');
+                    _todoController.clearMemoController();
                     await Get.offAll(() => Home());
                   },
                   color: isDarkMode ? darkPrimaryColor : primaryColor,

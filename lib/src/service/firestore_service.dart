@@ -185,6 +185,7 @@ Future<void> updateFireStore(TestTodo todo) async {
       .doc(todo.uid)
       .update({
     'title': todo.title,
+    'memoText': todo.memoText,
     'startHour': todo.startHour,
     'startMinute': todo.startMinute,
     'endHour': todo.endHour,
@@ -259,6 +260,7 @@ Future<void> firebaseAuthSignUp(
         'month': DateTime.now().month,
         'day': DateTime.now().day,
         'title': '회원가입',
+        'memoTitle': '',
         'startHour': DateTime.now().hour,
         'startMinute': DateTime.now().minute,
         'endHour': DateTime.now().hour + 1,

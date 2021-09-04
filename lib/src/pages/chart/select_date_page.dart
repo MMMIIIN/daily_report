@@ -43,7 +43,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
               date.weekday == 6 || date.weekday == 7
                   ? Text(
                 date.day.toString(),
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.redAccent),
               )
                   : Text(date.day.toString())
             ],

@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                 date.weekday == 6 || date.weekday == 7
                     ? Text(
                         date.day.toString(),
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.redAccent),
                       )
                     : Text(date.day.toString())
               ],

@@ -155,7 +155,7 @@ class _ListPageState extends State<ListPage> {
               date.weekday == 6 || date.weekday == 7
                   ? Text(
                       date.day.toString(),
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.redAccent),
                     )
                   : Text(date.day.toString())
             ],
@@ -286,6 +286,9 @@ class _ListPageState extends State<ListPage> {
           var todoUid = _listController.searchTodoList.value.todoList.isEmpty
               ? _listController.searchResult[index].uid
               : _listController.searchTodoList.value.todoList[index].uid;
+          var memoTitle = _listController.searchTodoList.value.todoList.isEmpty
+              ? _listController.searchResult[index].memoText
+              : _listController.searchTodoList.value.todoList[index].memoText;
           return Padding(
             padding: const EdgeInsets.only(bottom: 10),
             child: InkWell(
@@ -296,7 +299,7 @@ class _ListPageState extends State<ListPage> {
                   currentTimeRange,
                 );
                 _todoController.currentDateTime(currentDateTime);
-                todoDialog(context, currentTitle, currentDateTime,
+                todoDialog(context, currentTitle, memoTitle, currentDateTime,
                     currentTimeRange, currentColorIndex, todoUid);
               },
               child: Container(
@@ -421,8 +424,14 @@ class _ListPageState extends State<ListPage> {
     });
   }
 
-  Future<void> todoDialog(BuildContext context, String title, DateTime dateTime,
-      TimeRange timeRange, int colorIndex, String todoUid) async {
+  Future<void> todoDialog(
+      BuildContext context,
+      String title,
+      String memoTitle,
+      DateTime dateTime,
+      TimeRange timeRange,
+      int colorIndex,
+      String todoUid) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -517,7 +526,7 @@ class _ListPageState extends State<ListPage> {
             ],
           ),
           content: Container(
-            height: context.mediaQuery.size.height * 0.1,
+            height: memoTitle.isEmpty ? context.mediaQuery.size.height * 0.1 : context.mediaQuery.size.height * 0.13,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -529,6 +538,13 @@ class _ListPageState extends State<ListPage> {
                   ' ${getOfDay(dateTime.weekday)}',
                   style: TextStyle(fontSize: 30),
                 ),
+                SizedBox(height: 10),
+                memoTitle.isEmpty ? Container() : Text(
+                  memoTitle,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 25),
+                ),
+                SizedBox(height: 10),
                 Text(
                   '${timeRange.startTime.hour} : '
                   '${timeRange.startTime.minute} - '
