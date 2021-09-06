@@ -9,7 +9,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final TodoController _todoController = Get.put(TodoController());
-final SettingsController _settingsController = Get.put(SettingsController());
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _selectedDay = _todoController.currentDateTime.value;
   bool isDarkMode = GetStorage().read('isDarkMode');
+  bool isPercentOrHour = GetStorage().read('isPercentOrHour') ?? false;
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
@@ -253,17 +253,14 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
-                              _settingsController.isPercentOrHourIndex.value ==
-                                      0
+                              isPercentOrHour
                                   ? Text(
+                                      ' ${_todoController.currentUidList.value.todoList[index].hourMinute}')
+                                  : Text(
                                       ' ${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(1)} %',
                                       style: TextStyle(fontSize: 13),
                                       overflow: TextOverflow.ellipsis,
                                     )
-                                  :
-                              Text(' ${_todoController.currentUidList.value.todoList[index].hourMinute}')
-                              // Text('  ${_todoController.currentUidList.value.todoList[index].value ~/ 60}시간 '
-                              //     '${_todoController.currentUidList.value.todoList[index].value % 60}분')
                             ],
                           ),
                         ],

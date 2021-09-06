@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
+import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/chart_page.dart';
 import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
@@ -19,9 +20,11 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+final HomeController _homeController = Get.put(HomeController());
+final TodoController _todoController = Get.put(TodoController());
+
 class _HomeState extends State<Home> {
-  final HomeController _homeController = Get.put(HomeController());
-  bool isDarkMode = GetStorage().read('isDarkMode');
+  bool isDarkMode = GetStorage().read('isDarkMode') ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,7 @@ class _HomeState extends State<Home> {
               if (snapshot.connectionState == ConnectionState.none) {
                 return Center(child: CircularProgressIndicator());
               } else {
+                _todoController.setCurrentIndex(DateTime.now());
                 return Scaffold(
                   resizeToAvoidBottomInset: false,
                   body: Obx(() {

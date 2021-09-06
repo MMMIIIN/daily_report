@@ -18,6 +18,49 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final isDarkMode = _settingsController.isDarkModeIndex.value == 1;
 
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            userInfo(),
+            darkMode(),
+            showPercentOrHour(),
+            listPageSelect(),
+            timePickerOfTime(),
+            logoutButton(),
+            MaterialButton(
+              onPressed: () {
+                Get.to(() => LoginPage());
+              },
+              color: Colors.cyanAccent,
+            ),
+            MaterialButton(
+              onPressed: () {
+                Get.to(() => SignUpPage());
+              },
+              color: Colors.deepPurpleAccent,
+            ),
+            MaterialButton(
+              onPressed: () {
+                Get.showSnackbar(GetBar(
+                  title: 'SUCCESS',
+                  message: '성공적으로 삭제되었습니다.',
+                  duration: Duration(seconds: 1),
+                  backgroundColor: Color(0xff1dd1a1),
+                ));
+              },
+              child: Text('snackBar'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget userInfo() {
     return Row(
       children: [
@@ -120,7 +163,7 @@ class _SettingsPageState extends State<SettingsPage> {
               activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
               initialLabelIndex: _settingsController.listPageIndex.value,
               onToggle: (index) {
-                _settingsController.listPageIndex(index);
+                _settingsController.setListPageIndex(index);
               },
             ),
           ],
@@ -194,45 +237,4 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            userInfo(),
-            darkMode(),
-            showPercentOrHour(),
-            listPageSelect(),
-            timePickerOfTime(),
-            logoutButton(),
-            MaterialButton(
-              onPressed: () {
-                Get.to(() => LoginPage());
-              },
-              color: Colors.cyanAccent,
-            ),
-            MaterialButton(
-              onPressed: () {
-                Get.to(() => SignUpPage());
-              },
-              color: Colors.deepPurpleAccent,
-            ),
-            MaterialButton(
-              onPressed: () {
-                Get.showSnackbar(GetBar(
-                  title: 'SUCCESS',
-                  message: '성공적으로 삭제되었습니다.',
-                  duration: Duration(seconds: 1),
-                  backgroundColor: Color(0xff1dd1a1),
-                ));
-              },
-              child: Text('snackBar'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

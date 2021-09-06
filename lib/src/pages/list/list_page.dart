@@ -4,7 +4,6 @@ import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
-import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,12 +19,12 @@ class ListPage extends StatefulWidget {
 final TodoController _todoController = Get.put(TodoController());
 final ListController _listController = Get.put(ListController());
 final ChartController _chartController = Get.put(ChartController());
-final SettingsController _settingsController = Get.put(SettingsController());
 
 class _ListPageState extends State<ListPage> {
   int touchedIndex = -1;
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
-  final bool isDarkMode = GetStorage().read('isDarkMode');
+  bool isDarkMode = GetStorage().read('isDarkMode') ?? false;
+  bool isListPageBool = GetStorage().read('isListPageBool') ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +54,7 @@ class _ListPageState extends State<ListPage> {
     return Container(
       height: context.mediaQuery.size.height * 0.06,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all()
-      ),
+          borderRadius: BorderRadius.circular(15), border: Border.all()),
       child: TextField(
         onChanged: (text) {
           _listController.searchTerm(text);
@@ -345,8 +342,20 @@ class _ListPageState extends State<ListPage> {
                         ),
                       ),
                     ),
-                    _settingsController.listPageIndex.value == 0
+                    isListPageBool
                         ? Container(
+                            width: context.mediaQuery.size.width * 0.2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('${currentValue ~/ 60}시간 '),
+                                currentValue % 60 == 0
+                                    ? Text('')
+                                    : Text('${currentValue % 60}분')
+                              ],
+                            ),
+                          )
+                        : Container(
                             width: context.mediaQuery.size.width * 0.31,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -358,21 +367,10 @@ class _ListPageState extends State<ListPage> {
                                 ),
                                 SizedBox(width: 20),
                                 Text(
-                                    '${currentTimeRange.endTime.hour.toString().length < 2 ? '0${currentTimeRange.endTime.hour} : ' : '${currentTimeRange.endTime.hour} : '}'
-                                    '${currentTimeRange.endTime.minute.toString() == '0' ? '00' : currentTimeRange.endTime.minute}',
-                                    style: TextStyle(fontSize: 14))
-                              ],
-                            ),
-                          )
-                        : Container(
-                            width: context.mediaQuery.size.width * 0.2,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('${currentValue ~/ 60}시간 '),
-                                currentValue % 60 == 0
-                                    ? Text('')
-                                    : Text('${currentValue % 60}분')
+                                  '${currentTimeRange.endTime.hour.toString().length < 2 ? '0${currentTimeRange.endTime.hour} : ' : '${currentTimeRange.endTime.hour} : '}'
+                                  '${currentTimeRange.endTime.minute.toString() == '0' ? '00' : currentTimeRange.endTime.minute}',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ],
                             ),
                           )
@@ -503,7 +501,9 @@ class _ListPageState extends State<ListPage> {
             ],
           ),
           content: Container(
-            height: memoTitle.isEmpty ? context.mediaQuery.size.height * 0.1 : context.mediaQuery.size.height * 0.13,
+            height: memoTitle.isEmpty
+                ? context.mediaQuery.size.height * 0.13
+                : context.mediaQuery.size.height * 0.18,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -516,12 +516,14 @@ class _ListPageState extends State<ListPage> {
                   style: TextStyle(fontSize: 30),
                 ),
                 SizedBox(height: 10),
-                memoTitle.isEmpty ? Container() : Text(
-                  memoTitle,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 25),
-                ),
-                SizedBox(height: 10),
+                memoTitle.isEmpty
+                    ? Container()
+                    : Text(
+                        memoTitle,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 25),
+                      ),
+                SizedBox(height: 15),
                 Text(
                   '${timeRange.startTime.hour} : '
                   '${timeRange.startTime.minute} - '

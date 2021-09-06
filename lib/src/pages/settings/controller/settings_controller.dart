@@ -34,6 +34,19 @@ class SettingsController extends GetxController {
     }
   }
 
+  void setListPageIndex(int index) {
+    listPageIndex(index);
+    setListPage();
+  }
+
+  void setListPage() {
+    if(listPageIndex.value == 0){
+      GetStorage().write('isListPageBool', false);
+    } else {
+      GetStorage().write('isListPageBool', true);
+    }
+  }
+
   void setTimePickerTimeIndex(int index) {
     isTimePickerTimeIndex(index);
     setTimePickerOfInterval(index);
@@ -67,16 +80,24 @@ class SettingsController extends GetxController {
   void setInitStorage() {
     var darkModeIndex = GetStorage().read('isDarkMode') ?? false;
     var percentOrHour = GetStorage().read('isPercentOrHour') ?? false;
+    var listPageIndex = GetStorage().read('isListPageBool') ?? false;
     var interval = GetStorage().read('timePickerOfInterval') ?? 1;
-    if (darkModeIndex) {
+    if (darkModeIndex == null) {
       isDarkModeIndex(1);
     } else {
       isDarkModeIndex(0);
     }
     if (percentOrHour) {
       isPercentOrHourIndex(1);
+      setPercentOrHourIndex(1);
     } else {
       isPercentOrHourIndex(0);
+      setPercentOrHourIndex(0);
+    }
+    if(listPageIndex) {
+      setListPageIndex(1);
+    } else {
+      setListPageIndex(0);
     }
     if (interval != null) {
       isTimePickerTimeIndex(interval);
@@ -88,9 +109,6 @@ class SettingsController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     setInitStorage();
-    print(isDarkModeIndex.value);
-    print(isPercentOrHourIndex.value);
-    print(timePickerOfInterval.value);
     super.onInit();
   }
 }
