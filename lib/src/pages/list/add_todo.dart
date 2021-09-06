@@ -766,6 +766,7 @@ class _AddTodoState extends State<AddTodo> {
             height: context.mediaQuery.size.height * 0.045,
             onPressed: () {
               _todoController.titleTextController.value.clear();
+              _todoController.clearMemoController();
               Get.back();
             },
             color: isDarkMode
@@ -791,6 +792,7 @@ class _AddTodoState extends State<AddTodo> {
                             _todoController.currentDateTime.value.month,
                             _todoController.currentDateTime.value.day),
                         title: _todoController.titleTextController.value.text,
+                        memoText: _todoController.memoText.value,
                         startHour:
                             _todoController.defaultTime.value.startTime.hour,
                         startMinute:
@@ -811,6 +813,8 @@ class _AddTodoState extends State<AddTodo> {
                           .value = todoUpdateDto.value;
                       _todoController.todoUidList.value.todoList[todoIndex]
                           .title = todoUpdateDto.title;
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .memoText = todoUpdateDto.memoText;
                       _todoController.todoUidList.value.todoList[todoIndex]
                           .startHour = todoUpdateDto.startHour;
                       _todoController.todoUidList.value.todoList[todoIndex]

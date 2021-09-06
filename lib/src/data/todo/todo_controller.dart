@@ -212,7 +212,6 @@ class TodoController extends GetxController {
     loadTodoUidList.value.todoList.forEach((element) {
       todoUidCheckAdd(element);
     });
-    print('todo내 서치');
     _listController.searchTitle('');
   }
 

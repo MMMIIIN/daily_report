@@ -289,7 +289,6 @@ Future<void> firebaseLogIn(String userId, String userPw) async {
       password: userPw,
     )
         .then((value) async {
-      print('login Async');
       await _todoController.initUidTodoList();
       await _todoController.initTodoTitleList();
       await _loginController.clearTextField();

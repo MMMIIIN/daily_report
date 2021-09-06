@@ -547,6 +547,8 @@ class _ListPageState extends State<ListPage> {
               onPressed: () {
                 _todoController.titleTextController.value.text = title;
                 _todoController.selectColorIndex(colorIndex);
+                _todoController.memoText(memoTitle);
+                _todoController.memoController.value.text = memoTitle;
                 Get.off(() => AddTodo(
                       editMode: true,
                       todoUid: todoUid,
