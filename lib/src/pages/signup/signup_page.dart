@@ -90,7 +90,7 @@ class SignUpPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
         decoration: BoxDecoration(
-            color: primaryColor.withOpacity(0.3),
+          border: Border.all(),
             borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -127,6 +127,9 @@ class SignUpPage extends StatelessWidget {
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
                 ),
               ),
             ),
@@ -142,7 +145,7 @@ class SignUpPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
         decoration: BoxDecoration(
-          color: primaryColor.withOpacity(0.3),
+          border: Border.all(),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -181,6 +184,9 @@ class SignUpPage extends StatelessWidget {
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
                 ),
               ),
             ),
@@ -196,7 +202,7 @@ class SignUpPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
         decoration: BoxDecoration(
-          color: primaryColor.withOpacity(0.3),
+          border: Border.all(),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -235,6 +241,9 @@ class SignUpPage extends StatelessWidget {
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
                 ),
               ),
             ),
@@ -250,7 +259,7 @@ class SignUpPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
         decoration: BoxDecoration(
-          color: primaryColor.withOpacity(0.3),
+          border: Border.all(),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -285,6 +294,9 @@ class SignUpPage extends StatelessWidget {
                       ? null
                       : '비밀번호가 일치하지 않습니다.',
                   enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
                 ),

@@ -56,9 +56,7 @@ class _ListPageState extends State<ListPage> {
       height: context.mediaQuery.size.height * 0.06,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: isDarkMode
-            ? Colors.white.withOpacity(0.9)
-            : primaryColor.withOpacity(0.1),
+        border: Border.all()
       ),
       child: TextField(
         onChanged: (text) {
@@ -332,7 +330,7 @@ class _ListPageState extends State<ListPage> {
                               Text('${currentDateTime.year}.'
                                   '${currentDateTime.month}.'
                                   '${currentDateTime.day}'
-                                  ' ${getOfDay(currentDateTime.weekday)}'),
+                                  ' ${_listController.getOfDay(currentDateTime.weekday)}'),
                             ],
                           ),
                         ],
@@ -386,27 +384,6 @@ class _ListPageState extends State<ListPage> {
         },
       ),
     );
-  }
-
-  String getOfDay(int weekday) {
-    switch (weekday) {
-      case 1:
-        return '(월)';
-      case 2:
-        return '(화)';
-      case 3:
-        return '(수)';
-      case 4:
-        return '(목)';
-      case 5:
-        return '(금)';
-      case 6:
-        return '(토)';
-      case 7:
-        return '(일)';
-      default:
-        return '';
-    }
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -535,7 +512,7 @@ class _ListPageState extends State<ListPage> {
                   '${dateTime.year} .'
                   '${dateTime.month} .'
                   '${dateTime.day}'
-                  ' ${getOfDay(dateTime.weekday)}',
+                  ' ${_listController.getOfDay(dateTime.weekday)}',
                   style: TextStyle(fontSize: 30),
                 ),
                 SizedBox(height: 10),

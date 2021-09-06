@@ -54,8 +54,8 @@ class _AddTodoState extends State<AddTodo> {
               children: [
                 selectOfDate(),
                 titleField(),
-                makeRule(),
                 Obx(() => printTodo()),
+                makeRule(),
                 memoField(context),
                 Flexible(
                   child: Padding(
@@ -73,7 +73,7 @@ class _AddTodoState extends State<AddTodo> {
                   ),
                 ),
                 colorSelect(),
-                actionButton()
+                actionButton(context)
               ],
             ),
           ),
@@ -263,7 +263,8 @@ class _AddTodoState extends State<AddTodo> {
                 Text(
                   '${_todoController.currentDateTime.value.year} .'
                   '${_todoController.currentDateTime.value.month} .'
-                  '${_todoController.currentDateTime.value.day}',
+                  '${_todoController.currentDateTime.value.day} '
+                  '${_listController.getOfDay(_todoController.currentDateTime.value.weekday)}',
                   style: TextStyle(
                       fontSize: 20,
                       color: isDarkMode ? Colors.black : Colors.white,
@@ -284,10 +285,7 @@ class _AddTodoState extends State<AddTodo> {
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           border: Border.all(),
-            borderRadius: BorderRadius.circular(10),
-            // color: isDarkMode
-            //     ? darkPrimaryColor.withOpacity(0.9)
-            //     : primaryColor.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: TextField(
           style: TextStyle(color: isDarkMode ? Colors.black : primaryColor),
@@ -301,7 +299,7 @@ class _AddTodoState extends State<AddTodo> {
             ),
             focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
-                    color: isDarkMode ? Colors.black : primaryColor)),
+                    color: isDarkMode ? Colors.black : Colors.transparent)),
             hintText: 'Title',
             hintStyle: TextStyle(
               color: isDarkMode ? Colors.black : primaryColor,
@@ -321,7 +319,7 @@ class _AddTodoState extends State<AddTodo> {
             context: context,
             builder: (_) => Dialog(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Container(
                   height: context.mediaQuery.size.height * 0.4,
                   child: Column(
@@ -330,31 +328,38 @@ class _AddTodoState extends State<AddTodo> {
                       Container(
                         padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: primaryColor.withOpacity(0.2)),
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         child: TextField(
                           onChanged: (text) {
                             _todoController.setMakeRuleTitle(text);
                           },
                           controller:
-                          _todoController.makeRuleTitleController.value,
+                              _todoController.makeRuleTitleController.value,
+                          cursorColor: primaryColor,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.title,
-                              color: primaryColor,
-                            ),
-                            hintText: 'Title',
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                          ),
+                              prefixIcon: Icon(
+                                Icons.title,
+                                color: primaryColor,
+                              ),
+                              hintText: 'Title',
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent))),
                         ),
                       ),
                       colorSelect(),
                       Obx(
-                            () => Row(
+                        () => Row(
                           children: [
                             Checkbox(
+                              checkColor: Colors.white,
+                              activeColor: primaryColor,
                               value: _todoController.checkBoxBool.value,
                               onChanged: (check) {
                                 _todoController.checkBoxBool(check);
@@ -363,8 +368,8 @@ class _AddTodoState extends State<AddTodo> {
                             InkWell(
                               onTap: _todoController.checkBoxBool.value
                                   ? () {
-                                setTimeRange();
-                              }
+                                      setTimeRange();
+                                    }
                                   : () {},
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
@@ -380,15 +385,15 @@ class _AddTodoState extends State<AddTodo> {
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Text(
                                         '${_todoController.defaultTime.value.startTime.hour} : '
-                                            '${_todoController.defaultTime.value.startTime.minute}'),
+                                        '${_todoController.defaultTime.value.startTime.minute}'),
                                     Text(' ~ '),
                                     Text(
                                         '${_todoController.defaultTime.value.endTime.hour} : '
-                                            '${_todoController.defaultTime.value.endTime.minute}'),
+                                        '${_todoController.defaultTime.value.endTime.minute}'),
                                   ],
                                 ),
                               ),
@@ -418,54 +423,54 @@ class _AddTodoState extends State<AddTodo> {
                                 TodoTitle(
                                   title: _todoController.makeRuleTitle.value,
                                   titleColor:
-                                  _todoController.selectColorIndex.value,
+                                      _todoController.selectColorIndex.value,
                                   boolOfTime:
-                                  _todoController.checkBoxBool.value,
+                                      _todoController.checkBoxBool.value,
                                   timeRange: _todoController.checkBoxBool.value
                                       ? _todoController.defaultTime.value
                                       : TimeRange(
-                                    startTime:
-                                    TimeOfDay(hour: 0, minute: 0),
-                                    endTime:
-                                    TimeOfDay(hour: 1, minute: 0),
-                                  ),
+                                          startTime:
+                                              TimeOfDay(hour: 0, minute: 0),
+                                          endTime:
+                                              TimeOfDay(hour: 1, minute: 0),
+                                        ),
                                 ),
                               );
                               _todoController.addTodoTitle(
                                 TodoTitle(
                                     title: _todoController.makeRuleTitle.value,
                                     titleColor:
-                                    _todoController.selectColorIndex.value,
+                                        _todoController.selectColorIndex.value,
                                     uid: currentTodoTitleUid,
                                     timeRange:
-                                    _todoController.checkBoxBool.value
-                                        ? TimeRange(
-                                      startTime: TimeOfDay(
-                                          hour: _todoController
-                                              .defaultTime
-                                              .value
-                                              .startTime
-                                              .hour,
-                                          minute: _todoController
-                                              .defaultTime
-                                              .value
-                                              .startTime
-                                              .minute),
-                                      endTime: TimeOfDay(
-                                          hour: _todoController
-                                              .defaultTime
-                                              .value
-                                              .endTime
-                                              .hour,
-                                          minute: _todoController
-                                              .defaultTime
-                                              .value
-                                              .endTime
-                                              .minute),
-                                    )
-                                        : null,
+                                        _todoController.checkBoxBool.value
+                                            ? TimeRange(
+                                                startTime: TimeOfDay(
+                                                    hour: _todoController
+                                                        .defaultTime
+                                                        .value
+                                                        .startTime
+                                                        .hour,
+                                                    minute: _todoController
+                                                        .defaultTime
+                                                        .value
+                                                        .startTime
+                                                        .minute),
+                                                endTime: TimeOfDay(
+                                                    hour: _todoController
+                                                        .defaultTime
+                                                        .value
+                                                        .endTime
+                                                        .hour,
+                                                    minute: _todoController
+                                                        .defaultTime
+                                                        .value
+                                                        .endTime
+                                                        .minute),
+                                              )
+                                            : null,
                                     boolOfTime:
-                                    _todoController.checkBoxBool.value),
+                                        _todoController.checkBoxBool.value),
                               );
                               _todoController.titleTextController.value.text =
                                   _todoController.makeRuleTitle.value;
@@ -636,8 +641,7 @@ class _AddTodoState extends State<AddTodo> {
       width: context.mediaQuery.size.width * 0.85,
       decoration: BoxDecoration(
         border: Border.all(),
-          // color: primaryColor.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -751,13 +755,15 @@ class _AddTodoState extends State<AddTodo> {
     );
   }
 
-  Widget actionButton() {
+  Widget actionButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           MaterialButton(
+            minWidth: context.mediaQuery.size.width * 0.225,
+            height: context.mediaQuery.size.height * 0.045,
             onPressed: () {
               _todoController.titleTextController.value.clear();
               Get.back();
@@ -775,6 +781,8 @@ class _AddTodoState extends State<AddTodo> {
           ),
           widget.editMode == true
               ? MaterialButton(
+                  minWidth: context.mediaQuery.size.width * 0.225,
+                  height: context.mediaQuery.size.height * 0.045,
                   onPressed: () async {
                     var todoUpdateDto = TestTodo(
                         uid: widget.todoUid!,
@@ -832,6 +840,8 @@ class _AddTodoState extends State<AddTodo> {
                   ),
                 )
               : MaterialButton(
+                  minWidth: context.mediaQuery.size.width * 0.225,
+                  height: context.mediaQuery.size.height * 0.045,
                   onPressed: () async {
                     var todoAddDto = TestTodo(
                         uid: 'NULL',

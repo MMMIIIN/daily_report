@@ -67,7 +67,7 @@ class LoginPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
         decoration: BoxDecoration(
-          color: primaryColor.withOpacity(0.3),
+          border: Border.all(),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -84,16 +84,12 @@ class LoginPage extends StatelessWidget {
                   _loginController.setCheckEmail();
                 },
                 textInputAction: TextInputAction.next,
-                // autofocus: true,
                 onSubmitted: (_) =>
                     FocusScope.of(context).requestFocus(passwordFocus),
                 obscureText: false,
                 cursorColor: primaryColor,
                 controller: _loginController.emailController.value,
                 decoration: InputDecoration(
-                  errorText: _loginController.checkEmail.value
-                      ? null
-                      : '이메일 형식이 아닙니다.',
                   hintText: 'example@email.com',
                   hintStyle: TextStyle(
                     color: primaryColor,
@@ -103,6 +99,9 @@ class LoginPage extends StatelessWidget {
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent)
+                  )
                 ),
               ),
             ),
@@ -118,7 +117,7 @@ class LoginPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
         decoration: BoxDecoration(
-          color: primaryColor.withOpacity(0.3),
+          border: Border.all(),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -139,9 +138,6 @@ class LoginPage extends StatelessWidget {
                 cursorColor: primaryColor,
                 controller: _loginController.passwordController.value,
                 decoration: InputDecoration(
-                  errorText: _loginController.checkPassword.value
-                      ? null
-                      : '패스워드가 너무 짧습니다.',
                   hintText: '비밀번호',
                   hintStyle: TextStyle(
                     color: primaryColor,
@@ -151,6 +147,9 @@ class LoginPage extends StatelessWidget {
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent)
+                  )
                 ),
               ),
             ),
@@ -216,7 +215,6 @@ class LoginPage extends StatelessWidget {
                             ),
                             Text(
                               '해당 이메일로 비밀번호 재설정 메일이 발송됩니다.',
-                              // textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 15,
                                 color: primaryColor.withOpacity(0.5),
