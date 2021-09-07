@@ -79,6 +79,7 @@ class _ListPageState extends State<ListPage> {
             ),
             suffixIcon: _listController.searchTerm.value != ''
                 ? IconButton(
+                    splashRadius: 13,
                     icon: Icon(
                       Icons.cancel_outlined,
                       size: 20,

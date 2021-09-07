@@ -89,7 +89,7 @@ class _AddTodoState extends State<AddTodo> {
         showDialog(
           context: context,
           builder: (_) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 120),
+            padding: const EdgeInsets.symmetric(vertical: 100),
             child: Dialog(
               insetPadding: EdgeInsets.symmetric(horizontal: 15),
               child: Obx(
@@ -281,29 +281,44 @@ class _AddTodoState extends State<AddTodo> {
   Widget titleField() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: TextField(
-          style: TextStyle(color: isDarkMode ? Colors.black : primaryColor),
-          controller: _todoController.titleTextController.value,
-          cursorColor: isDarkMode ? Colors.black : primaryColor,
-          decoration: InputDecoration(
-            prefixIcon: Icon(Icons.title,
-                color: isDarkMode ? Colors.black : primaryColor),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-            ),
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: isDarkMode ? Colors.black : Colors.transparent)),
-            hintText: 'Title',
-            hintStyle: TextStyle(
-              color: isDarkMode ? Colors.black : primaryColor,
-              fontWeight: FontWeight.w300,
+      child: Obx(
+        () => Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            border: Border.all(),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: TextField(
+            onChanged: (text) {
+              _todoController.titleText(text);
+            },
+            style: TextStyle(color: isDarkMode ? Colors.black : primaryColor),
+            controller: _todoController.titleTextController.value,
+            cursorColor: isDarkMode ? Colors.black : primaryColor,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.title,
+                  color: isDarkMode ? Colors.black : primaryColor),
+              suffixIcon: _todoController.titleText.value.isEmpty
+                  ? null
+                  : IconButton(
+                      splashRadius: 16,
+                      icon: Icon(Icons.cancel_outlined),
+                      onPressed: () {
+                        _todoController.titleText('');
+                        _todoController.titleTextController.value.clear();
+                      },
+                    ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: isDarkMode ? Colors.black : Colors.transparent)),
+              hintText: 'Title',
+              hintStyle: TextStyle(
+                color: isDarkMode ? Colors.black : primaryColor,
+                fontWeight: FontWeight.w300,
+              ),
             ),
           ),
         ),
@@ -325,32 +340,47 @@ class _AddTodoState extends State<AddTodo> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextField(
-                          onChanged: (text) {
-                            _todoController.setMakeRuleTitle(text);
-                          },
-                          controller:
-                              _todoController.makeRuleTitleController.value,
-                          cursorColor: primaryColor,
-                          decoration: InputDecoration(
-                              prefixIcon: Icon(
-                                Icons.title,
-                                color: primaryColor,
-                              ),
-                              hintText: 'Title',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
+                      Obx(
+                        () => Container(
+                          padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextField(
+                            onChanged: (text) {
+                              _todoController.setMakeRuleTitle(text);
+                            },
+                            controller:
+                                _todoController.makeRuleTitleController.value,
+                            cursorColor: primaryColor,
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.title,
+                                  color: primaryColor,
+                                ),
+                                suffixIcon:
+                                    _todoController.makeRuleTitle.isEmpty
+                                        ? null
+                                        : IconButton(
+                                            splashRadius: 16,
+                                            icon: Icon(Icons.cancel_outlined),
+                                            onPressed: () {
+                                              _todoController
+                                                  .makeRuleTitleController.value
+                                                  .clear();
+                                              _todoController.makeRuleTitle('');
+                                            },
+                                          ),
+                                hintText: 'Title',
+                                enabledBorder: UnderlineInputBorder(
                                   borderSide:
-                                      BorderSide(color: Colors.transparent))),
+                                      BorderSide(color: Colors.transparent),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent))),
+                          ),
                         ),
                       ),
                       colorSelect(),
@@ -375,7 +405,7 @@ class _AddTodoState extends State<AddTodo> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Container(
-                                width: context.mediaQuery.size.width * 0.6,
+                                width: context.mediaQuery.size.width * 0.55,
                                 height: context.mediaQuery.size.height * 0.05,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
@@ -406,6 +436,9 @@ class _AddTodoState extends State<AddTodo> {
                         children: [
                           MaterialButton(
                             onPressed: () {
+                              _todoController.makeRuleTitle('');
+                              _todoController.makeRuleTitleController.value
+                                  .clear();
                               Get.back();
                             },
                             elevation: 0,
@@ -417,8 +450,6 @@ class _AddTodoState extends State<AddTodo> {
                           ),
                           MaterialButton(
                             onPressed: () async {
-                              _todoController.makeRuleTitleController.value
-                                  .clear();
                               await addTodoTitle(
                                 TodoTitle(
                                   title: _todoController.makeRuleTitle.value,
@@ -474,6 +505,9 @@ class _AddTodoState extends State<AddTodo> {
                               );
                               _todoController.titleTextController.value.text =
                                   _todoController.makeRuleTitle.value;
+                              _todoController.makeRuleTitle('');
+                              _todoController.makeRuleTitleController.value
+                                  .clear();
                             },
                             elevation: 0,
                             color: primaryColor.withOpacity(0.9),
@@ -802,9 +836,10 @@ class _AddTodoState extends State<AddTodo> {
                             _todoController.defaultTime.value.endTime.minute,
                         value: _todoController.defaultValue.value,
                         colorIndex: _todoController.selectColorIndex.value,
-                        hourMinute:
-                            '${_todoController.defaultValue.value.toInt() ~/ 60}h '
-                            '${_todoController.defaultValue.value.toInt() % 60}m');
+                        hourMinute: _todoController.defaultValue.value % 60 == 0
+                            ? '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
+                            : '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
+                                '${_todoController.defaultValue.value.toInt() % 60}분');
                     await updateFireStore(todoUpdateDto);
                     var todoIndex = _todoController.todoUidList.value.todoList
                         .indexWhere((element) => element.uid == widget.todoUid);
@@ -896,7 +931,7 @@ class _AddTodoState extends State<AddTodo> {
     return await showDialog(
       context: context,
       builder: (_) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 100),
+        padding: EdgeInsets.symmetric(vertical: 80),
         child: Dialog(
           child: Column(
             children: [

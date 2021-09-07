@@ -28,6 +28,7 @@ class TodoController extends GetxController {
   var memoController = TextEditingController().obs;
   final todoTitleList = <TodoTitle>[].obs;
   RxString currentUid = ''.obs;
+  RxString titleText = ''.obs;
   RxString makeRuleTitle = ''.obs;
   RxString memoText = ''.obs;
   RxBool checkBoxBool = false.obs;
