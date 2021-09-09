@@ -81,7 +81,7 @@ class _ListPageState extends State<ListPage> {
                 ? IconButton(
                     splashRadius: 13,
                     icon: Icon(
-                      Icons.cancel_outlined,
+                      IconsDB.cancle_outlined,
                       size: 20,
                       color: Colors.black,
                     ),

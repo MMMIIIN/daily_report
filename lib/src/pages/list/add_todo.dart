@@ -1,4 +1,5 @@
 import 'package:daily_report/color.dart';
+import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
@@ -302,7 +303,7 @@ class _AddTodoState extends State<AddTodo> {
                   ? null
                   : IconButton(
                       splashRadius: 16,
-                      icon: Icon(Icons.cancel_outlined),
+                      icon: Icon(IconsDB.cancle_outlined),
                       onPressed: () {
                         _todoController.titleText('');
                         _todoController.titleTextController.value.clear();
@@ -364,7 +365,10 @@ class _AddTodoState extends State<AddTodo> {
                                         ? null
                                         : IconButton(
                                             splashRadius: 16,
-                                            icon: Icon(Icons.cancel_outlined),
+                                            icon: Icon(IconsDB.cancle_outlined,
+                                            size: 20,
+                                            color: Colors.black,
+                                            ),
                                             onPressed: () {
                                               _todoController
                                                   .makeRuleTitleController.value

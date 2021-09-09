@@ -39,4 +39,5 @@ class IconsDB {
   static const IconData locked_outlined = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData locked_filled = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData mail_outlined = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData cancle_outlined = IconData(0xe812, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
