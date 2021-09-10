@@ -350,10 +350,6 @@ class SignUpPage extends StatelessWidget {
                     _signUpController.signupPassword.value,
                     _signUpController.signupName.value,
                     _signUpController.genderIndex.value)
-                .then((value) {
-                  _signUpController.intiDataSet();
-                Get.off(() => Home());
-              })
             : null;
       },
       child: Container(

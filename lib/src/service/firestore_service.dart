@@ -7,6 +7,7 @@ import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:daily_report/src/pages/login/controller/login_controller.dart';
 import 'package:daily_report/src/pages/login/login_page.dart';
+import 'package:daily_report/src/pages/signup/controller/signup_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ String currentTodoUid = '';
 final TodoController _todoController = Get.put(TodoController());
 final LoginController _loginController = Get.put(LoginController());
 final ListController _listController = Get.put(ListController());
+final SignUpController _signUpController = Get.put(SignUpController());
 
 Future<void> addTodoTitle(TodoTitle todoTitle) async {
   await FirebaseFirestore.instance
@@ -268,6 +270,8 @@ Future<void> firebaseAuthSignUp(
         'value': 60,
         'colorIndex': 0
       });
+      Get.off(() => Home());
+      _signUpController.intiDataSet();
     });
   } on FirebaseAuthException catch (e) {
     await Get.showSnackbar(GetBar(

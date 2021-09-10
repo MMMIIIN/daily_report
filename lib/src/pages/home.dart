@@ -43,6 +43,7 @@ class _HomeState extends State<Home> {
               if (snapshot.connectionState == ConnectionState.none) {
                 return Center(child: CircularProgressIndicator());
               } else {
+                _todoController.currentDateTime(DateTime.now());
                 _todoController.setCurrentIndex(DateTime.now());
                 return Scaffold(
                   resizeToAvoidBottomInset: false,
