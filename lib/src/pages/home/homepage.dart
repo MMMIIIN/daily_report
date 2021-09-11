@@ -51,9 +51,10 @@ class _HomePageState extends State<HomePage> {
   Widget showCalendar() {
     return Obx(
       () => TableCalendar(
+        rowHeight: 45,
         calendarBuilders: CalendarBuilders(
           selectedBuilder: (context, date, events) => Container(
-            margin: const EdgeInsets.all(4),
+            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: isDarkMode
@@ -170,7 +171,7 @@ class _HomePageState extends State<HomePage> {
     return GetBuilder<TodoController>(
       init: TodoController(),
       builder: (_) => Flexible(
-        flex: 3,
+        flex: 1,
         child: _todoController.currentIndexList.isNotEmpty
             ? PieChart(
                 PieChartData(
@@ -190,17 +191,13 @@ class _HomePageState extends State<HomePage> {
                   }),
                   startDegreeOffset: 270,
                   sectionsSpace: 4,
-                  centerSpaceRadius: 50,
+                  centerSpaceRadius: 35,
                   sections: List<PieChartSectionData>.generate(
                       _todoController.currentIndexList.length, (index) {
                     final isTouched = index == touchedIndex;
                     final radius = isTouched ? 80.0 : 60.0;
-                    final title = isTouched
-                        ? _todoController
-                            .currentUidList.value.todoList[index].title
-                        : '';
                     return PieChartSectionData(
-                      title: title,
+                      title: '${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(0)}%',
                       color: colorList[_todoController
                           .currentUidList.value.todoList[index].colorIndex],
                       value: _todoController
@@ -221,47 +218,48 @@ class _HomePageState extends State<HomePage> {
       builder: (_) => Flexible(
           flex: 1,
           child: _todoController.currentIndexList.isNotEmpty
-              ? GridView.builder(
+              ? ListView.builder(
                   itemCount: _todoController.currentIndexList.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 50,
-                    mainAxisExtent: 30,
-                  ),
                   itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            width: 16,
-                            height: 16,
+                            width: 18,
+                            height: 18,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: colorList[_todoController.currentUidList
                                     .value.todoList[index].colorIndex]),
                           ),
-                          SizedBox(width: 4),
-                          Row(
-                            children: [
-                              Text(
-                                _todoController
-                                    .currentUidList.value.todoList[index].title,
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              isPercentOrHour
-                                  ? Text(
-                                      ' ${_todoController.currentUidList.value.todoList[index].hourMinute}')
-                                  : Text(
-                                      ' ${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(1)} %',
-                                      style: TextStyle(fontSize: 13),
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                            ],
+                          SizedBox(width: 10),
+                          Container(
+                            width: context.mediaQuery.size.width * 0.8,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _todoController
+                                      .currentUidList.value.todoList[index].title,
+                                  style: TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                Flexible(
+                                  child: Text(_todoController.currentUidList.value.todoList[index].memoText,
+                                  overflow: TextOverflow.ellipsis,),
+                                ),
+                                isPercentOrHour
+                                    ? Text(
+                                        ' ${_todoController.currentUidList.value.todoList[index].hourMinute}')
+                                    : Text(
+                                        ' ${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(0)} %',
+                                        style: TextStyle(fontSize: 16),
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                              ],
+                            ),
                           ),
                         ],
                       ),
