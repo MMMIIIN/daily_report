@@ -14,6 +14,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
+final ChartController _chartController = Get.put(ChartController());
+final TodoController _todoController = Get.put(TodoController());
+final ListController _listController = Get.put(ListController());
+final SettingsController _settingsController = Get.put(SettingsController());
+
 class AddTodo extends StatefulWidget {
   String? todoUid;
   bool? editMode;
@@ -23,11 +28,6 @@ class AddTodo extends StatefulWidget {
   @override
   _AddTodoState createState() => _AddTodoState();
 }
-
-final ChartController _chartController = Get.put(ChartController());
-final TodoController _todoController = Get.put(TodoController());
-final ListController _listController = Get.put(ListController());
-final SettingsController _settingsController = Get.put(SettingsController());
 
 class _AddTodoState extends State<AddTodo> {
   bool isDarkMode = GetStorage().read('isDarkMode');
@@ -39,44 +39,30 @@ class _AddTodoState extends State<AddTodo> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Center(
-          child: Container(
-            height: context.mediaQuery.size.height * 0.85,
-            width: context.mediaQuery.size.width * 0.99,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                  color: isDarkMode ? darkPrimaryColor : primaryColor),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                selectOfDate(),
-                titleField(),
-                Obx(() => printTodo()),
-                makeRule(),
-                memoField(context),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Obx(
-                          () => Expanded(
-                            child: setTime(context),
-                          ),
-                        ),
-                      ],
+      child: SafeArea(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              selectOfDate(),
+              titleField(),
+              Obx(() => printTodo()),
+              makeRule(),
+              memoField(context),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Obx(
+                    () => Expanded(
+                      child: setTime(context),
                     ),
                   ),
-                ),
-                colorSelect(),
-                actionButton(context)
-              ],
-            ),
+                ],
+              ),
+              colorSelect(),
+              actionButton(context)
+            ],
           ),
         ),
       ),
@@ -280,46 +266,41 @@ class _AddTodoState extends State<AddTodo> {
   }
 
   Widget titleField() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Obx(
-        () => Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            border: Border.all(),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: TextField(
-            onChanged: (text) {
-              _todoController.titleText(text);
-            },
-            style: TextStyle(color: isDarkMode ? Colors.black : primaryColor),
-            controller: _todoController.titleTextController.value,
-            cursorColor: isDarkMode ? Colors.black : primaryColor,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.title,
-                  color: isDarkMode ? Colors.black : primaryColor),
-              suffixIcon: _todoController.titleText.value.isEmpty
-                  ? null
-                  : IconButton(
-                      splashRadius: 16,
-                      icon: Icon(IconsDB.cancle_outlined),
-                      onPressed: () {
-                        _todoController.titleText('');
-                        _todoController.titleTextController.value.clear();
-                      },
-                    ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: isDarkMode ? Colors.black : Colors.transparent)),
-              hintText: 'Title',
-              hintStyle: TextStyle(
-                color: isDarkMode ? Colors.black : primaryColor,
-                fontWeight: FontWeight.w300,
-              ),
+    return Obx(
+      () => Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black.withOpacity(0.7)),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: TextField(
+          onChanged: (text) {
+            _todoController.titleText(text);
+          },
+          style: TextStyle(color: Colors.black),
+          controller: _todoController.titleTextController.value,
+          cursorColor: isDarkMode ? Colors.black : primaryColor,
+          decoration: InputDecoration(
+            suffixIcon: _todoController.titleText.value.isEmpty
+                ? null
+                : IconButton(
+                    splashRadius: 16,
+                    icon: Icon(IconsDB.cancle_outlined),
+                    onPressed: () {
+                      _todoController.titleText('');
+                      _todoController.titleTextController.value.clear();
+                    },
+                  ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+            ),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color: isDarkMode ? Colors.black : Colors.transparent)),
+            hintText: 'ex) 회사',
+            hintStyle: TextStyle(
+              color: isDarkMode ? Colors.black : Colors.black.withOpacity(0.4),
+              fontWeight: FontWeight.w300,
             ),
           ),
         ),
@@ -365,9 +346,10 @@ class _AddTodoState extends State<AddTodo> {
                                         ? null
                                         : IconButton(
                                             splashRadius: 16,
-                                            icon: Icon(IconsDB.cancle_outlined,
-                                            size: 20,
-                                            color: Colors.black,
+                                            icon: Icon(
+                                              IconsDB.cancle_outlined,
+                                              size: 20,
+                                              color: Colors.black,
                                             ),
                                             onPressed: () {
                                               _todoController
@@ -507,8 +489,10 @@ class _AddTodoState extends State<AddTodo> {
                                     boolOfTime:
                                         _todoController.checkBoxBool.value),
                               );
+                              _todoController.sortTodoTitleList();
                               _todoController.titleTextController.value.text =
                                   _todoController.makeRuleTitle.value;
+                              _todoController.titleText(_todoController.makeRuleTitle.value);
                               _todoController.makeRuleTitle('');
                               _todoController.makeRuleTitleController.value
                                   .clear();
@@ -534,152 +518,148 @@ class _AddTodoState extends State<AddTodo> {
 
   Widget printTodo() {
     return Container(
-      // height: context.mediaQuery.size.height * 0.15,
-      // color: Colors.red.withOpacity(0.5),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: GridView.builder(
-          shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 50,
-            mainAxisExtent: 30,
-          ),
-          itemCount: _todoController.todoTitleList.length,
-          itemBuilder: (context, index) {
-            return Align(
-              alignment: Alignment.topCenter,
-              child: InkWell(
-                onTap: () {
-                  _todoController.titleTextController.value.text =
-                      _todoController.todoTitleList[index].title;
-                  _todoController.selectColorIndex(
-                      _todoController.todoTitleList[index].titleColor);
-                  _todoController.todoTitleList[index].boolOfTime
-                      ? _todoController.setTime(
-                          TimeRange(
-                            startTime: TimeOfDay(
-                              hour: _todoController.todoTitleList[index]
-                                  .timeRange!.startTime.hour,
-                              minute: _todoController.todoTitleList[index]
-                                  .timeRange!.startTime.minute,
-                            ),
-                            endTime: TimeOfDay(
-                              hour: _todoController
-                                  .todoTitleList[index].timeRange!.endTime.hour,
-                              minute: _todoController.todoTitleList[index]
-                                  .timeRange!.endTime.minute,
-                            ),
-                          ),
-                        )
-                      : null;
-                  _todoController.todoTitleList[index].boolOfTime
-                      ? _todoController.defaultValue(
-                          _todoController.getValue(DateTime.now(),
-                              _todoController.todoTitleList[index].timeRange!),
-                        )
-                      : null;
-                },
-                onLongPress: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: Row(
-                        children: [
-                          Container(
-                            width: 16,
-                            height: 16,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: colorList[_todoController
-                                  .todoTitleList[index].titleColor],
-                            ),
-                          ),
-                          Flexible(
-                            child: Text(
-                              ' ${_todoController.todoTitleList[index].title}',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
+      height: context.mediaQuery.size.height * 0.2,
+      child: ListView.builder(
+        itemCount: _todoController.todoTitleList.length,
+        itemBuilder: (context, index) {
+          return InkWell(
+            onTap: () {
+              _todoController.titleTextController.value.text =
+                  _todoController.todoTitleList[index].title;
+              _todoController
+                  .titleText(_todoController.todoTitleList[index].title);
+              _todoController.selectColorIndex(
+                  _todoController.todoTitleList[index].titleColor);
+              _todoController.todoTitleList[index].boolOfTime
+                  ? _todoController.setTime(
+                      TimeRange(
+                        startTime: TimeOfDay(
+                          hour: _todoController
+                              .todoTitleList[index].timeRange!.startTime.hour,
+                          minute: _todoController
+                              .todoTitleList[index].timeRange!.startTime.minute,
+                        ),
+                        endTime: TimeOfDay(
+                          hour: _todoController
+                              .todoTitleList[index].timeRange!.endTime.hour,
+                          minute: _todoController
+                              .todoTitleList[index].timeRange!.endTime.minute,
+                        ),
                       ),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          MaterialButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            elevation: 0,
-                            color: primaryColor.withOpacity(0.4),
-                            child: Text(
-                              '취소',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          MaterialButton(
-                            onPressed: () {
-                              deleteTodoTitle(
-                                  _todoController.todoTitleList[index].uid);
-                              _todoController.todoTitleList.removeWhere(
-                                  (element) =>
-                                      element.uid ==
-                                      _todoController.todoTitleList[index].uid);
-                              Get.back();
-                            },
-                            elevation: 0,
-                            color: primaryColor,
-                            child: Text(
-                              '규칙 삭제',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-                customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                child: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    )
+                  : null;
+              _todoController.todoTitleList[index].boolOfTime
+                  ? _todoController.defaultValue(
+                      _todoController.getValue(DateTime.now(),
+                          _todoController.todoTitleList[index].timeRange!),
+                    )
+                  : null;
+            },
+            onLongPress: () {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Row(
                     children: [
                       Container(
                         width: 16,
                         height: 16,
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: colorList[_todoController
-                                .todoTitleList[index].titleColor]),
+                          shape: BoxShape.circle,
+                          color: colorList[
+                              _todoController.todoTitleList[index].titleColor],
+                        ),
                       ),
                       Flexible(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
+                        child: Text(
+                          ' ${_todoController.todoTitleList[index].title}',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        elevation: 0,
+                        color: primaryColor.withOpacity(0.4),
+                        child: Text(
+                          '취소',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          deleteTodoTitle(
+                              _todoController.todoTitleList[index].uid);
+                          _todoController.todoTitleList.removeWhere((element) =>
+                              element.uid ==
+                              _todoController.todoTitleList[index].uid);
+                          Get.back();
+                        },
+                        elevation: 0,
+                        color: primaryColor,
+                        child: Text(
+                          '규칙 삭제',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            customBorder:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: colorList[_todoController
+                                  .todoTitleList[index].titleColor]),
+                        ),
+                        Container(
+                          width: context.mediaQuery.size.width * 0.50,
                           child: Text(
                             ' ${_todoController.todoTitleList[index].title}',
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                    Text('${_todoController.todoTitleList[index].boolOfTime ? '${_todoController.todoTitleList[index].timeRange!.startTime.hour} : '
+                        '${_todoController.todoTitleList[index].timeRange!.startTime.minute}  - '
+                        '${_todoController.todoTitleList[index].timeRange!.endTime.hour} : '
+                        '${_todoController.todoTitleList[index].timeRange!.endTime.minute}' : ''}'),
+                  ],
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
   Widget memoField(BuildContext context) {
     return Container(
-      width: context.mediaQuery.size.width * 0.85,
       decoration: BoxDecoration(
-        border: Border.all(),
-        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.black.withOpacity(0.7)),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -735,7 +715,7 @@ class _AddTodoState extends State<AddTodo> {
               ],
             ),
             Text(
-              '~',
+              '-',
               style: TextStyle(
                   color: isDarkMode ? Colors.black : Colors.white,
                   fontSize: 20),
@@ -805,7 +785,7 @@ class _AddTodoState extends State<AddTodo> {
             onPressed: () {
               _todoController.titleTextController.value.clear();
               _todoController.clearMemoController();
-              Get.back();
+              Get.off(Home(), transition: Transition.leftToRight);
             },
             color: isDarkMode
                 ? darkPrimaryColor.withOpacity(0.8)
@@ -870,6 +850,7 @@ class _AddTodoState extends State<AddTodo> {
                           .ymd = todoUpdateDto.ymd;
                       _chartController.makeRangeDate();
                       _todoController.clearMemoController();
+                      _todoController.initHome(_todoController.currentDateTime.value);
                       await Get.off(() => Home());
                     }
                   },
@@ -913,6 +894,7 @@ class _AddTodoState extends State<AddTodo> {
                     await _listController.initSearchResult();
                     _listController.searchTitle('');
                     _todoController.clearMemoController();
+                    _todoController.initHome(_todoController.currentDateTime.value);
                     await Get.offAll(() => Home());
                   },
                   color: isDarkMode ? darkPrimaryColor : primaryColor,
@@ -983,7 +965,7 @@ class _AddTodoState extends State<AddTodo> {
                 children: [
                   MaterialButton(
                     onPressed: () {
-                      Get.back();
+                      // Get.back(closeOverlays: true);
                     },
                     elevation: 0,
                     color: primaryColor.withOpacity(0.4),
