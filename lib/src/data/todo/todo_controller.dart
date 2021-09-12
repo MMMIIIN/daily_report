@@ -200,6 +200,7 @@ class TodoController extends GetxController {
 
   Future<void> initTodoTitleList() async {
     todoTitleList.addAll(await getTodoTitleData());
+    sortTodoTitleList();
   }
 
   void initCheckBoxBool() {
@@ -242,6 +243,15 @@ class TodoController extends GetxController {
   void clearMemoController() {
     memoText('');
     memoController.value.clear();
+  }
+
+  void sortTodoTitleList() {
+    todoTitleList.sort((a, b) => a.titleColor.compareTo(b.titleColor));
+  }
+
+  void initHome(DateTime dateTime) {
+    currentDateTime(dateTime);
+    setCurrentIndex(dateTime);
   }
 
   @override

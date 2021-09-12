@@ -26,8 +26,7 @@ class _HomePageState extends State<HomePage> {
     if (!isSameDay(_selectedDay, selectedDay)) {
       setState(() {
         _selectedDay = selectedDay;
-        _todoController.setCurrentIndex(_selectedDay);
-        _todoController.currentDateTime(_selectedDay);
+        _todoController.initHome(_selectedDay);
         _todoController.selectDateTime(_selectedDay);
       });
     }
@@ -168,11 +167,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget showChart() {
-    return GetBuilder<TodoController>(
-      init: TodoController(),
-      builder: (_) => Flexible(
-        flex: 1,
-        child: _todoController.currentIndexList.isNotEmpty
+    return Flexible(
+      child: GetBuilder<TodoController>(
+        init: TodoController(),
+        builder: (_) => _todoController.currentIndexList.isNotEmpty
             ? PieChart(
                 PieChartData(
                   pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
@@ -214,59 +212,69 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget showChartList() {
-    return GetBuilder<TodoController>(
-      builder: (_) => Flexible(
-          flex: 1,
-          child: _todoController.currentIndexList.isNotEmpty
-              ? ListView.builder(
-                  itemCount: _todoController.currentIndexList.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 18,
-                            height: 18,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: colorList[_todoController.currentUidList
-                                    .value.todoList[index].colorIndex]),
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            width: context.mediaQuery.size.width * 0.8,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
+    return Flexible(
+      child: GetBuilder<TodoController>(
+        builder: (_) => _todoController.currentIndexList.isNotEmpty
+            ? ListView.builder(
+                itemCount: _todoController.currentIndexList.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 18,
+                          height: 18,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: colorList[_todoController.currentUidList
+                                  .value.todoList[index].colorIndex]),
+                        ),
+                        SizedBox(width: 10),
+                        Container(
+                          width: context.mediaQuery.size.width * 0.8,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: context.mediaQuery.size.width * 0.3,
+                                child: Text(
                                   _todoController
                                       .currentUidList.value.todoList[index].title,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
-                                Flexible(
-                                  child: Text(_todoController.currentUidList.value.todoList[index].memoText,
-                                  overflow: TextOverflow.ellipsis,),
-                                ),
-                                isPercentOrHour
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                width: context.mediaQuery.size.width * 0.3,
+                                child: Text(_todoController.currentUidList.value.todoList[index].memoText,
+                                overflow: TextOverflow.ellipsis,),
+                              ),
+                              Container(
+                                alignment: Alignment.topRight,
+                                width: context.mediaQuery.size.width * 0.2,
+                                child: isPercentOrHour
                                     ? Text(
                                         ' ${_todoController.currentUidList.value.todoList[index].hourMinute}')
                                     : Text(
                                         ' ${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(0)} %',
                                         style: TextStyle(fontSize: 16),
                                         overflow: TextOverflow.ellipsis,
-                                      )
-                              ],
-                            ),
+                                      ),
+                              )
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                )
-              : Container()),
+                ),
+              )
+            : Container(),
+      ),
     );
   }
 }
