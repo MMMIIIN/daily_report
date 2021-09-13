@@ -229,6 +229,7 @@ class _ListPageState extends State<ListPage> {
   }
 
   Widget showListView() {
+    print(_listController.searchTodoList.value.todoList.isEmpty);
     return Expanded(
       child: ListView.builder(
         itemCount: _listController.searchTodoList.value.todoList.isEmpty
@@ -294,12 +295,13 @@ class _ListPageState extends State<ListPage> {
                 _todoController.setTime(
                   currentTimeRange,
                 );
-                _todoController.currentDateTime(currentDateTime);
+                // _todoController.currentDateTime(currentDateTime);
+                _todoController.initHome(currentDateTime);
                 todoDialog(context, currentTitle, memoTitle, currentDateTime,
                     currentTimeRange, currentColorIndex, todoUid);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                // padding: EdgeInsets.symmetric(horizontal: 10),
                 width: context.mediaQuery.size.width * 0.8,
                 height: context.mediaQuery.size.height * 0.05,
                 decoration: BoxDecoration(
@@ -357,18 +359,20 @@ class _ListPageState extends State<ListPage> {
                             ),
                           )
                         : Container(
-                            width: context.mediaQuery.size.width * 0.31,
+                            width: context.mediaQuery.size.width * 0.4,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${currentTimeRange.startTime.hour.toString().length < 2 ? '0${currentTimeRange.startTime.hour} : ' : '${currentTimeRange.startTime.hour} : '}'
+                                  '${currentTimeRange.startTime.hour < 12 ? '오전' : '오후'} '
+                                  '${currentTimeRange.startTime.hour < 13 ? '${currentTimeRange.startTime.hour < 10 ? '0${currentTimeRange.startTime.hour} : ' : '${currentTimeRange.startTime.hour} : '}' : '${currentTimeRange.startTime.hour - 12 < 10 ? '0${currentTimeRange.startTime.hour - 12}' : '${currentTimeRange.startTime.hour - 12}'} : '}'
                                   '${currentTimeRange.startTime.minute.toString() == '0' ? '00' : currentTimeRange.startTime.minute}',
                                   style: TextStyle(fontSize: 14),
                                 ),
-                                SizedBox(width: 20),
+                                SizedBox(width: 10),
                                 Text(
-                                  '${currentTimeRange.endTime.hour.toString().length < 2 ? '0${currentTimeRange.endTime.hour} : ' : '${currentTimeRange.endTime.hour} : '}'
+                                  '${currentTimeRange.endTime.hour < 12 ? '오전' : '오후'} '
+                                  '${currentTimeRange.endTime.hour < 13 ? '${currentTimeRange.endTime.hour < 10 ? '0${currentTimeRange.endTime.hour} : ' : '${currentTimeRange.endTime.hour} : '}' : '${currentTimeRange.endTime.hour - 12 < 10 ? '0${currentTimeRange.endTime.hour - 12}' : '${currentTimeRange.endTime.hour - 12}'} : '}'
                                   '${currentTimeRange.endTime.minute.toString() == '0' ? '00' : currentTimeRange.endTime.minute}',
                                   style: TextStyle(fontSize: 14),
                                 ),
