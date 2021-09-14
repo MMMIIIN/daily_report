@@ -7,6 +7,7 @@ class SettingsController extends GetxController {
   RxInt isTimePickerTimeIndex = 1.obs;
   RxInt timePickerOfInterval = 10.obs;
   RxInt listPageIndex = 0.obs;
+  RxInt selectPrimaryColorIndex = 0.obs;
 
   void setDarkModeIndex(int index) {
     isDarkModeIndex(index);
@@ -103,6 +104,10 @@ class SettingsController extends GetxController {
       isTimePickerTimeIndex(interval);
       setTimePickerTimeIndex(isTimePickerTimeIndex.value);
     }
+  }
+
+  void setPrimaryColorIndex(int selectIndex) {
+    selectPrimaryColorIndex(selectIndex);
   }
 
   @override

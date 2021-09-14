@@ -9,6 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final TodoController _todoController = Get.put(TodoController());
+final SettingsController _settingsController = Get.put(SettingsController());
 
 class HomePage extends StatefulWidget {
   @override
@@ -58,7 +59,8 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
                 color: isDarkMode
                     ? Color(0xff95afc0)
-                    : primaryColor.withOpacity(0.9),
+                    : colorList[_settingsController
+                    .selectPrimaryColorIndex.value].withOpacity(0.9),
                 borderRadius: BorderRadius.circular(10)),
             child: date.year == DateTime.now().year &&
                     date.month == DateTime.now().month &&
@@ -117,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                   height: 7,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: isDarkMode ? Colors.white : Color(0xff212529)),
+                      color: isDarkMode ? Colors.white : markerColor),
                 ),
               );
             }

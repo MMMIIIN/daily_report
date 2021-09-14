@@ -63,8 +63,8 @@ class _ListPageState extends State<ListPage> {
             _listController.selectedDays.clear();
           }
         },
-        cursorColor: primaryColor,
-        style: TextStyle(color: primaryColor),
+        cursorColor: context.theme.primaryColor,
+        style: TextStyle(color: context.theme.primaryColor),
         controller: _listController.searchTitleController.value,
         decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(
@@ -75,7 +75,7 @@ class _ListPageState extends State<ListPage> {
             ),
             prefixIcon: Icon(
               Icons.search,
-              color: primaryColor,
+              color: Colors.black,
             ),
             suffixIcon: _listController.searchTerm.value != ''
                 ? IconButton(
@@ -93,7 +93,7 @@ class _ListPageState extends State<ListPage> {
                   )
                 : null,
             hintText: '검색',
-            hintStyle: TextStyle(color: primaryColor)),
+            hintStyle: TextStyle(color: Colors.black)),
       ),
     );
   }
@@ -107,7 +107,7 @@ class _ListPageState extends State<ListPage> {
           decoration: BoxDecoration(
               color: isDarkMode
                   ? Color(0xff95afc0)
-                  : primaryColor.withOpacity(0.9),
+                  : context.theme.primaryColor.withOpacity(0.9),
               borderRadius: BorderRadius.circular(10)),
           child: date.year == DateTime.now().year &&
                   date.month == DateTime.now().month &&
@@ -455,14 +455,15 @@ class _ListPageState extends State<ListPage> {
                             actions: [
                               MaterialButton(
                                 elevation: 0.0,
-                                color: primaryColor.withOpacity(0.4),
+                                color:
+                                    context.theme.primaryColor.withOpacity(0.4),
                                 onPressed: () {
                                   Get.back();
                                 },
                                 child: Text('취소'),
                               ),
                               MaterialButton(
-                                color: primaryColor,
+                                color: context.theme.primaryColor,
                                 onPressed: () async {
                                   _todoController.todoDelete(todoUid);
                                   await todoFirebaseDelete(todoUid)
@@ -542,26 +543,34 @@ class _ListPageState extends State<ListPage> {
           actions: [
             MaterialButton(
               elevation: 0.0,
-              color: primaryColor.withOpacity(0.4),
+              color: context.theme.primaryColor.withOpacity(0.4),
               onPressed: () {
                 Get.back();
               },
-              child: Text('취소'),
+              child: Text(
+                '취소',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
             MaterialButton(
               elevation: 0,
-              color: primaryColor,
+              color: context.theme.primaryColor,
               onPressed: () {
                 _todoController.titleTextController.value.text = title;
                 _todoController.selectColorIndex(colorIndex);
                 _todoController.memoText(memoTitle);
                 _todoController.memoController.value.text = memoTitle;
-                Get.off(() => AddTodo(
-                      editMode: true,
-                      todoUid: todoUid,
-                    ));
+                Get.off(
+                  () => AddTodo(
+                    editMode: true,
+                    todoUid: todoUid,
+                  ),
+                );
               },
-              child: Text('수정'),
+              child: Text(
+                '수정',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         );

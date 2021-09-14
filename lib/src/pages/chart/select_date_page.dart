@@ -53,7 +53,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: isDarkMode ? darkSelectColor : primaryColor,
+              color: isDarkMode ? darkSelectColor : context.theme.primaryColor,
               borderRadius: BorderRadius.circular(10)),
           child: date.year == DateTime.now().year &&
               date.month == DateTime.now().month &&
@@ -89,7 +89,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: isDarkMode ? darkSelectColor : primaryColor,
+              color: isDarkMode ? darkSelectColor : context.theme.primaryColor,
               borderRadius: BorderRadius.circular(10)),
           child: date.year == DateTime.now().year &&
               date.month == DateTime.now().month &&
@@ -130,7 +130,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
             decoration: BoxDecoration(
               color: isDarkMode
                   ? (_ ? darkSelectColor.withOpacity(0.85) : null)
-                  : (_ ? primaryColor.withOpacity(0.8) : null),
+                  : (_ ? context.theme.primaryColor.withOpacity(0.8) : null),
             ),
           ),
         ),
@@ -226,7 +226,8 @@ class _SelectDatePageState extends State<SelectDatePage> {
             onPressed: () {
               Get.offAll(() => Home(), transition: Transition.leftToRight);
             },
-            color: Color(0xff95afc0),
+            elevation: 0,
+            color: context.theme.primaryColor.withOpacity(0.4),
             child: Text(
               '취소',
               style: TextStyle(color: Colors.white),
@@ -238,8 +239,9 @@ class _SelectDatePageState extends State<SelectDatePage> {
               Get.offAll(() => Home(), transition: Transition.leftToRight);
             }
           },
+          elevation: 0,
           color: _selectDateController.rangeBool.value
-              ? primaryColor
+              ? context.theme.primaryColor
               : Color(0xffecf0f1),
           child: Text(
             '확인',

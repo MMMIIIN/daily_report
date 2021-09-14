@@ -2,6 +2,7 @@ import 'package:daily_report/color.dart';
 import 'package:daily_report/src/binding/init_binding.dart';
 import 'package:daily_report/src/pages/app.dart';
 import 'package:daily_report/src/pages/chart/chart_page.dart';
+import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,8 @@ void main() async {
   runApp(MyApp());
 }
 
+final SettingsController _settingsController = Get.put(SettingsController());
+
 class MyApp extends StatelessWidget {
   final appdata = GetStorage();
 
@@ -25,26 +28,30 @@ class MyApp extends StatelessWidget {
     appdata.writeIfNull('isDarkMode', false);
     return SimpleBuilder(builder: (_) {
       bool isDarkMode = appdata.read('isDarkMode');
-      return GetMaterialApp(
-        // debugShowCheckedModeBanner: false,
-        title: 'Daily Report',
-        darkTheme: ThemeData(brightness: Brightness.dark, fontFamily: 'Hyemin'),
-        theme: ThemeData(
-            primaryColor: primaryColor,
-            fontFamily: 'Hyemin'),
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [const Locale('ko', 'KR')],
-        themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-        initialRoute: '/',
-        initialBinding: InitBinding(),
-        getPages: [
-          GetPage(name: '/', page: () => App()),
-          GetPage(name: 'chart', page: () => ChartPage()),
-        ],
+      return Obx(
+        () => GetMaterialApp(
+          // debugShowCheckedModeBanner: false,
+          title: 'Daily Report',
+          darkTheme:
+              ThemeData(brightness: Brightness.dark, fontFamily: 'Hyemin'),
+          theme: ThemeData(
+              primaryColor:
+                  colorList[_settingsController.selectPrimaryColorIndex.value],
+              fontFamily: 'Hyemin'),
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [const Locale('ko', 'KR')],
+          themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          initialRoute: '/',
+          initialBinding: InitBinding(),
+          getPages: [
+            GetPage(name: '/', page: () => App()),
+            GetPage(name: 'chart', page: () => ChartPage()),
+          ],
+        ),
       );
     });
   }

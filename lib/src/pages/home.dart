@@ -7,6 +7,7 @@ import 'package:daily_report/src/pages/home/homepage.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/list/list_page.dart';
 import 'package:daily_report/src/pages/login/login_page.dart';
+import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:daily_report/src/pages/settings/settings_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class Home extends StatefulWidget {
 }
 
 final HomeController _homeController = Get.put(HomeController());
-final TodoController _todoController = Get.put(TodoController());
+final SettingsController _settingsController = Get.put(SettingsController());
 
 class _HomeState extends State<Home> {
   bool isDarkMode = GetStorage().read('isDarkMode') ?? false;
@@ -43,8 +44,6 @@ class _HomeState extends State<Home> {
               if (snapshot.connectionState == ConnectionState.none) {
                 return Center(child: CircularProgressIndicator());
               } else {
-                _todoController.currentDateTime(DateTime.now());
-                _todoController.setCurrentIndex(DateTime.now());
                 return Scaffold(
                   resizeToAvoidBottomInset: false,
                   body: Obx(() {
@@ -67,15 +66,17 @@ class _HomeState extends State<Home> {
                     padding: const EdgeInsets.all(4.0),
                     child: GestureDetector(
                       onTap: () {
-                        Get.to(() => AddTodo(), transition: Transition.fade);
+                        Get.off(() => AddTodo(), transition: Transition.fade);
                       },
                       child: Container(
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color:
-                                isDarkMode ? darkPrimaryColor : primaryColor),
+                            color: isDarkMode
+                                ? darkPrimaryColor
+                                : colorList[_settingsController
+                                    .selectPrimaryColorIndex.value]),
                         child: Icon(
                           Icons.add,
                           color: isDarkMode ? Colors.black : Colors.white,
@@ -160,7 +161,8 @@ class _HomeState extends State<Home> {
                     ? IconsDB.home_filled
                     : IconsDB.home_outlined,
                 size: 22,
-                color: primaryColor,
+                color: colorList[_settingsController
+                    .selectPrimaryColorIndex.value],
               ),
               onPressed: () {
                 _homeController.changeTapMenu(0);
@@ -174,7 +176,8 @@ class _HomeState extends State<Home> {
                     ? IconsDB.menu_filled
                     : IconsDB.menu_outlined,
                 size: 24,
-                color: primaryColor,
+                color: colorList[_settingsController
+                    .selectPrimaryColorIndex.value],
               ),
               onPressed: () {
                 _homeController.changeTapMenu(1);
@@ -188,7 +191,8 @@ class _HomeState extends State<Home> {
                     ? IconsDB.pie_chart_filled
                     : IconsDB.pie_chart_outlined,
                 size: 24,
-                color: primaryColor,
+                color: colorList[_settingsController
+                    .selectPrimaryColorIndex.value],
               ),
               onPressed: () {
                 _homeController.changeTapMenu(2);
@@ -202,7 +206,8 @@ class _HomeState extends State<Home> {
                     ? IconsDB.settings_filled
                     : IconsDB.settings_outlined,
                 size: 24,
-                color: primaryColor,
+                color: colorList[_settingsController
+                    .selectPrimaryColorIndex.value],
               ),
               onPressed: () {
                 _homeController.changeTapMenu(3);

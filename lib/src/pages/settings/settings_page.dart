@@ -2,6 +2,7 @@ import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/pages/login/login_page.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
+import 'package:daily_report/src/pages/settings/select_primary_color_page.dart';
 import 'package:daily_report/src/pages/signup/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 showPercentOrHour(),
                 listPageSelect(),
                 timePickerOfTime(),
+                selectPrimaryColor(),
                 logoutButton(),
                 MaterialButton(
                   onPressed: () {
@@ -44,7 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   onPressed: () {
                     Get.to(() => SignUpPage());
                   },
-                  color: Colors.deepPurpleAccent,
+                  color: context.theme.primaryColor,
                 ),
                 MaterialButton(
                   onPressed: () {
@@ -68,11 +70,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Text(
                     '오픈소스 라이센스',
                     style: TextStyle(
-                      fontSize: 15,
-                      decoration: TextDecoration.underline,
-                      decorationColor: primaryColor,
-                      decorationStyle: TextDecorationStyle.double
-                    ),
+                        fontSize: 15,
+                        decoration: TextDecoration.underline,
+                        decorationColor: primaryColor,
+                        decorationStyle: TextDecorationStyle.double),
                   ),
                 ),
                 SizedBox(height: 50)
@@ -89,7 +90,7 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Icon(
           IconsDB.user_man_circle_outlined,
-          color: isDarkMode ? Colors.white : primaryColor,
+          color: isDarkMode ? Colors.white : Colors.black,
         ),
         Text(
           '  ${FirebaseAuth.instance.currentUser!.email}',
@@ -117,8 +118,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
             inactiveBgColor: isDarkMode
                 ? primaryColor.withOpacity(0.7)
-                : primaryColor.withOpacity(0.2),
-            activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
+                : context.theme.primaryColor.withOpacity(0.2),
+            activeBgColor: [isDarkMode ? darkPrimaryColor : context.theme.primaryColor],
             initialLabelIndex: _settingsController.isDarkModeIndex.value,
             onToggle: (index) {
               _settingsController.setDarkModeIndex(index);
@@ -143,8 +144,8 @@ class _SettingsPageState extends State<SettingsPage> {
             labels: ['%', '분'],
             inactiveBgColor: isDarkMode
                 ? primaryColor.withOpacity(0.7)
-                : primaryColor.withOpacity(0.2),
-            activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
+                : context.theme.primaryColor.withOpacity(0.2),
+            activeBgColor: [isDarkMode ? darkPrimaryColor : context.theme.primaryColor],
             initialLabelIndex: _settingsController.isPercentOrHourIndex.value,
             onToggle: (index) {
               _settingsController.setPercentOrHourIndex(index);
@@ -177,13 +178,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 TextStyle(
                     fontSize: 14,
                     color: _settingsController.listPageIndex.value == 0
-                        ? primaryColor
+                        ? Colors.black
                         : Colors.white),
               ],
               inactiveBgColor: isDarkMode
                   ? primaryColor.withOpacity(0.7)
-                  : primaryColor.withOpacity(0.2),
-              activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
+                  : context.theme.primaryColor.withOpacity(0.2),
+              activeBgColor: [isDarkMode ? darkPrimaryColor : context.theme.primaryColor],
               initialLabelIndex: _settingsController.listPageIndex.value,
               onToggle: (index) {
                 _settingsController.setListPageIndex(index);
@@ -207,14 +208,40 @@ class _SettingsPageState extends State<SettingsPage> {
             minHeight: 25,
             totalSwitches: 5,
             labels: ['5m', '10m', '15m', '20m', '30m'],
-            activeBgColor: [isDarkMode ? darkPrimaryColor : primaryColor],
+            activeBgColor: [isDarkMode ? darkPrimaryColor : context.theme.primaryColor],
             inactiveBgColor: isDarkMode
                 ? primaryColor.withOpacity(0.7)
-                : primaryColor.withOpacity(0.2),
+                : context.theme.primaryColor.withOpacity(0.2),
             initialLabelIndex: _settingsController.isTimePickerTimeIndex.value,
             onToggle: (index) {
               _settingsController.setTimePickerTimeIndex(index);
             },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget selectPrimaryColor() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('테마 컬러 선택'),
+          GestureDetector(
+            onTap: () {
+              Get.off(() => SelectPrimaryColorPage());
+            },
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: colorList[_settingsController
+                    .selectPrimaryColorIndex.value],
+                borderRadius: BorderRadius.circular(10)
+              ),
+            ),
           )
         ],
       ),
@@ -236,7 +263,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       Get.back();
                     },
                     elevation: 0.0,
-                    color: primaryColor.withOpacity(0.4),
+                    color: context.theme.primaryColor.withOpacity(0.4),
                     child: Text('취소'),
                   ),
                   MaterialButton(
@@ -245,14 +272,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       Get.back();
                     },
                     elevation: 0.0,
-                    color: primaryColor,
+                    color: context.theme.primaryColor,
                     child: Text('확인'),
                   ),
                 ],
               );
             });
       },
-      color: primaryColor,
+      color: context.theme.primaryColor,
       child: Text(
         'logOut',
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),

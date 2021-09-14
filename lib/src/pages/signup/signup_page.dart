@@ -1,6 +1,5 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
-import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/signup/controller/signup_controller.dart';
 import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class SignUpPage extends StatelessWidget {
               child: Text(
                 '<',
                 style: TextStyle(
-                    color: primaryColor,
+                    color: context.theme.primaryColor,
                     fontSize: 25,
                     fontWeight: FontWeight.bold),
               ),
@@ -47,7 +46,7 @@ class SignUpPage extends StatelessWidget {
             () => SingleChildScrollView(
               child: Column(
                 children: [
-                  customImage(),
+                  customImage(context),
                   SizedBox(
                     height: context.mediaQuery.size.height * 0.03,
                   ),
@@ -55,7 +54,7 @@ class SignUpPage extends StatelessWidget {
                   signupEmailField(context),
                   signupPasswordField(context),
                   passwordCheckField(context),
-                  genderSwitch(),
+                  genderSwitch(context),
                   SizedBox(
                     height: context.mediaQuery.size.height * 0.05,
                   ),
@@ -69,12 +68,12 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  Widget customImage() {
+  Widget customImage(BuildContext context) {
     return Container(
       width: 180,
       height: 180,
       decoration: BoxDecoration(
-          color: primaryColor.withOpacity(0.8), shape: BoxShape.circle),
+          color: context.theme.primaryColor.withOpacity(0.8), shape: BoxShape.circle),
       child: Center(
         child: Text(
           'Daily Report',
@@ -116,12 +115,12 @@ class SignUpPage extends StatelessWidget {
                     FocusScope.of(context).requestFocus(emailFocus),
                 autofocus: true,
                 controller: _signUpController.signupNameController.value,
-                cursorColor: primaryColor,
+                cursorColor: Colors.black,
                 decoration: InputDecoration(
                   focusColor: Colors.red,
                   hintText: '이름',
                   hintStyle: TextStyle(
-                    color: primaryColor,
+                    color: Colors.black.withOpacity(0.4),
                     fontSize: 15,
                   ),
                   enabledBorder: UnderlineInputBorder(
@@ -168,7 +167,7 @@ class SignUpPage extends StatelessWidget {
                 onSubmitted: (_) =>
                     FocusScope.of(context).requestFocus(passwordFocus),
                 obscureText: false,
-                cursorColor: primaryColor,
+                cursorColor: Colors.black,
                 controller: _signUpController.signupEmailController.value,
                 decoration: InputDecoration(
                   errorText: _signUpController.checkEmail.value ||
@@ -177,10 +176,9 @@ class SignUpPage extends StatelessWidget {
                       : '이메일 형식이 아닙니다.',
                   hintText: 'example@email.com',
                   hintStyle: TextStyle(
-                    color: primaryColor,
+                    color: Colors.black.withOpacity(0.4),
                     fontSize: 16,
                   ),
-                  focusColor: primaryColor,
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
@@ -225,7 +223,7 @@ class SignUpPage extends StatelessWidget {
                 onSubmitted: (_) =>
                     FocusScope.of(context).requestFocus(passwordCheckFocus),
                 obscureText: true,
-                cursorColor: primaryColor,
+                cursorColor: Colors.black,
                 controller: _signUpController.signupPasswordController.value,
                 decoration: InputDecoration(
                   errorText: _signUpController.checkPassword.value ||
@@ -234,10 +232,9 @@ class SignUpPage extends StatelessWidget {
                       : '비밀번호가 너무 짧습니다.',
                   hintText: '비밀번호',
                   hintStyle: TextStyle(
-                    color: primaryColor,
+                    color: Colors.black.withOpacity(0.4),
                     fontSize: 15,
                   ),
-                  focusColor: primaryColor,
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
@@ -282,11 +279,11 @@ class SignUpPage extends StatelessWidget {
                 textInputAction: TextInputAction.done,
                 onSubmitted: (_) => FocusScope.of(context).unfocus(),
                 obscureText: true,
-                cursorColor: primaryColor,
+                cursorColor: Colors.black,
                 decoration: InputDecoration(
                   hintText: '비밀번호 확인',
                   hintStyle: TextStyle(
-                    color: primaryColor,
+                    color: Colors.black.withOpacity(0.4),
                     fontSize: 15,
                   ),
                   errorText: _signUpController.equalPassword.value ||
@@ -308,35 +305,19 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  Widget genderSwitch() {
+  Widget genderSwitch(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0),
       child: ToggleSwitch(
         minWidth: double.infinity,
-        inactiveBgColor: primaryColor.withOpacity(0.2),
-        activeBgColor: [primaryColor],
+        inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
+        activeBgColor: [context.theme.primaryColor],
         labels: ['남', '여'],
         totalSwitches: 2,
         initialLabelIndex: _signUpController.genderIndex.value,
         onToggle: (index) {
           _signUpController.setGenderIndex(index);
         },
-      ),
-    );
-  }
-
-  Widget cancleButton() {
-    return MaterialButton(
-      onPressed: () {
-        Get.back();
-      },
-      highlightColor: Colors.white.withOpacity(0.9),
-      splashColor: Colors.transparent,
-      color: primaryColor.withOpacity(0.2),
-      elevation: 0,
-      child: Text(
-        '취소',
-        style: TextStyle(color: primaryColor),
       ),
     );
   }
@@ -357,8 +338,8 @@ class SignUpPage extends StatelessWidget {
         height: context.mediaQuery.size.height * 0.07,
         decoration: BoxDecoration(
           color: _signUpController.allCheck.value
-              ? primaryColor
-              : primaryColor.withOpacity(0.4),
+              ? context.theme.primaryColor
+              : context.theme.primaryColor.withOpacity(0.4),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(

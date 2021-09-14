@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  customImage(),
+                  customImage(context),
                   Column(
                     children: [
                       emailField(context),
@@ -35,7 +35,7 @@ class LoginPage extends StatelessWidget {
                   Column(
                     children: [loginButton(context),
                       SizedBox(height: 10),
-                      signUpText()],
+                      signUpText(context)],
                   )
                 ],
               ),
@@ -46,12 +46,12 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget customImage() {
+  Widget customImage(BuildContext context) {
     return Container(
       width: 200,
       height: 200,
       decoration: BoxDecoration(
-          color: primaryColor.withOpacity(0.8), shape: BoxShape.circle),
+          color: context.theme.primaryColor.withOpacity(0.8), shape: BoxShape.circle),
       child: Center(
         child: Text(
           'Daily Report',
@@ -87,15 +87,14 @@ class LoginPage extends StatelessWidget {
                 onSubmitted: (_) =>
                     FocusScope.of(context).requestFocus(passwordFocus),
                 obscureText: false,
-                cursorColor: primaryColor,
+                cursorColor: Colors.black,
                 controller: _loginController.emailController.value,
                 decoration: InputDecoration(
                   hintText: 'example@email.com',
                   hintStyle: TextStyle(
-                    color: primaryColor,
+                    color: Colors.black.withOpacity(0.4),
                     fontSize: 16,
                   ),
-                  focusColor: primaryColor,
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
@@ -135,15 +134,15 @@ class LoginPage extends StatelessWidget {
                 },
                 onSubmitted: (_) => FocusScope.of(context).unfocus(),
                 obscureText: true,
-                cursorColor: primaryColor,
+                cursorColor: Colors.black,
                 controller: _loginController.passwordController.value,
                 decoration: InputDecoration(
                   hintText: '비밀번호',
                   hintStyle: TextStyle(
-                    color: primaryColor,
+                    color: Colors.black.withOpacity(0.4),
                     fontSize: 16,
                   ),
-                  focusColor: primaryColor,
+                  focusColor: Colors.black,
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
@@ -182,7 +181,8 @@ class LoginPage extends StatelessWidget {
                               padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: primaryColor.withOpacity(0.3)),
+                                border: Border.all()
+                                  ),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
@@ -196,6 +196,7 @@ class LoginPage extends StatelessWidget {
                                     padding: EdgeInsets.only(left: 10),
                                     width: context.mediaQuery.size.width * 0.55,
                                     child: TextField(
+                                      cursorColor: Colors.black,
                                       controller: _loginController
                                           .forgotEmailController.value,
                                       onChanged: (text) {
@@ -207,6 +208,11 @@ class LoginPage extends StatelessWidget {
                                           borderSide: BorderSide(
                                               color: Colors.transparent),
                                         ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.transparent
+                                          )
+                                        )
                                       ),
                                     ),
                                   ),
@@ -217,7 +223,7 @@ class LoginPage extends StatelessWidget {
                               '해당 이메일로 비밀번호 재설정 메일이 발송됩니다.',
                               style: TextStyle(
                                 fontSize: 15,
-                                color: primaryColor.withOpacity(0.5),
+                                color: Colors.black.withOpacity(0.5),
                               ),
                             ),
                             Row(
@@ -231,7 +237,7 @@ class LoginPage extends StatelessWidget {
                                     _loginController.forgotPasswordEmail('');
                                   },
                                   elevation: 0,
-                                  color: primaryColor.withOpacity(0.5),
+                                  color: context.theme.primaryColor.withOpacity(0.5),
                                   child: Text(
                                     '취 소',
                                     style: TextStyle(color: Colors.white),
@@ -243,7 +249,7 @@ class LoginPage extends StatelessWidget {
                                         .forgotPasswordEmail.value);
                                   },
                                   elevation: 0,
-                                  color: primaryColor,
+                                  color: context.theme.primaryColor,
                                   child: Text(
                                     '확 인',
                                     style: TextStyle(color: Colors.white),
@@ -258,7 +264,7 @@ class LoginPage extends StatelessWidget {
           },
           child: Text(
             '비밀번호 찾기',
-            style: TextStyle(fontSize: 16, color: primaryColor),
+            style: TextStyle(fontSize: 16, color: context.theme.primaryColor),
           ),
         ),
       ],
@@ -274,7 +280,7 @@ class LoginPage extends StatelessWidget {
       child: Container(
         height: context.mediaQuery.size.height * 0.07,
         decoration: BoxDecoration(
-          color: primaryColor,
+          color: context.theme.primaryColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
@@ -287,13 +293,13 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget signUpText() {
+  Widget signUpText(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           '아직 계정이 없다면?  ',
-          style: TextStyle(color: primaryColor.withOpacity(0.5), fontSize: 16),
+          style: TextStyle(color: context.theme.primaryColor.withOpacity(0.5), fontSize: 16),
         ),
         GestureDetector(
           onTap: () {
@@ -301,7 +307,7 @@ class LoginPage extends StatelessWidget {
           },
           child: Text(
             '빠른 회원가입',
-            style: TextStyle(color: primaryColor, fontSize: 16),
+            style: TextStyle(color: context.theme.primaryColor, fontSize: 16),
           ),
         )
       ],
