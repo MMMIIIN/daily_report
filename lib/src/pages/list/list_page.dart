@@ -54,7 +54,7 @@ class _ListPageState extends State<ListPage> {
     return Container(
       height: context.mediaQuery.size.height * 0.06,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15), border: Border.all()),
+          borderRadius: BorderRadius.circular(10), border: Border.all()),
       child: TextField(
         onChanged: (text) {
           _listController.searchTerm(text);
@@ -63,8 +63,7 @@ class _ListPageState extends State<ListPage> {
             _listController.selectedDays.clear();
           }
         },
-        cursorColor: context.theme.primaryColor,
-        style: TextStyle(color: context.theme.primaryColor),
+        cursorColor: Colors.black,
         controller: _listController.searchTitleController.value,
         decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(
@@ -166,12 +165,13 @@ class _ListPageState extends State<ListPage> {
                 height: 7,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: isDarkMode ? Colors.white : Colors.black87),
+                    color: isDarkMode ? Colors.white : markerColor),
               ),
             );
           }
         },
       ),
+      rowHeight: 45,
       firstDay: FirstDay,
       lastDay: LastDay,
       focusedDay: _todoController.currentDateTime.value,

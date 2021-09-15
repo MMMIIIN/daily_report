@@ -1,18 +1,14 @@
 import 'package:daily_report/color.dart';
-import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/select_date_controller.dart';
 import 'package:daily_report/src/pages/chart/select_date_page.dart';
-import 'package:daily_report/src/pages/home.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-final TodoController _todoController = Get.put(TodoController());
 final ChartController _chartController = Get.put(ChartController());
 final SelectDateController _selectDateController =
     Get.put(SelectDateController());
@@ -36,6 +32,14 @@ class _ChartPageState extends State<ChartPage> {
           () => Column(
             children: [
               Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: Text('기간 선택'),
+                  ),
+                ],
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   selectDateTime(),
@@ -58,8 +62,12 @@ class _ChartPageState extends State<ChartPage> {
       totalSwitches: 2,
       initialLabelIndex: _chartController.modeIndex.value,
       labels: ['%', 'h'],
-      inactiveBgColor: isDarkMode ? primaryColor : Color(0xffecf0f1),
-      activeBgColor: [isDarkMode ? Color(0xffecf0f1) : context.theme.primaryColor],
+      inactiveBgColor: isDarkMode
+          ? primaryColor
+          : context.theme.primaryColor.withOpacity(0.2),
+      activeBgColor: [
+        isDarkMode ? Color(0xffecf0f1) : context.theme.primaryColor
+      ],
       onToggle: (index) {
         _chartController.setMode(index);
       },
@@ -69,7 +77,7 @@ class _ChartPageState extends State<ChartPage> {
   Widget selectDateTime() {
     return InkWell(
       customBorder:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onTap: () {
         Get.to(() => SelectDatePage());
       },
@@ -77,18 +85,24 @@ class _ChartPageState extends State<ChartPage> {
         width: context.mediaQuery.size.width * 0.6,
         height: 50,
         decoration: BoxDecoration(
-            border: Border.all(
-                color: isDarkMode ? darkPrimaryColor : Color(0xff34495e)),
-            borderRadius: BorderRadius.circular(15)),
+            // border: Border.all(
+            //     color: isDarkMode ? darkPrimaryColor : Color(0xff34495e)),
+            color: context.theme.primaryColor.withOpacity(0.4),
+            borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${_selectDateController.rangeStart.value.year} - '
-                '${_selectDateController.rangeStart.value.month} - '
-                '${_selectDateController.rangeStart.value.day} ~ '
-                '${_selectDateController.rangeEnd.value.year} - '
-                '${_selectDateController.rangeEnd.value.month} - '
-                '${_selectDateController.rangeEnd.value.day}')
+            Text(
+              '${_selectDateController.rangeStart.value.year} - '
+              '${_selectDateController.rangeStart.value.month} - '
+              '${_selectDateController.rangeStart.value.day} ~ '
+              '${_selectDateController.rangeEnd.value.year} - '
+              '${_selectDateController.rangeEnd.value.month} - '
+              '${_selectDateController.rangeEnd.value.day}',
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
+              ),
+            ),
           ],
         ),
       ),

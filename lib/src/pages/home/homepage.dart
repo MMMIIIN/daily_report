@@ -51,7 +51,6 @@ class _HomePageState extends State<HomePage> {
   Widget showCalendar() {
     return Obx(
       () => TableCalendar(
-        rowHeight: 45,
         calendarBuilders: CalendarBuilders(
           selectedBuilder: (context, date, events) => Container(
             margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
@@ -130,6 +129,7 @@ class _HomePageState extends State<HomePage> {
           titleCentered: true,
           titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
         ),
+        rowHeight: 45,
         locale: 'ko-KR',
         firstDay: FirstDay,
         lastDay: LastDay,
