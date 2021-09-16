@@ -83,6 +83,7 @@ class SettingsController extends GetxController {
     var percentOrHour = GetStorage().read('isPercentOrHour') ?? false;
     var listPageIndex = GetStorage().read('isListPageBool') ?? false;
     var interval = GetStorage().read('timePickerOfInterval') ?? 1;
+    var colorIndex = GetStorage().read('primaryColor') ?? 0;
     if (darkModeIndex == null) {
       isDarkModeIndex(1);
     } else {
@@ -104,10 +105,19 @@ class SettingsController extends GetxController {
       isTimePickerTimeIndex(interval);
       setTimePickerTimeIndex(isTimePickerTimeIndex.value);
     }
+    if(colorIndex != null){
+      print(colorIndex);
+      selectPrimaryColorIndex(colorIndex);
+      setPrimaryColorIndex(colorIndex);
+    }
   }
 
   void setPrimaryColorIndex(int selectIndex) {
     selectPrimaryColorIndex(selectIndex);
+  }
+
+  void setPrimaryColor(int colorIndex) {
+    GetStorage().write('primaryColor', colorIndex);
   }
 
   @override

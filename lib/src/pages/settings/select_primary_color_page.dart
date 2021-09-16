@@ -46,6 +46,7 @@ class SelectPrimaryColorPage extends StatelessWidget {
                 return ListTile(
                   onTap: () {
                     _settingsController.setPrimaryColorIndex(index);
+                    _settingsController.setPrimaryColor(index);
                   },
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 5, horizontal: 20),
