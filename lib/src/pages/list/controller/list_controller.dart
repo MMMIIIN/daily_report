@@ -12,7 +12,7 @@ class ListController extends GetxController {
   var searchTitleController = TextEditingController().obs;
   RxString searchTerm = ''.obs;
 
-  Future<void> initSearchResult() async{
+  Future<void> initSearchResult() async {
     clearAllData();
     searchResult.addAll(searchTitle(''));
   }
@@ -31,6 +31,7 @@ class ListController extends GetxController {
   }
 
   void setSearchTodoList(List<DateTime> _dateTime) {
+    searchResult.clear();
     searchTodoList.value.todoList.clear();
     _dateTime.forEach((element) {
       searchTodoList.value.todoList.addAll(
@@ -68,7 +69,6 @@ class ListController extends GetxController {
         return '';
     }
   }
-
 
   @override
   void onInit() {

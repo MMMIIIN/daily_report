@@ -304,13 +304,11 @@ class _ListPageState extends State<ListPage> {
                   _todoController.setTime(
                     currentTimeRange,
                   );
-                  // _todoController.currentDateTime(currentDateTime);
                   _todoController.initHome(currentDateTime);
                   todoDialog(context, currentTitle, memoTitle, currentDateTime,
                       currentTimeRange, currentColorIndex, todoUid);
                 },
                 child: Container(
-                  // padding: EdgeInsets.symmetric(horizontal: 10),
                   width: context.mediaQuery.size.width * 0.8,
                   height: context.mediaQuery.size.height * 0.05,
                   decoration: BoxDecoration(
@@ -408,6 +406,7 @@ class _ListPageState extends State<ListPage> {
       }
       _listController.setSearchTodoList(_listController.selectedDays);
       _listController.searchTitleController.value.clear();
+      _listController.searchTerm('');
       if (_listController.selectedDays.isEmpty) {
         _listController.searchTitle('');
       }
