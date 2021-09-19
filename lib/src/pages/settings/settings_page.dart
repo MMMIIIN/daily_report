@@ -1,9 +1,7 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
-import 'package:daily_report/src/pages/login/login_page.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:daily_report/src/pages/settings/select_primary_color_page.dart';
-import 'package:daily_report/src/pages/signup/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,29 +34,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 timePickerOfTime(),
                 selectPrimaryColor(),
                 logoutButton(),
-                MaterialButton(
-                  onPressed: () {
-                    Get.to(() => LoginPage());
-                  },
-                  color: Colors.cyanAccent,
-                ),
-                MaterialButton(
-                  onPressed: () {
-                    Get.to(() => SignUpPage());
-                  },
-                  color: context.theme.primaryColor,
-                ),
-                MaterialButton(
-                  onPressed: () {
-                    Get.showSnackbar(GetBar(
-                      title: 'SUCCESS',
-                      message: '성공적으로 삭제되었습니다.',
-                      duration: Duration(seconds: 1),
-                      backgroundColor: Color(0xff1dd1a1),
-                    ));
-                  },
-                  child: Text('snackBar'),
-                ),
               ],
             ),
             Column(
@@ -72,7 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: TextStyle(
                         fontSize: 15,
                         decoration: TextDecoration.underline,
-                        decorationColor: primaryColor,
+                        decorationColor: context.theme.primaryColor,
                         decorationStyle: TextDecorationStyle.double),
                   ),
                 ),
@@ -119,7 +94,9 @@ class _SettingsPageState extends State<SettingsPage> {
             inactiveBgColor: isDarkMode
                 ? primaryColor.withOpacity(0.7)
                 : context.theme.primaryColor.withOpacity(0.2),
-            activeBgColor: [isDarkMode ? darkPrimaryColor : context.theme.primaryColor],
+            activeBgColor: [
+              isDarkMode ? darkPrimaryColor : context.theme.primaryColor
+            ],
             initialLabelIndex: _settingsController.isDarkModeIndex.value,
             onToggle: (index) {
               _settingsController.setDarkModeIndex(index);
@@ -145,7 +122,9 @@ class _SettingsPageState extends State<SettingsPage> {
             inactiveBgColor: isDarkMode
                 ? primaryColor.withOpacity(0.7)
                 : context.theme.primaryColor.withOpacity(0.2),
-            activeBgColor: [isDarkMode ? darkPrimaryColor : context.theme.primaryColor],
+            activeBgColor: [
+              isDarkMode ? darkPrimaryColor : context.theme.primaryColor
+            ],
             initialLabelIndex: _settingsController.isPercentOrHourIndex.value,
             onToggle: (index) {
               _settingsController.setPercentOrHourIndex(index);
@@ -184,7 +163,9 @@ class _SettingsPageState extends State<SettingsPage> {
               inactiveBgColor: isDarkMode
                   ? primaryColor.withOpacity(0.7)
                   : context.theme.primaryColor.withOpacity(0.2),
-              activeBgColor: [isDarkMode ? darkPrimaryColor : context.theme.primaryColor],
+              activeBgColor: [
+                isDarkMode ? darkPrimaryColor : context.theme.primaryColor
+              ],
               initialLabelIndex: _settingsController.listPageIndex.value,
               onToggle: (index) {
                 _settingsController.setListPageIndex(index);
@@ -208,7 +189,9 @@ class _SettingsPageState extends State<SettingsPage> {
             minHeight: 25,
             totalSwitches: 5,
             labels: ['5m', '10m', '15m', '20m', '30m'],
-            activeBgColor: [isDarkMode ? darkPrimaryColor : context.theme.primaryColor],
+            activeBgColor: [
+              isDarkMode ? darkPrimaryColor : context.theme.primaryColor
+            ],
             inactiveBgColor: isDarkMode
                 ? primaryColor.withOpacity(0.7)
                 : context.theme.primaryColor.withOpacity(0.2),
@@ -237,10 +220,9 @@ class _SettingsPageState extends State<SettingsPage> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: colorList[_settingsController
-                    .selectPrimaryColorIndex.value],
-                borderRadius: BorderRadius.circular(10)
-              ),
+                  color: colorList[
+                      _settingsController.selectPrimaryColorIndex.value],
+                  borderRadius: BorderRadius.circular(10)),
             ),
           )
         ],

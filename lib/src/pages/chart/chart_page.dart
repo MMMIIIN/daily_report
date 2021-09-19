@@ -85,9 +85,7 @@ class _ChartPageState extends State<ChartPage> {
         width: context.mediaQuery.size.width * 0.6,
         height: 50,
         decoration: BoxDecoration(
-            // border: Border.all(
-            //     color: isDarkMode ? darkPrimaryColor : Color(0xff34495e)),
-            color: context.theme.primaryColor.withOpacity(0.4),
+            color: context.theme.primaryColor.withOpacity(0.2),
             borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +98,7 @@ class _ChartPageState extends State<ChartPage> {
               '${_selectDateController.rangeEnd.value.month} - '
               '${_selectDateController.rangeEnd.value.day}',
               style: TextStyle(
-                color: Colors.black.withOpacity(0.7),
+                color: Colors.black.withOpacity(0.8),
               ),
             ),
           ],
@@ -108,179 +106,6 @@ class _ChartPageState extends State<ChartPage> {
       ),
     );
   }
-
-  // void selectDateDialog() {
-  //   var _selectedDay;
-  //   DateTime? _rangeStart = _selectDateController.defaultRangeStart.value;
-  //   DateTime? _rangeEnd = _selectDateController.defaultRangeEnd.value;
-  //   var _focusedDay = DateTime.now();
-  //   var _calendarFormat = CalendarFormat.month;
-  //   var rangeSelectionMode = RangeSelectionMode.toggledOn;
-  //   showDialog(
-  //     context: context,
-  //     builder: (_) {
-  //       return Padding(
-  //         padding: const EdgeInsets.symmetric(vertical: 120),
-  //         child: Obx(
-  //           () => Dialog(
-  //             child: Column(
-  //               children: [
-  //                 TableCalendar(
-  //                   calendarBuilders: CalendarBuilders(
-  //                     selectedBuilder: (context, date, _) => Container(
-  //                       margin: const EdgeInsets.all(4),
-  //                       alignment: Alignment.center,
-  //                       decoration: BoxDecoration(
-  //                           color: context.theme.primaryColor,
-  //                           borderRadius: BorderRadius.circular(10)),
-  //                       child: Text(
-  //                         date.day.toString(),
-  //                         style: TextStyle(color: Colors.white),
-  //                       ),
-  //                     ),
-  //                     todayBuilder: (context, date, _) => Container(
-  //                       margin: const EdgeInsets.all(4),
-  //                       alignment: Alignment.center,
-  //                       decoration: BoxDecoration(
-  //                           color: Color(0xff95afc0),
-  //                           borderRadius: BorderRadius.circular(10)),
-  //                       child: Text(
-  //                         date.day.toString(),
-  //                         style: TextStyle(color: Colors.white),
-  //                       ),
-  //                     ),
-  //                     rangeStartBuilder: (context, date, _) => Container(
-  //                       margin: const EdgeInsets.all(4),
-  //                       alignment: Alignment.center,
-  //                       decoration: BoxDecoration(
-  //                           color: context.theme.primaryColor,
-  //                           borderRadius: BorderRadius.circular(10)),
-  //                       child: Text(
-  //                         date.day.toString(),
-  //                         style: TextStyle(color: Colors.white),
-  //                       ),
-  //                     ),
-  //                     rangeEndBuilder: (context, date, _) => Container(
-  //                       margin: const EdgeInsets.all(4),
-  //                       alignment: Alignment.center,
-  //                       decoration: BoxDecoration(
-  //                           color: context.theme.primaryColor,
-  //                           borderRadius: BorderRadius.circular(10)),
-  //                       child: Text(
-  //                         date.day.toString(),
-  //                         style: TextStyle(color: Colors.white),
-  //                       ),
-  //                     ),
-  //                     rangeHighlightBuilder: (context, date, _) => Container(
-  //                       decoration: BoxDecoration(
-  //                         color: _ ? Color(0xff95afc0) : null,
-  //                       ),
-  //                     ),
-  //                     markerBuilder: (context, date, _) {
-  //                       if (_.isNotEmpty) {
-  //                         return Padding(
-  //                           padding: const EdgeInsets.only(bottom: 5.0),
-  //                           child: Container(
-  //                             width: 7,
-  //                             height: 7,
-  //                             decoration: BoxDecoration(
-  //                                 borderRadius: BorderRadius.circular(10),
-  //                                 color: isDarkMode
-  //                                     ? Colors.white
-  //                                     : Colors.black87),
-  //                           ),
-  //                         );
-  //                       }
-  //                     },
-  //                   ),
-  //                   firstDay: FirstDay,
-  //                   lastDay: LastDay,
-  //                   focusedDay: _focusedDay,
-  //                   selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-  //                   rangeStartDay:
-  //                       _selectDateController.defaultRangeStart.value,
-  //                   rangeEndDay: _selectDateController.defaultRangeEnd.value,
-  //                   calendarFormat: _calendarFormat,
-  //                   rangeSelectionMode: rangeSelectionMode,
-  //                   eventLoader: (day) {
-  //                     for (var todo
-  //                         in _todoController.todoUidList.value.todoList) {
-  //                       if (day.year == todo.ymd.year &&
-  //                           day.month == todo.ymd.month &&
-  //                           day.day == todo.ymd.day) {
-  //                         return [Container()];
-  //                       }
-  //                     }
-  //                     return [];
-  //                   },
-  //                   onDaySelected: (selectedDay, focusedDay) {
-  //                     if (!isSameDay(_selectedDay, selectedDay)) {
-  //                       setState(() {
-  //                         _selectedDay = selectedDay;
-  //                         _focusedDay = focusedDay;
-  //                         _rangeStart = null; // Important to clean those
-  //                         _rangeEnd = null;
-  //                         rangeSelectionMode = RangeSelectionMode.toggledOff;
-  //                       });
-  //                     }
-  //                   },
-  //                   onRangeSelected: (start, end, focusedDay) {
-  //                     setState(() {
-  //                       _selectedDay = null;
-  //                       _focusedDay = focusedDay;
-  //                       _rangeStart = start;
-  //                       _rangeEnd = end;
-  //                       rangeSelectionMode = RangeSelectionMode.toggledOn;
-  //                     });
-  //                     _selectDateController.setDefaultRangeTime(
-  //                         _rangeStart ?? DateTime.now(),
-  //                         _rangeEnd ?? _rangeStart!);
-  //                   },
-  //                   onFormatChanged: (format) {
-  //                     if (_calendarFormat != format) {
-  //                       setState(() {
-  //                         _calendarFormat = format;
-  //                       });
-  //                     }
-  //                   },
-  //                   onPageChanged: (focusedDay) {
-  //                     _focusedDay = focusedDay;
-  //                   },
-  //                 ),
-  //                 Row(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                   children: [
-  //                     MaterialButton(
-  //                       onPressed: () {
-  //                         Get.back();
-  //                       },
-  //                       color: context.theme.primaryColor,
-  //                       child: Text(
-  //                         '취소',
-  //                         style: TextStyle(color: Colors.white),
-  //                       ),
-  //                     ),
-  //                     MaterialButton(
-  //                       onPressed: () {
-  //                         _selectDateController.setRangeTime(
-  //                             _rangeStart!, _rangeEnd!);
-  //                         _chartController.makeRangeDate();
-  //                         Get.offAll(Home());
-  //                       },
-  //                       color: context.theme.primaryColor,
-  //                       child:
-  //                           Text('확인', style: TextStyle(color: Colors.white)),
-  //                     ),
-  //                   ],
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   Widget showChart(BuildContext context) {
     return GetBuilder<ChartController>(
