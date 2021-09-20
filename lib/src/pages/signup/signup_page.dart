@@ -73,11 +73,12 @@ class SignUpPage extends StatelessWidget {
       width: 180,
       height: 180,
       decoration: BoxDecoration(
-          color: context.theme.primaryColor.withOpacity(0.8), shape: BoxShape.circle),
+          color: context.theme.primaryColor.withOpacity(0.8),
+          shape: BoxShape.circle),
       child: Center(
         child: Text(
           'Daily Report',
-          style: TextStyle(fontSize: 25, color: Colors.white),
+          style: TextStyle(fontSize: 25, color: Colors.white, fontFamily: ''),
         ),
       ),
     );
@@ -89,8 +90,8 @@ class SignUpPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
         decoration: BoxDecoration(
-          // border: Border.all(),
-          color: context.theme.primaryColor.withOpacity(0.2),
+            // border: Border.all(),
+            color: context.theme.primaryColor.withOpacity(0.2),
             borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -331,10 +332,10 @@ class SignUpPage extends StatelessWidget {
       onTap: () {
         _signUpController.allCheck.value
             ? firebaseAuthSignUp(
-                    _signUpController.signupEmail.value,
-                    _signUpController.signupPassword.value,
-                    _signUpController.signupName.value,
-                    _signUpController.genderIndex.value)
+                _signUpController.signupEmail.value,
+                _signUpController.signupPassword.value,
+                _signUpController.signupName.value,
+                _signUpController.genderIndex.value)
             : null;
       },
       child: Container(

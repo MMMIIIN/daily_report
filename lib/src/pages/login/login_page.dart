@@ -55,7 +55,7 @@ class LoginPage extends StatelessWidget {
       child: Center(
         child: Text(
           'Daily Report',
-          style: TextStyle(fontSize: 25, color: Colors.white),
+          style: TextStyle(fontSize: 25, color: Colors.white,fontFamily: ''),
         ),
       ),
     );
