@@ -159,13 +159,6 @@ Future<void> addFireStore(TestTodo todo) async {
         .collection('todos')
         .doc(value.id)
         .update({'uid': value.id}).catchError((error) => print(error));
-    await Get.showSnackbar(GetBar(
-      title: 'SUCCESS',
-      message: '성공적으로 추가되었습니다.',
-      duration: Duration(seconds: 1),
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: successColor,
-    ));
   }).catchError(
     (error) async => await Get.showSnackbar(
       GetBar(
