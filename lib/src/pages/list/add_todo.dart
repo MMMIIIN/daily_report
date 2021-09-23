@@ -20,7 +20,6 @@ final ListController _listController = Get.put(ListController());
 final SettingsController _settingsController = Get.put(SettingsController());
 
 class AddTodo extends StatefulWidget {
-
   @override
   _AddTodoState createState() => _AddTodoState();
 }
@@ -805,68 +804,65 @@ class _AddTodoState extends State<AddTodo> {
   }
 
   Widget completeButton() {
-    return Obx(() => GestureDetector(
+    return Obx(
+      () => GestureDetector(
         onTap: _todoController.isEditMode.value
-            ? () async{
-          var todoUpdateDto = TestTodo(
-              uid: _todoController.editTodoUid.value,
-              ymd: DateTime(
-                  _todoController.currentDateTime.value.year,
-                  _todoController.currentDateTime.value.month,
-                  _todoController.currentDateTime.value.day),
-              title: _todoController
-                  .titleTextController.value.text,
-              memoText: _todoController.memoText.value,
-              startHour: _todoController
-                  .defaultTime.value.startTime.hour,
-              startMinute: _todoController
-                  .defaultTime.value.startTime.minute,
-              endHour: _todoController
-                  .defaultTime.value.endTime.hour,
-              endMinute: _todoController
-                  .defaultTime.value.endTime.minute,
-              value: _todoController.defaultValue.value,
-              colorIndex:
-              _todoController.selectColorIndex.value,
-              hourMinute: _todoController.defaultValue.value %
-                  60 ==
-                  0
-                  ? '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
-                  : '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
-                  '${_todoController.defaultValue.value.toInt() % 60}분');
-          await updateFireStore(todoUpdateDto);
-          var todoIndex = _todoController.todoUidList.value.todoList
-              .indexWhere((element) => element.uid == todoUpdateDto.uid);
-          if (todoIndex != -1) {
-            _todoController.todoUidList.value.todoList[todoIndex].value =
-                todoUpdateDto.value;
-            _todoController.todoUidList.value.todoList[todoIndex].title =
-                todoUpdateDto.title;
-            _todoController.todoUidList.value.todoList[todoIndex].memoText =
-                todoUpdateDto.memoText;
-            _todoController.todoUidList.value.todoList[todoIndex].startHour =
-                todoUpdateDto.startHour;
-            _todoController.todoUidList.value.todoList[todoIndex].startMinute =
-                todoUpdateDto.startMinute;
-            _todoController.todoUidList.value.todoList[todoIndex].endHour =
-                todoUpdateDto.endHour;
-            _todoController.todoUidList.value.todoList[todoIndex].endMinute =
-                todoUpdateDto.endMinute;
-            _todoController.todoUidList.value.todoList[todoIndex].colorIndex =
-                todoUpdateDto.colorIndex;
-            _todoController.todoUidList.value.todoList[todoIndex].hourMinute =
-                todoUpdateDto.hourMinute;
-            _todoController.todoUidList.value.todoList[todoIndex].ymd =
-                todoUpdateDto.ymd;
-            _chartController.makeRangeDate();
-            _todoController.clearMemoController();
-            _todoController.initHome(_todoController.currentDateTime.value);
-            _todoController.titleTextController.value.clear();
-            await Get.off(() => Home());
-          }
-          _todoController.clickedAddButton(false);
+            ? _todoController.clickedAddButton.value ? null : () async {
+                _todoController.clickedAddButton(true);
+                var todoUpdateDto = TestTodo(
+                    uid: _todoController.editTodoUid.value,
+                    ymd: DateTime(
+                        _todoController.currentDateTime.value.year,
+                        _todoController.currentDateTime.value.month,
+                        _todoController.currentDateTime.value.day),
+                    title: _todoController.titleTextController.value.text,
+                    memoText: _todoController.memoText.value,
+                    startHour: _todoController.defaultTime.value.startTime.hour,
+                    startMinute:
+                        _todoController.defaultTime.value.startTime.minute,
+                    endHour: _todoController.defaultTime.value.endTime.hour,
+                    endMinute: _todoController.defaultTime.value.endTime.minute,
+                    value: _todoController.defaultValue.value,
+                    colorIndex: _todoController.selectColorIndex.value,
+                    hourMinute: _todoController.defaultValue.value % 60 == 0
+                        ? '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
+                        : '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
+                            '${_todoController.defaultValue.value.toInt() % 60}분');
+                await updateFireStore(todoUpdateDto);
+                var todoIndex = _todoController.todoUidList.value.todoList
+                    .indexWhere((element) => element.uid == todoUpdateDto.uid);
+                if (todoIndex != -1) {
+                  _todoController.todoUidList.value.todoList[todoIndex].value =
+                      todoUpdateDto.value;
+                  _todoController.todoUidList.value.todoList[todoIndex].title =
+                      todoUpdateDto.title;
+                  _todoController.todoUidList.value.todoList[todoIndex]
+                      .memoText = todoUpdateDto.memoText;
+                  _todoController.todoUidList.value.todoList[todoIndex]
+                      .startHour = todoUpdateDto.startHour;
+                  _todoController.todoUidList.value.todoList[todoIndex]
+                      .startMinute = todoUpdateDto.startMinute;
+                  _todoController.todoUidList.value.todoList[todoIndex]
+                      .endHour = todoUpdateDto.endHour;
+                  _todoController.todoUidList.value.todoList[todoIndex]
+                      .endMinute = todoUpdateDto.endMinute;
+                  _todoController.todoUidList.value.todoList[todoIndex]
+                      .colorIndex = todoUpdateDto.colorIndex;
+                  _todoController.todoUidList.value.todoList[todoIndex]
+                      .hourMinute = todoUpdateDto.hourMinute;
+                  _todoController.todoUidList.value.todoList[todoIndex].ymd =
+                      todoUpdateDto.ymd;
+                  _chartController.makeRangeDate();
+                  _todoController.clearMemoController();
+                  _todoController
+                      .initHome(_todoController.currentDateTime.value);
+                  _todoController.titleTextController.value.clear();
+                  _todoController.titleText('');
+                  await Get.off(() => Home());
+                }
               }
-            : () async {
+            : _todoController.clickedAddButton.value ? null : () async {
+                _todoController.clickedAddButton(true);
                 var todoAddDto = TestTodo(
                     uid: 'NULL',
                     ymd: DateTime(
@@ -908,7 +904,7 @@ class _AddTodoState extends State<AddTodo> {
           ),
           child: Center(child: clickedText()),
         ),
-    ),
+      ),
     );
   }
 

@@ -8,6 +8,7 @@ class SignUpController extends GetxController{
   var signupEmailController = TextEditingController().obs;
   var signupPasswordController = TextEditingController().obs;
   var passwordCheckController = TextEditingController().obs;
+  RxBool clickedButton = false.obs;
 
   RxString signupName = ''.obs;
   RxString signupEmail = ''.obs;

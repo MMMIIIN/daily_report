@@ -32,6 +32,9 @@ class TodoController extends GetxController {
   RxString makeRuleTitle = ''.obs;
   RxString memoText = ''.obs;
   RxBool checkBoxBool = false.obs;
+  RxBool clickedAddButton = false.obs;
+  RxBool isEditMode = false.obs;
+  RxString editTodoUid = ''.obs;
 
   Rx<TimeRange> defaultTime = TimeRange(
           startTime: TimeOfDay(hour: 0, minute: 0),

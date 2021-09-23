@@ -21,6 +21,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+final TodoController _todoController = Get.put(TodoController());
 final HomeController _homeController = Get.put(HomeController());
 final SettingsController _settingsController = Get.put(SettingsController());
 
@@ -66,7 +67,9 @@ class _HomeState extends State<Home> {
                     padding: const EdgeInsets.all(4.0),
                     child: GestureDetector(
                       onTap: () {
-                        Get.off(() => AddTodo(), transition: Transition.fade);
+                        _todoController.isEditMode(false);
+                        _todoController.clickedAddButton(false);
+                        Get.to(() => AddTodo(), transition: Transition.fade);
                       },
                       child: Container(
                         width: 60,

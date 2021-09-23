@@ -1,4 +1,3 @@
-import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:daily_report/src/pages/login/controller/login_controller.dart';
@@ -33,9 +32,11 @@ class LoginPage extends StatelessWidget {
                     ],
                   ),
                   Column(
-                    children: [loginButton(context),
+                    children: [
+                      Obx(() => loginButton(context)),
                       SizedBox(height: 10),
-                      signUpText(context)],
+                      signUpText(context)
+                    ],
                   )
                 ],
               ),
@@ -51,11 +52,12 @@ class LoginPage extends StatelessWidget {
       width: 200,
       height: 200,
       decoration: BoxDecoration(
-          color: context.theme.primaryColor.withOpacity(0.8), shape: BoxShape.circle),
+          color: context.theme.primaryColor.withOpacity(0.8),
+          shape: BoxShape.circle),
       child: Center(
         child: Text(
           'Daily Report',
-          style: TextStyle(fontSize: 25, color: Colors.white,fontFamily: ''),
+          style: TextStyle(fontSize: 25, color: Colors.white, fontFamily: ''),
         ),
       ),
     );
@@ -90,18 +92,16 @@ class LoginPage extends StatelessWidget {
                 cursorColor: Colors.black,
                 controller: _loginController.emailController.value,
                 decoration: InputDecoration(
-                  hintText: 'example@email.com',
-                  hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(0.4),
-                    fontSize: 16,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent)
-                  )
-                ),
+                    hintText: 'example@email.com',
+                    hintStyle: TextStyle(
+                      color: Colors.black.withOpacity(0.4),
+                      fontSize: 16,
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent))),
               ),
             ),
           ],
@@ -137,19 +137,17 @@ class LoginPage extends StatelessWidget {
                 cursorColor: Colors.black,
                 controller: _loginController.passwordController.value,
                 decoration: InputDecoration(
-                  hintText: '비밀번호',
-                  hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(0.4),
-                    fontSize: 16,
-                  ),
-                  focusColor: Colors.black,
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent)
-                  )
-                ),
+                    hintText: '비밀번호',
+                    hintStyle: TextStyle(
+                      color: Colors.black.withOpacity(0.4),
+                      fontSize: 16,
+                    ),
+                    focusColor: Colors.black,
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent))),
               ),
             ),
           ],
@@ -181,8 +179,7 @@ class LoginPage extends StatelessWidget {
                               padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                border: Border.all()
-                                  ),
+                                  border: Border.all()),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
@@ -203,17 +200,14 @@ class LoginPage extends StatelessWidget {
                                         _loginController.setForgotEmail(text);
                                       },
                                       decoration: InputDecoration(
-                                        hintText: 'example@email.com',
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.transparent),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.transparent
-                                          )
-                                        )
-                                      ),
+                                          hintText: 'example@email.com',
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.transparent),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.transparent))),
                                     ),
                                   ),
                                 ],
@@ -237,7 +231,8 @@ class LoginPage extends StatelessWidget {
                                     _loginController.forgotPasswordEmail('');
                                   },
                                   elevation: 0,
-                                  color: context.theme.primaryColor.withOpacity(0.5),
+                                  color: context.theme.primaryColor
+                                      .withOpacity(0.5),
                                   child: Text(
                                     '취 소',
                                     style: TextStyle(color: Colors.white),
@@ -273,22 +268,44 @@ class LoginPage extends StatelessWidget {
 
   Widget loginButton(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        firebaseLogIn(_loginController.loginEmail.value,
-            _loginController.loginPassword.value);
-      },
+      onTap: _loginController.clickedButton.value
+          ? null
+          : () {
+              _loginController.clickedButton(true);
+              firebaseLogIn(_loginController.loginEmail.value,
+                      _loginController.loginPassword.value)
+                  .then((value) => _loginController.clickedButton(false));
+            },
       child: Container(
         height: context.mediaQuery.size.height * 0.07,
         decoration: BoxDecoration(
-          color: context.theme.primaryColor,
+          color: _loginController.clickedButton.value
+              ? context.theme.primaryColor.withOpacity(0.6)
+              : context.theme.primaryColor,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Center(
-          child: Text(
-            '로그인',
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ),
+        child: _loginController.clickedButton.value
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Transform.scale(
+                    scale: 0.5,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  ),
+                  Text(
+                    ' loading...',
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              )
+            : Center(
+                child: Text(
+                  '로그인',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ),
       ),
     );
   }
@@ -299,7 +316,8 @@ class LoginPage extends StatelessWidget {
       children: [
         Text(
           '아직 계정이 없다면?  ',
-          style: TextStyle(color: context.theme.primaryColor.withOpacity(0.5), fontSize: 16),
+          style: TextStyle(
+              color: context.theme.primaryColor.withOpacity(0.5), fontSize: 16),
         ),
         GestureDetector(
           onTap: () {

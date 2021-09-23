@@ -1,4 +1,3 @@
-import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/pages/signup/controller/signup_controller.dart';
 import 'package:daily_report/src/service/firestore_service.dart';
@@ -329,30 +328,50 @@ class SignUpPage extends StatelessWidget {
 
   Widget signUpButton(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        _signUpController.allCheck.value
-            ? firebaseAuthSignUp(
-                _signUpController.signupEmail.value,
-                _signUpController.signupPassword.value,
-                _signUpController.signupName.value,
-                _signUpController.genderIndex.value)
-            : null;
-      },
+      onTap: _signUpController.allCheck.value
+          ? _signUpController.clickedButton.value ? null : () {
+              _signUpController.clickedButton(true);
+              firebaseAuthSignUp(
+                      _signUpController.signupEmail.value,
+                      _signUpController.signupPassword.value,
+                      _signUpController.signupName.value,
+                      _signUpController.genderIndex.value)
+                  .then((value) => _signUpController.clickedButton(false));
+            }
+          : null,
       child: Container(
         width: double.infinity,
         height: context.mediaQuery.size.height * 0.07,
         decoration: BoxDecoration(
           color: _signUpController.allCheck.value
-              ? context.theme.primaryColor
+              ? _signUpController.clickedButton.value
+                  ? context.theme.primaryColor.withOpacity(0.6)
+                  : context.theme.primaryColor
               : context.theme.primaryColor.withOpacity(0.4),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Center(
-          child: Text(
-            '회원가입',
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ),
+        child: _signUpController.clickedButton.value
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Transform.scale(
+                    scale: 0.5,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  ),
+                  Text(
+                    ' loading...',
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              )
+            : Center(
+                child: Text(
+                  '회원가입',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ),
       ),
     );
   }

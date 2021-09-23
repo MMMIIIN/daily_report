@@ -10,6 +10,7 @@ class LoginController extends GetxController {
   RxString forgotPasswordEmail = ''.obs;
   RxBool checkEmail = true.obs;
   RxBool checkPassword = true.obs;
+  RxBool clickedButton = false.obs;
 
   void setLoginEmail(String email) {
     loginEmail(email);

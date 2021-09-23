@@ -117,19 +117,18 @@ Future<void> todoFirebaseDelete(String todoUid) async {
       .collection('todos')
       .doc(todoUid)
       .delete()
-      .then((value) async{
-
-  }).catchError(
-    (error) async => await Get.showSnackbar(
-      GetBar(
-        title: 'DELETE',
-        message: 'ERROR!',
-        duration: Duration(seconds: 2),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: errorColor,
-      ),
-    ),
-  );
+      .then((value) async {})
+      .catchError(
+        (error) async => await Get.showSnackbar(
+          GetBar(
+            title: 'DELETE',
+            message: 'ERROR!',
+            duration: Duration(seconds: 2),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: errorColor,
+          ),
+        ),
+      );
 }
 
 Future<void> addFireStore(TestTodo todo) async {
@@ -286,6 +285,7 @@ Future<void> firebaseLogIn(String userId, String userPw) async {
       password: userPw,
     )
         .then((value) async {
+      _loginController.clickedButton(false);
       await _todoController.initUidTodoList();
       await _todoController.initTodoTitleList();
       await _loginController.clearTextField();
