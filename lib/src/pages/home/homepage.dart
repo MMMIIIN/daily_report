@@ -58,8 +58,9 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
                 color: isDarkMode
                     ? Color(0xff95afc0)
-                    : colorList[_settingsController
-                    .selectPrimaryColorIndex.value].withOpacity(0.9),
+                    : colorList[
+                            _settingsController.selectPrimaryColorIndex.value]
+                        .withOpacity(0.9),
                 borderRadius: BorderRadius.circular(10)),
             child: date.year == DateTime.now().year &&
                     date.month == DateTime.now().month &&
@@ -70,26 +71,16 @@ class _HomePageState extends State<HomePage> {
                         'today',
                         style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
-                      date.weekday == 6 || date.weekday == 7
-                          ? Text(
-                              date.day.toString(),
-                              style: TextStyle(color: Colors.redAccent),
-                            )
-                          : Text(
-                              date.day.toString(),
-                              style: TextStyle(color: Colors.white),
-                            )
-                    ],
-                  )
-                : date.weekday == 6 || date.weekday == 7
-                    ? Text(
-                        date.day.toString(),
-                        style: TextStyle(color: Colors.redAccent),
-                      )
-                    : Text(
+                      Text(
                         date.day.toString(),
                         style: TextStyle(color: Colors.white),
-                      ),
+                      )
+                    ],
+                  )
+                : Text(
+                    date.day.toString(),
+                    style: TextStyle(color: Colors.white),
+                  ),
           ),
           todayBuilder: (context, date, events) => Container(
             margin: const EdgeInsets.all(4),
@@ -197,7 +188,8 @@ class _HomePageState extends State<HomePage> {
                     final isTouched = index == touchedIndex;
                     final radius = isTouched ? 80.0 : 60.0;
                     return PieChartSectionData(
-                      title: '${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(0)}%',
+                      title:
+                          '${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(0)}%',
                       color: colorList[_todoController
                           .currentUidList.value.todoList[index].colorIndex],
                       value: _todoController
@@ -242,18 +234,22 @@ class _HomePageState extends State<HomePage> {
                               Container(
                                 width: context.mediaQuery.size.width * 0.3,
                                 child: Text(
-                                  _todoController
-                                      .currentUidList.value.todoList[index].title,
+                                  _todoController.currentUidList.value
+                                      .todoList[index].title,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.bold),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Container(
                                 alignment: Alignment.center,
                                 width: context.mediaQuery.size.width * 0.3,
-                                child: Text(_todoController.currentUidList.value.todoList[index].memoText,
-                                overflow: TextOverflow.ellipsis,),
+                                child: Text(
+                                  _todoController.currentUidList.value
+                                      .todoList[index].memoText,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               Container(
                                 alignment: Alignment.topRight,

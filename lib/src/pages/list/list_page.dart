@@ -236,46 +236,51 @@ class _ListPageState extends State<ListPage> {
     return Expanded(
       child: RefreshIndicator(
         color: context.theme.primaryColor,
-        onRefresh: () async{
-          await Future.delayed(Duration(seconds: 1));
-          listCount = _listController.searchTodoList.value.todoList.isEmpty
-              ? _listController.searchResult.length
-              : _listController.searchTodoList.value.todoList.length;
+        onRefresh: () async {
+          setState(() {
+            Future.delayed(Duration(seconds: 1));
+            listCount = _listController.searchTodoList.value.todoList.isEmpty
+                ? _listController.searchResult.length
+                : _listController.searchTodoList.value.todoList.length;
+          });
         },
         child: ListView.builder(
           itemCount: listCount,
           itemBuilder: (context, index) {
-            var currentValue =
-                _listController.searchTodoList.value.todoList.isEmpty
-                    ? _listController.searchResult[index].value
-                    : _listController.searchTodoList.value.todoList[index].value;
+            var currentValue = _listController
+                    .searchTodoList.value.todoList.isEmpty
+                ? _listController.searchResult[index].value
+                : _listController.searchTodoList.value.todoList[index].value;
             var currentTimeRange = TimeRange(
                 startTime: TimeOfDay(
                     hour: _listController.searchTodoList.value.todoList.isEmpty
                         ? _listController.searchResult[index].startHour
                         : _listController
                             .searchTodoList.value.todoList[index].startHour,
-                    minute: _listController.searchTodoList.value.todoList.isEmpty
-                        ? _listController.searchResult[index].startMinute
-                        : _listController
-                            .searchTodoList.value.todoList[index].startMinute),
+                    minute:
+                        _listController.searchTodoList.value.todoList.isEmpty
+                            ? _listController.searchResult[index].startMinute
+                            : _listController.searchTodoList.value
+                                .todoList[index].startMinute),
                 endTime: TimeOfDay(
                     hour: _listController.searchTodoList.value.todoList.isEmpty
                         ? _listController.searchResult[index].endHour
                         : _listController
                             .searchTodoList.value.todoList[index].endHour,
-                    minute: _listController.searchTodoList.value.todoList.isEmpty
-                        ? _listController.searchResult[index].endMinute
-                        : _listController
-                            .searchTodoList.value.todoList[index].endMinute));
-            var currentTitle =
-                _listController.searchTodoList.value.todoList.isEmpty
-                    ? _listController.searchResult[index].title
-                    : _listController.searchTodoList.value.todoList[index].title;
-            var currentColorIndex = _listController
+                    minute:
+                        _listController.searchTodoList.value.todoList.isEmpty
+                            ? _listController.searchResult[index].endMinute
+                            : _listController.searchTodoList.value
+                                .todoList[index].endMinute));
+            var currentTitle = _listController
                     .searchTodoList.value.todoList.isEmpty
-                ? _listController.searchResult[index].colorIndex
-                : _listController.searchTodoList.value.todoList[index].colorIndex;
+                ? _listController.searchResult[index].title
+                : _listController.searchTodoList.value.todoList[index].title;
+            var currentColorIndex =
+                _listController.searchTodoList.value.todoList.isEmpty
+                    ? _listController.searchResult[index].colorIndex
+                    : _listController
+                        .searchTodoList.value.todoList[index].colorIndex;
             var currentDateTime = DateTime(
                 _listController.searchTodoList.value.todoList.isEmpty
                     ? _listController.searchResult[index].ymd.year
@@ -292,7 +297,8 @@ class _ListPageState extends State<ListPage> {
             var todoUid = _listController.searchTodoList.value.todoList.isEmpty
                 ? _listController.searchResult[index].uid
                 : _listController.searchTodoList.value.todoList[index].uid;
-            var memoTitle = _listController.searchTodoList.value.todoList.isEmpty
+            var memoTitle = _listController
+                    .searchTodoList.value.todoList.isEmpty
                 ? _listController.searchResult[index].memoText
                 : _listController.searchTodoList.value.todoList[index].memoText;
             return Padding(
@@ -333,7 +339,8 @@ class _ListPageState extends State<ListPage> {
                                       color: colorList[currentColorIndex]),
                                 ),
                                 SizedBox(
-                                    width: context.mediaQuery.size.width * 0.03),
+                                    width:
+                                        context.mediaQuery.size.width * 0.03),
                                 Text('${currentDateTime.year}.'
                                     '${currentDateTime.month}.'
                                     '${currentDateTime.day}'
@@ -354,7 +361,7 @@ class _ListPageState extends State<ListPage> {
                       ),
                       isListPageBool
                           ? Container(
-                              width: context.mediaQuery.size.width * 0.2,
+                              width: context.mediaQuery.size.width * 0.23,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -453,7 +460,7 @@ class _ListPageState extends State<ListPage> {
                 ],
               ),
               IconButton(
-                  icon: Icon(IconsDB.trash, size: 22),
+                  icon: Icon(IconsDB.trash, size: 26),
                   splashRadius: 20,
                   onPressed: () {
                     showDialog(
@@ -464,14 +471,17 @@ class _ListPageState extends State<ListPage> {
                             actions: [
                               MaterialButton(
                                 elevation: 0.0,
-                                color:
-                                    context.theme.primaryColor.withOpacity(0.4),
+                                color: context.theme.primaryColor,
                                 onPressed: () {
                                   Get.back();
                                 },
-                                child: Text('취소'),
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                               MaterialButton(
+                                elevation: 0,
                                 color: context.theme.primaryColor,
                                 onPressed: () async {
                                   _todoController.todoDelete(todoUid);
@@ -507,7 +517,10 @@ class _ListPageState extends State<ListPage> {
                                     backgroundColor: successColor,
                                   ));
                                 },
-                                child: Text('삭제'),
+                                child: Text('삭제',
+                                style: TextStyle(
+                                  color: Colors.white
+                                ),),
                               ),
                             ],
                           );
@@ -552,7 +565,7 @@ class _ListPageState extends State<ListPage> {
           actions: [
             MaterialButton(
               elevation: 0.0,
-              color: context.theme.primaryColor.withOpacity(0.4),
+              color: context.theme.primaryColor,
               onPressed: () {
                 Get.back();
               },
@@ -569,11 +582,11 @@ class _ListPageState extends State<ListPage> {
                 _todoController.selectColorIndex(colorIndex);
                 _todoController.memoText(memoTitle);
                 _todoController.memoController.value.text = memoTitle;
-                Get.off(
-                  () => AddTodo(
-                    editMode: true,
-                    todoUid: todoUid,
-                  ),
+                _todoController.isEditMode(true);
+                _todoController.editTodoUid(todoUid);
+                _todoController.clickedAddButton(false);
+                Get.to(
+                  () => AddTodo(),
                 );
               },
               child: Text(

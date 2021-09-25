@@ -227,7 +227,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
               Get.offAll(() => Home(), transition: Transition.leftToRight);
             },
             elevation: 0,
-            color: context.theme.primaryColor.withOpacity(0.4),
+            color: context.theme.primaryColor,
             child: Text(
               '취소',
               style: TextStyle(color: Colors.white),
@@ -242,7 +242,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
           elevation: 0,
           color: _selectDateController.rangeBool.value
               ? context.theme.primaryColor
-              : Color(0xffecf0f1),
+              : context.theme.primaryColor.withOpacity(0.4),
           child: Text(
             '확인',
             style: TextStyle(color: Colors.white),
