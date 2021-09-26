@@ -20,7 +20,6 @@ class _HomePageState extends State<HomePage> {
   int touchedIndex = -1;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _selectedDay = _todoController.currentDateTime.value;
-  bool isDarkMode = GetStorage().read('isDarkMode');
   bool isPercentOrHour = GetStorage().read('isPercentOrHour') ?? false;
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -56,9 +55,7 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: isDarkMode
-                    ? Color(0xff95afc0)
-                    : colorList[
+                color: colorList[
                             _settingsController.selectPrimaryColorIndex.value]
                         .withOpacity(0.9),
                 borderRadius: BorderRadius.circular(10)),
@@ -109,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                   height: 7,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: isDarkMode ? Colors.white : markerColor),
+                      color: markerColorList[_settingsController.selectPrimaryColorIndex.value]),
                 ),
               );
             }

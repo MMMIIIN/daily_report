@@ -25,15 +25,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    appdata.writeIfNull('isDarkMode', false);
     return SimpleBuilder(builder: (_) {
-      bool isDarkMode = appdata.read('isDarkMode');
       return Obx(
         () => GetMaterialApp(
           // debugShowCheckedModeBanner: false,
           title: 'Daily Report',
-          darkTheme:
-              ThemeData(brightness: Brightness.dark, fontFamily: 'Hyemin'),
           theme: ThemeData(
               primaryColor:
                   colorList[_settingsController.selectPrimaryColorIndex.value],
@@ -44,7 +40,7 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: [const Locale('ko', 'KR')],
-          themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          themeMode: ThemeMode.light,
           initialRoute: '/',
           initialBinding: InitBinding(),
           getPages: [

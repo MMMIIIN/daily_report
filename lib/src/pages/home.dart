@@ -12,7 +12,6 @@ import 'package:daily_report/src/pages/settings/settings_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 import 'home/controller/home_controller.dart';
 
@@ -26,7 +25,6 @@ final HomeController _homeController = Get.put(HomeController());
 final SettingsController _settingsController = Get.put(SettingsController());
 
 class _HomeState extends State<Home> {
-  bool isDarkMode = GetStorage().read('isDarkMode') ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +74,11 @@ class _HomeState extends State<Home> {
                         height: 60,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: isDarkMode
-                                ? darkPrimaryColor
-                                : colorList[_settingsController
+                            color: colorList[_settingsController
                                     .selectPrimaryColorIndex.value]),
                         child: Icon(
                           Icons.add,
-                          color: isDarkMode ? Colors.black : Colors.white,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -90,7 +86,7 @@ class _HomeState extends State<Home> {
                   bottomNavigationBar: BottomAppBar(
                     shape: CircularNotchedRectangle(),
                     child:
-                        Obx(() => isDarkMode ? darkModeRow() : lightModeRow()),
+                        Obx(() => lightModeRow()),
                   ),
                 );
               }
@@ -98,57 +94,6 @@ class _HomeState extends State<Home> {
           );
         }
       },
-    );
-  }
-
-  Widget darkModeRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 15.0),
-          child: IconButton(
-              icon: Icon(
-                _homeController.currentIndex.value == 0
-                    ? IconsDB.home_filled
-                    : IconsDB.home_outlined,
-                size: 22,
-              ),
-              onPressed: () {
-                _homeController.changeTapMenu(0);
-              }),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 30.0),
-          child: IconButton(
-              icon: Icon(_homeController.currentIndex.value == 1
-                  ? IconsDB.menu_filled
-                  : IconsDB.menu_outlined),
-              onPressed: () {
-                _homeController.changeTapMenu(1);
-              }),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: IconButton(
-              icon: Icon(_homeController.currentIndex.value == 2
-                  ? IconsDB.pie_chart_filled
-                  : IconsDB.pie_chart_outlined),
-              onPressed: () {
-                _homeController.changeTapMenu(2);
-              }),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 15.0),
-          child: IconButton(
-              icon: Icon(_homeController.currentIndex.value == 3
-                  ? IconsDB.settings_filled
-                  : IconsDB.settings_outlined),
-              onPressed: () {
-                _homeController.changeTapMenu(3);
-              }),
-        ),
-      ],
     );
   }
 
@@ -191,9 +136,9 @@ class _HomeState extends State<Home> {
           child: IconButton(
               icon: Icon(
                 _homeController.currentIndex.value == 2
-                    ? IconsDB.pie_chart_filled
-                    : IconsDB.pie_chart_outlined,
-                size: 24,
+                    ? IconsDB.custom_chart_filled
+                    : IconsDB.custom_chart_outlined,
+                size: 35,
                 color: colorList[_settingsController
                     .selectPrimaryColorIndex.value],
               ),

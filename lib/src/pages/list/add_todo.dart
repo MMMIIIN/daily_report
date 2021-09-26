@@ -10,7 +10,6 @@ import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
@@ -25,7 +24,6 @@ class AddTodo extends StatefulWidget {
 }
 
 class _AddTodoState extends State<AddTodo> {
-  bool isDarkMode = GetStorage().read('isDarkMode');
   final currentDay = DateTime(
       _todoController.currentDateTime.value.year,
       _todoController.currentDateTime.value.month,
@@ -112,10 +110,8 @@ class _AddTodoState extends State<AddTodo> {
                             margin: const EdgeInsets.all(4),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: isDarkMode
-                                    ? Color(0xff95afc0)
-                                    : context.theme.primaryColor
-                                        .withOpacity(0.9),
+                                color:
+                                    context.theme.primaryColor.withOpacity(0.9),
                                 borderRadius: BorderRadius.circular(10)),
                             child: date.year == DateTime.now().year &&
                                     date.month == DateTime.now().month &&
@@ -172,7 +168,7 @@ class _AddTodoState extends State<AddTodo> {
                             ),
                           ),
                           markerBuilder: (context, date, _) {
-                            if (isDarkMode && _.isNotEmpty) {
+                            if (_.isNotEmpty) {
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 5.0),
                                 child: Container(
@@ -275,7 +271,7 @@ class _AddTodoState extends State<AddTodo> {
                 '${_listController.getOfDay(_todoController.currentDateTime.value.weekday)}',
                 style: TextStyle(
                     fontSize: 20,
-                    color: isDarkMode ? Colors.black : Colors.black,
+                    color: Colors.black,
                     fontWeight: FontWeight.w400),
               )
             ],
@@ -299,7 +295,7 @@ class _AddTodoState extends State<AddTodo> {
           },
           style: TextStyle(color: Colors.black),
           controller: _todoController.titleTextController.value,
-          cursorColor: isDarkMode ? Colors.black : Colors.black,
+          cursorColor: Colors.black,
           decoration: InputDecoration(
             suffixIcon: _todoController.titleText.value.isEmpty
                 ? null
@@ -315,11 +311,10 @@ class _AddTodoState extends State<AddTodo> {
               borderSide: BorderSide(color: Colors.transparent),
             ),
             focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: isDarkMode ? Colors.black : Colors.transparent)),
+                borderSide: BorderSide(color: Colors.transparent)),
             hintText: 'ex) 회사',
             hintStyle: TextStyle(
-              color: isDarkMode ? Colors.black : Colors.black.withOpacity(0.4),
+              color: Colors.black.withOpacity(0.4),
               fontWeight: FontWeight.w300,
             ),
           ),
@@ -734,7 +729,7 @@ class _AddTodoState extends State<AddTodo> {
                       '${_todoController.defaultTime.value.startTime.hour < 13 ? '${_todoController.defaultTime.value.startTime.hour}' : '${_todoController.defaultTime.value.startTime.hour - 12}'} : '
                       '${_todoController.defaultTime.value.startTime.minute}',
                       style: TextStyle(
-                          color: isDarkMode ? Colors.black : Colors.black,
+                          color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.w200),
                     ),
@@ -742,9 +737,7 @@ class _AddTodoState extends State<AddTodo> {
                 ),
                 Text(
                   '-',
-                  style: TextStyle(
-                      color: isDarkMode ? Colors.black : Colors.black,
-                      fontSize: 20),
+                  style: TextStyle(color: Colors.black, fontSize: 20),
                 ),
                 Row(
                   children: [
@@ -753,7 +746,7 @@ class _AddTodoState extends State<AddTodo> {
                       '${_todoController.defaultTime.value.endTime.hour < 13 ? '${_todoController.defaultTime.value.endTime.hour}' : '${_todoController.defaultTime.value.endTime.hour - 12}'} : '
                       '${_todoController.defaultTime.value.endTime.minute}',
                       style: TextStyle(
-                          color: isDarkMode ? Colors.black : Colors.black,
+                          color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.w200),
                     ),
@@ -788,9 +781,7 @@ class _AddTodoState extends State<AddTodo> {
                     height: 25,
                     decoration: BoxDecoration(
                       border: _todoController.selectColorIndex.value == index
-                          ? Border.all(
-                              width: 3,
-                              color: isDarkMode ? Colors.white : Colors.black)
+                          ? Border.all(width: 3, color: Colors.black)
                           : null,
                       shape: BoxShape.circle,
                       color: colorList[index],
@@ -807,92 +798,102 @@ class _AddTodoState extends State<AddTodo> {
     return Obx(
       () => GestureDetector(
         onTap: _todoController.isEditMode.value
-            ? _todoController.clickedAddButton.value ? null : () async {
-                _todoController.clickedAddButton(true);
-                var todoUpdateDto = TestTodo(
-                    uid: _todoController.editTodoUid.value,
-                    ymd: DateTime(
-                        _todoController.currentDateTime.value.year,
-                        _todoController.currentDateTime.value.month,
-                        _todoController.currentDateTime.value.day),
-                    title: _todoController.titleTextController.value.text,
-                    memoText: _todoController.memoText.value,
-                    startHour: _todoController.defaultTime.value.startTime.hour,
-                    startMinute:
-                        _todoController.defaultTime.value.startTime.minute,
-                    endHour: _todoController.defaultTime.value.endTime.hour,
-                    endMinute: _todoController.defaultTime.value.endTime.minute,
-                    value: _todoController.defaultValue.value,
-                    colorIndex: _todoController.selectColorIndex.value,
-                    hourMinute: _todoController.defaultValue.value % 60 == 0
-                        ? '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
-                        : '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
-                            '${_todoController.defaultValue.value.toInt() % 60}분');
-                await updateFireStore(todoUpdateDto);
-                var todoIndex = _todoController.todoUidList.value.todoList
-                    .indexWhere((element) => element.uid == todoUpdateDto.uid);
-                if (todoIndex != -1) {
-                  _todoController.todoUidList.value.todoList[todoIndex].value =
-                      todoUpdateDto.value;
-                  _todoController.todoUidList.value.todoList[todoIndex].title =
-                      todoUpdateDto.title;
-                  _todoController.todoUidList.value.todoList[todoIndex]
-                      .memoText = todoUpdateDto.memoText;
-                  _todoController.todoUidList.value.todoList[todoIndex]
-                      .startHour = todoUpdateDto.startHour;
-                  _todoController.todoUidList.value.todoList[todoIndex]
-                      .startMinute = todoUpdateDto.startMinute;
-                  _todoController.todoUidList.value.todoList[todoIndex]
-                      .endHour = todoUpdateDto.endHour;
-                  _todoController.todoUidList.value.todoList[todoIndex]
-                      .endMinute = todoUpdateDto.endMinute;
-                  _todoController.todoUidList.value.todoList[todoIndex]
-                      .colorIndex = todoUpdateDto.colorIndex;
-                  _todoController.todoUidList.value.todoList[todoIndex]
-                      .hourMinute = todoUpdateDto.hourMinute;
-                  _todoController.todoUidList.value.todoList[todoIndex].ymd =
-                      todoUpdateDto.ymd;
-                  _chartController.makeRangeDate();
-                  _todoController.clearMemoController();
-                  _todoController
-                      .initHome(_todoController.currentDateTime.value);
-                  _todoController.titleTextController.value.clear();
-                  _todoController.titleText('');
-                  await Get.off(() => Home());
-                }
-              }
-            : _todoController.clickedAddButton.value ? null : () async {
-                _todoController.clickedAddButton(true);
-                var todoAddDto = TestTodo(
-                    uid: 'NULL',
-                    ymd: DateTime(
-                        _todoController.currentDateTime.value.year,
-                        _todoController.currentDateTime.value.month,
-                        _todoController.currentDateTime.value.day),
-                    title: _todoController.titleTextController.value.text,
-                    memoText: _todoController.memoController.value.text,
-                    startHour: _todoController.defaultTime.value.startTime.hour,
-                    startMinute:
-                        _todoController.defaultTime.value.startTime.minute,
-                    endHour: _todoController.defaultTime.value.endTime.hour,
-                    endMinute: _todoController.defaultTime.value.endTime.minute,
-                    value: _todoController.defaultValue.value,
-                    colorIndex: _todoController.selectColorIndex.value,
-                    hourMinute: _todoController.defaultValue.value % 60 == 0
-                        ? '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
-                        : '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
-                            '${_todoController.defaultValue.value.toInt() % 60}분');
-                await addFireStore(todoAddDto);
-                _todoController.addTodo(todoAddDto..uid = currentTodoUid);
-                _chartController.makeRangeDate();
-                await _listController.initSearchResult();
-                _listController.searchTitle('');
-                _todoController.clearMemoController();
-                _todoController.initHome(_todoController.currentDateTime.value);
-                await Get.offAll(() => Home());
-                _todoController.titleTextController.value.clear();
-                _todoController.titleText('');
-              },
+            ? _todoController.clickedAddButton.value
+                ? null
+                : () async {
+                    _todoController.clickedAddButton(true);
+                    var todoUpdateDto = TestTodo(
+                        uid: _todoController.editTodoUid.value,
+                        ymd: DateTime(
+                            _todoController.currentDateTime.value.year,
+                            _todoController.currentDateTime.value.month,
+                            _todoController.currentDateTime.value.day),
+                        title: _todoController.titleTextController.value.text,
+                        memoText: _todoController.memoText.value,
+                        startHour:
+                            _todoController.defaultTime.value.startTime.hour,
+                        startMinute:
+                            _todoController.defaultTime.value.startTime.minute,
+                        endHour: _todoController.defaultTime.value.endTime.hour,
+                        endMinute:
+                            _todoController.defaultTime.value.endTime.minute,
+                        value: _todoController.defaultValue.value,
+                        colorIndex: _todoController.selectColorIndex.value,
+                        hourMinute: _todoController.defaultValue.value % 60 == 0
+                            ? '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
+                            : '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
+                                '${_todoController.defaultValue.value.toInt() % 60}분');
+                    await updateFireStore(todoUpdateDto);
+                    var todoIndex = _todoController.todoUidList.value.todoList
+                        .indexWhere(
+                            (element) => element.uid == todoUpdateDto.uid);
+                    if (todoIndex != -1) {
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .value = todoUpdateDto.value;
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .title = todoUpdateDto.title;
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .memoText = todoUpdateDto.memoText;
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .startHour = todoUpdateDto.startHour;
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .startMinute = todoUpdateDto.startMinute;
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .endHour = todoUpdateDto.endHour;
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .endMinute = todoUpdateDto.endMinute;
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .colorIndex = todoUpdateDto.colorIndex;
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .hourMinute = todoUpdateDto.hourMinute;
+                      _todoController.todoUidList.value.todoList[todoIndex]
+                          .ymd = todoUpdateDto.ymd;
+                      _chartController.makeRangeDate();
+                      _todoController.clearMemoController();
+                      _todoController
+                          .initHome(_todoController.currentDateTime.value);
+                      _todoController.titleTextController.value.clear();
+                      _todoController.titleText('');
+                      await Get.off(() => Home());
+                    }
+                  }
+            : _todoController.clickedAddButton.value
+                ? null
+                : () async {
+                    _todoController.clickedAddButton(true);
+                    var todoAddDto = TestTodo(
+                        uid: 'NULL',
+                        ymd: DateTime(
+                            _todoController.currentDateTime.value.year,
+                            _todoController.currentDateTime.value.month,
+                            _todoController.currentDateTime.value.day),
+                        title: _todoController.titleTextController.value.text,
+                        memoText: _todoController.memoController.value.text,
+                        startHour:
+                            _todoController.defaultTime.value.startTime.hour,
+                        startMinute:
+                            _todoController.defaultTime.value.startTime.minute,
+                        endHour: _todoController.defaultTime.value.endTime.hour,
+                        endMinute:
+                            _todoController.defaultTime.value.endTime.minute,
+                        value: _todoController.defaultValue.value,
+                        colorIndex: _todoController.selectColorIndex.value,
+                        hourMinute: _todoController.defaultValue.value % 60 == 0
+                            ? '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
+                            : '${_todoController.defaultValue.value.toInt() ~/ 60}시간 '
+                                '${_todoController.defaultValue.value.toInt() % 60}분');
+                    await addFireStore(todoAddDto);
+                    _todoController.addTodo(todoAddDto..uid = currentTodoUid);
+                    _chartController.makeRangeDate();
+                    await _listController.initSearchResult();
+                    _listController.searchTitle('');
+                    _todoController.clearMemoController();
+                    _todoController
+                        .initHome(_todoController.currentDateTime.value);
+                    await Get.offAll(() => Home());
+                    _todoController.titleTextController.value.clear();
+                    _todoController.titleText('');
+                  },
         child: Container(
           width: double.infinity,
           height: 50,
@@ -997,17 +998,11 @@ class _AddTodoState extends State<AddTodo> {
                     },
                     ticks: 24,
                     handlerRadius: 8,
-                    handlerColor:
-                        isDarkMode ? Colors.grey : context.theme.primaryColor,
-                    backgroundColor: isDarkMode
-                        ? Colors.white.withOpacity(0.1)
-                        : context.theme.primaryColor.withOpacity(0.1),
-                    strokeColor: isDarkMode
-                        ? Colors.white.withOpacity(0.9)
-                        : context.theme.primaryColor.withOpacity(0.8),
-                    ticksColor: isDarkMode
-                        ? Colors.white.withOpacity(0.8)
-                        : context.theme.primaryColor,
+                    handlerColor: context.theme.primaryColor,
+                    backgroundColor:
+                        context.theme.primaryColor.withOpacity(0.1),
+                    strokeColor: context.theme.primaryColor.withOpacity(0.8),
+                    ticksColor: context.theme.primaryColor,
                     labelOffset: 30,
                     rotateLabels: false,
                     padding: 60,

@@ -2,24 +2,21 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class SettingsController extends GetxController {
-  RxInt isDarkModeIndex = 0.obs;
   RxInt isPercentOrHourIndex = 0.obs;
   RxInt isTimePickerTimeIndex = 1.obs;
   RxInt timePickerOfInterval = 10.obs;
   RxInt listPageIndex = 0.obs;
   RxInt selectPrimaryColorIndex = 0.obs;
 
-  void setDarkModeIndex(int index) {
-    isDarkModeIndex(index);
-    setDarkMode();
+  RxString loginText = '로그인'.obs;
+  RxBool clickedLogin = false.obs;
+
+  void setLoginText(){
+    loginText('');
   }
 
-  void setDarkMode() {
-    if (isDarkModeIndex.value == 0) {
-      GetStorage().write('isDarkMode', false);
-    } else {
-      GetStorage().write('isDarkMode', true);
-    }
+  void setClickedLogin() {
+    clickedLogin(true);
   }
 
   void setPercentOrHourIndex(int index) {
@@ -79,16 +76,10 @@ class SettingsController extends GetxController {
   }
 
   void setInitStorage() {
-    var darkModeIndex = GetStorage().read('isDarkMode') ?? false;
     var percentOrHour = GetStorage().read('isPercentOrHour') ?? false;
     var listPageIndex = GetStorage().read('isListPageBool') ?? false;
     var interval = GetStorage().read('timePickerOfInterval') ?? 1;
     var colorIndex = GetStorage().read('primaryColor') ?? 0;
-    if (darkModeIndex == null) {
-      isDarkModeIndex(1);
-    } else {
-      isDarkModeIndex(0);
-    }
     if (percentOrHour) {
       isPercentOrHourIndex(1);
       setPercentOrHourIndex(1);

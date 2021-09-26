@@ -6,7 +6,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 final ChartController _chartController = Get.put(ChartController());
@@ -19,7 +18,6 @@ class ChartPage extends StatefulWidget {
 }
 
 class _ChartPageState extends State<ChartPage> {
-  final bool isDarkMode = GetStorage().read('isDarkMode');
   var now = DateTime.now();
   int touchedIndex = -1;
 
@@ -62,11 +60,9 @@ class _ChartPageState extends State<ChartPage> {
       totalSwitches: 2,
       initialLabelIndex: _chartController.modeIndex.value,
       labels: ['%', 'h'],
-      inactiveBgColor: isDarkMode
-          ? primaryColor
-          : context.theme.primaryColor.withOpacity(0.2),
+      inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
       activeBgColor: [
-        isDarkMode ? Color(0xffecf0f1) : context.theme.primaryColor
+        context.theme.primaryColor
       ],
       onToggle: (index) {
         _chartController.setMode(index);

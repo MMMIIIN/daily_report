@@ -23,7 +23,6 @@ final ChartController _chartController = Get.put(ChartController());
 class _ListPageState extends State<ListPage> {
   int touchedIndex = -1;
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
-  bool isDarkMode = GetStorage().read('isDarkMode') ?? false;
   bool isListPageBool = GetStorage().read('isListPageBool') ?? false;
 
   @override
@@ -104,9 +103,7 @@ class _ListPageState extends State<ListPage> {
           margin: const EdgeInsets.all(4),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: isDarkMode
-                  ? Color(0xff95afc0)
-                  : context.theme.primaryColor.withOpacity(0.9),
+              color: context.theme.primaryColor.withOpacity(0.9),
               borderRadius: BorderRadius.circular(10)),
           child: date.year == DateTime.now().year &&
                   date.month == DateTime.now().month &&
@@ -165,7 +162,7 @@ class _ListPageState extends State<ListPage> {
                 height: 7,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: isDarkMode ? Colors.white : markerColor),
+                    color: markerColor),
               ),
             );
           }

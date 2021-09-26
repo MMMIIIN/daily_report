@@ -1,7 +1,10 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
+import 'package:daily_report/src/pages/license/license_page.dart';
+import 'package:daily_report/src/pages/login/login_page.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:daily_report/src/pages/settings/select_primary_color_page.dart';
+import 'package:daily_report/src/pages/signup/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +18,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final isDarkMode = _settingsController.isDarkModeIndex.value == 1;
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +30,24 @@ class _SettingsPageState extends State<SettingsPage> {
             Column(
               children: [
                 userInfo(),
-                darkMode(),
                 showPercentOrHour(),
                 listPageSelect(),
                 timePickerOfTime(),
                 selectPrimaryColor(),
                 logoutButton(),
+                MaterialButton(onPressed: () {
+                  Get.to(() => SignUpPage());
+                }),
+                MaterialButton(onPressed: () {
+                  Get.to(() => LoginPage());
+                }),
               ],
             ),
             Column(
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => LicensePage());
+                    Get.to(() => ShowLicensePage());
                   },
                   child: Text(
                     '오픈소스 라이센스',
@@ -65,45 +72,13 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Icon(
           IconsDB.user_man_circle_outlined,
-          color: isDarkMode ? Colors.white : Colors.black,
+          color: Colors.black,
         ),
         Text(
           '  ${FirebaseAuth.instance.currentUser!.email}',
           style: TextStyle(fontSize: 17),
         ),
       ],
-    );
-  }
-
-  Widget darkMode() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('다크모드'),
-          ToggleSwitch(
-            minWidth: 40,
-            minHeight: 30,
-            totalSwitches: 2,
-            labels: ['v', 'v'],
-            customTextStyles: [
-              TextStyle(color: isDarkMode ? Colors.transparent : Colors.white),
-              TextStyle(color: isDarkMode ? primaryColor : Colors.transparent)
-            ],
-            inactiveBgColor: isDarkMode
-                ? primaryColor.withOpacity(0.7)
-                : context.theme.primaryColor.withOpacity(0.2),
-            activeBgColor: [
-              isDarkMode ? darkPrimaryColor : context.theme.primaryColor
-            ],
-            initialLabelIndex: _settingsController.isDarkModeIndex.value,
-            onToggle: (index) {
-              _settingsController.setDarkModeIndex(index);
-            },
-          ),
-        ],
-      ),
     );
   }
 
@@ -119,11 +94,9 @@ class _SettingsPageState extends State<SettingsPage> {
             minHeight: 30,
             totalSwitches: 2,
             labels: ['%', '분'],
-            inactiveBgColor: isDarkMode
-                ? primaryColor.withOpacity(0.7)
-                : context.theme.primaryColor.withOpacity(0.2),
+            inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
             activeBgColor: [
-              isDarkMode ? darkPrimaryColor : context.theme.primaryColor
+              context.theme.primaryColor
             ],
             initialLabelIndex: _settingsController.isPercentOrHourIndex.value,
             onToggle: (index) {
@@ -160,11 +133,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         ? Colors.black
                         : Colors.white),
               ],
-              inactiveBgColor: isDarkMode
-                  ? primaryColor.withOpacity(0.7)
-                  : context.theme.primaryColor.withOpacity(0.2),
+              inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
               activeBgColor: [
-                isDarkMode ? darkPrimaryColor : context.theme.primaryColor
+                context.theme.primaryColor
               ],
               initialLabelIndex: _settingsController.listPageIndex.value,
               onToggle: (index) {
@@ -190,11 +161,9 @@ class _SettingsPageState extends State<SettingsPage> {
             totalSwitches: 5,
             labels: ['5m', '10m', '15m', '20m', '30m'],
             activeBgColor: [
-              isDarkMode ? darkPrimaryColor : context.theme.primaryColor
+              context.theme.primaryColor
             ],
-            inactiveBgColor: isDarkMode
-                ? primaryColor.withOpacity(0.7)
-                : context.theme.primaryColor.withOpacity(0.2),
+            inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
             initialLabelIndex: _settingsController.isTimePickerTimeIndex.value,
             onToggle: (index) {
               _settingsController.setTimePickerTimeIndex(index);
