@@ -4,6 +4,7 @@ import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
+import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class ListPage extends StatefulWidget {
 final TodoController _todoController = Get.put(TodoController());
 final ListController _listController = Get.put(ListController());
 final ChartController _chartController = Get.put(ChartController());
+final SettingsController _settingsController = Get.put(SettingsController());
 
 class _ListPageState extends State<ListPage> {
   int touchedIndex = -1;
@@ -162,7 +164,8 @@ class _ListPageState extends State<ListPage> {
                 height: 7,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: markerColor),
+                    color: markerColorList[
+                        _settingsController.selectPrimaryColorIndex.value]),
               ),
             );
           }
@@ -514,10 +517,10 @@ class _ListPageState extends State<ListPage> {
                                     backgroundColor: successColor,
                                   ));
                                 },
-                                child: Text('삭제',
-                                style: TextStyle(
-                                  color: Colors.white
-                                ),),
+                                child: Text(
+                                  '삭제',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ],
                           );

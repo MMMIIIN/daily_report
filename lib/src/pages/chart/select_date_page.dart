@@ -3,16 +3,17 @@ import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/select_date_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
+import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 final SelectDateController _selectDateController =
     Get.put(SelectDateController());
 final ChartController _chartController = Get.put(ChartController());
 final TodoController _todoController = Get.put(TodoController());
+final SettingsController _settingsController = Get.put(SettingsController());
 
 class SelectDatePage extends StatefulWidget {
   @override
@@ -41,9 +42,9 @@ class _SelectDatePageState extends State<SelectDatePage> {
               ),
               date.weekday == 6 || date.weekday == 7
                   ? Text(
-                date.day.toString(),
-                style: TextStyle(color: Colors.redAccent),
-              )
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.redAccent),
+                    )
                   : Text(date.day.toString())
             ],
           ),
@@ -55,34 +56,24 @@ class _SelectDatePageState extends State<SelectDatePage> {
               color: context.theme.primaryColor,
               borderRadius: BorderRadius.circular(10)),
           child: date.year == DateTime.now().year &&
-              date.month == DateTime.now().month &&
-              date.day == DateTime.now().day
+                  date.month == DateTime.now().month &&
+                  date.day == DateTime.now().day
               ? Column(
-            children: [
-              Text(
-                'today',
-                style: TextStyle(fontSize: 10, color: Colors.white),
-              ),
-              date.weekday == 6 || date.weekday == 7
-                  ? Text(
-                date.day.toString(),
-                style: TextStyle(color: Colors.redAccent),
-              )
-                  : Text(
-                date.day.toString(),
-                style: TextStyle(color: Colors.white),
-              )
-            ],
-          )
-              : date.weekday == 6 || date.weekday == 7
-              ? Text(
-            date.day.toString(),
-            style: TextStyle(color: Colors.redAccent),
-          )
+                  children: [
+                    Text(
+                      'today',
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    ),
+                    Text(
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                )
               : Text(
-            date.day.toString(),
-            style: TextStyle(color: Colors.white),
-          ),
+                  date.day.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
         ),
         rangeEndBuilder: (context, date, _) => Container(
           margin: const EdgeInsets.all(4),
@@ -91,34 +82,24 @@ class _SelectDatePageState extends State<SelectDatePage> {
               color: context.theme.primaryColor,
               borderRadius: BorderRadius.circular(10)),
           child: date.year == DateTime.now().year &&
-              date.month == DateTime.now().month &&
-              date.day == DateTime.now().day
+                  date.month == DateTime.now().month &&
+                  date.day == DateTime.now().day
               ? Column(
-            children: [
-              Text(
-                'today',
-                style: TextStyle(fontSize: 10, color: Colors.white),
-              ),
-              date.weekday == 6 || date.weekday == 7
-                  ? Text(
-                date.day.toString(),
-                style: TextStyle(color: Colors.redAccent),
-              )
-                  : Text(
-                date.day.toString(),
-                style: TextStyle(color: Colors.white),
-              )
-            ],
-          )
-              : date.weekday == 6 || date.weekday == 7
-              ? Text(
-            date.day.toString(),
-            style: TextStyle(color: Colors.redAccent),
-          )
+                  children: [
+                    Text(
+                      'today',
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    ),
+                    Text(
+                            date.day.toString(),
+                            style: TextStyle(color: Colors.white),
+                          )
+                  ],
+                )
               : Text(
-            date.day.toString(),
-            style: TextStyle(color: Colors.white),
-          ),
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.white),
+                    ),
         ),
         rangeHighlightBuilder: (context, date, _) => Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
@@ -148,7 +129,8 @@ class _SelectDatePageState extends State<SelectDatePage> {
                 height: 7,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.black87),
+                    color: markerColorList[
+                        _settingsController.selectPrimaryColorIndex.value]),
               ),
             );
           }

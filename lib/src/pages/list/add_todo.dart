@@ -176,7 +176,7 @@ class _AddTodoState extends State<AddTodo> {
                                   height: 7,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white),
+                                      color: markerColorList[_settingsController.selectPrimaryColorIndex.value]),
                                 ),
                               );
                             }

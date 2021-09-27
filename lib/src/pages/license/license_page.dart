@@ -48,71 +48,79 @@ class IconLicense extends StatelessWidget {
               children: [
                 ListTile(
                   leading: Icon(IconsDB.mail_outlined),
-                  trailing: Text('Icons made by Tomas Knop from www.flaticon.com'),
+                  title: Text('Icons made by Tomas Knop from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.home_outlined),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.home_filled),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.menu_outlined),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.menu_filled),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.trash),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.settings_outlined),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.settings_filled),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.user_man_filled),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.user_woman_filled),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.user_woman_outlined),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.user_woman_circle_outlined),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.user_man_circle_outlined),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.user_man_outlined),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.locked_outlined),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.locked_filled),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
                   leading: Icon(IconsDB.cancle_outlined),
-                  trailing: Text('Icons made by Smashicons from www.flaticon.com'),
+                  title: Text('Icons made by Smashicons from www.flaticon.com'),
+                ),
+                ListTile(
+                  leading: Icon(IconsDB.custom_chart_outlined,size: 35),
+                  title: Text('Icons made by SeongXi'),
+                ),
+                ListTile(
+                  leading: Icon(IconsDB.custom_chart_filled,size: 35),
+                  title: Text('Icons made by SeongXi'),
                 ),
               ],
             ),
