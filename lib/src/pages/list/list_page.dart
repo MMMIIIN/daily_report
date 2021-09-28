@@ -420,15 +420,9 @@ class _ListPageState extends State<ListPage> {
     });
   }
 
-  Future<void> todoDialog(
-      BuildContext context,
-      String title,
-      String memoTitle,
-      DateTime dateTime,
-      TimeRange timeRange,
-      int colorIndex,
-      String todoUid) async {
-    await showDialog(
+  void todoDialog(BuildContext context, String title, String memoTitle,
+      DateTime dateTime, TimeRange timeRange, int colorIndex, String todoUid) {
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         print('todoUid = $todoUid');
@@ -510,6 +504,7 @@ class _ListPageState extends State<ListPage> {
                                   });
                                   Get.back();
                                   Get.back();
+                                  setState(() {});
                                   await Get.showSnackbar(GetBar(
                                     duration: Duration(seconds: 2),
                                     title: 'SUCCESS',
