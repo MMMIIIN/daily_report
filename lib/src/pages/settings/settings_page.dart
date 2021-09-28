@@ -214,7 +214,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       Get.back();
                     },
                     elevation: 0.0,
-                    color: context.theme.primaryColor.withOpacity(0.4),
+                    color: context.theme.primaryColor,
                     child: Text('취소'),
                   ),
                   MaterialButton(

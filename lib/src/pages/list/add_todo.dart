@@ -61,7 +61,6 @@ class _AddTodoState extends State<AddTodo> {
                 ],
               ),
               colorSelect(),
-              // actionButton(context)
               completeButton()
             ],
           ),
@@ -98,10 +97,9 @@ class _AddTodoState extends State<AddTodo> {
           context: context,
           builder: (_) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 100),
-            child: Dialog(
+            child: Obx(() => Dialog(
               insetPadding: EdgeInsets.symmetric(horizontal: 15),
-              child: Obx(
-                () => Column(
+              child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     TableCalendar(
@@ -225,7 +223,7 @@ class _AddTodoState extends State<AddTodo> {
                             _todoController.selectDateTime(
                                 _todoController.currentDateTime.value);
                           },
-                          color: context.theme.primaryColor.withOpacity(0.5),
+                          color: context.theme.primaryColor,
                           elevation: 0,
                           child: Text(
                             '취 소',
@@ -238,6 +236,7 @@ class _AddTodoState extends State<AddTodo> {
                                 _todoController.selectDateTime.value);
                             Get.back();
                           },
+                          elevation: 0,
                           color: context.theme.primaryColor,
                           child: Text(
                             '확 인',
@@ -250,7 +249,7 @@ class _AddTodoState extends State<AddTodo> {
                 ),
               ),
             ),
-          ),
+            ),
         );
       },
       child: Obx(
@@ -443,7 +442,7 @@ class _AddTodoState extends State<AddTodo> {
                               Get.back();
                             },
                             elevation: 0,
-                            color: context.theme.primaryColor.withOpacity(0.4),
+                            color: context.theme.primaryColor,
                             child: Text(
                               '취 소',
                               style: TextStyle(color: Colors.white),
@@ -1015,7 +1014,7 @@ class _AddTodoState extends State<AddTodo> {
                           Get.back();
                         },
                         elevation: 0,
-                        color: context.theme.primaryColor.withOpacity(0.4),
+                        color: context.theme.primaryColor,
                         child: Text(
                           '취 소',
                           style: TextStyle(color: Colors.white),
