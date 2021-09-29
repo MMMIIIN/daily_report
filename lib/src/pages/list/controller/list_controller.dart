@@ -70,6 +70,12 @@ class ListController extends GetxController {
     }
   }
 
+  Future<void> clearData() async{
+    selectedDays.clear();
+    searchTodoList.value.todoList.clear();
+    searchResult.clear();
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit

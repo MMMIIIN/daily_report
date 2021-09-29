@@ -1,4 +1,6 @@
 import 'package:daily_report/icons.dart';
+import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
+import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:daily_report/src/pages/login/controller/login_controller.dart';
 import 'package:daily_report/src/pages/signup/signup_page.dart';

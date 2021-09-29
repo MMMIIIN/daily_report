@@ -137,6 +137,12 @@ class ChartController extends GetxController {
     }
   }
 
+  Future<void> clearData() async{
+    currentIndexList.clear();
+    checkChartPageList.value.todoList.clear();
+    chartPageList.value.todoList.clear();
+  }
+
   @override
   void onInit() {
     super.onInit();

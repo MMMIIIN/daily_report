@@ -3,6 +3,7 @@ import 'package:daily_report/color.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/error/error_handling.dart';
+import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:daily_report/src/pages/login/controller/login_controller.dart';
@@ -20,6 +21,7 @@ final TodoController _todoController = Get.put(TodoController());
 final LoginController _loginController = Get.put(LoginController());
 final ListController _listController = Get.put(ListController());
 final SignUpController _signUpController = Get.put(SignUpController());
+final ChartController _chartController = Get.put(ChartController());
 
 Future<void> addTodoTitle(TodoTitle todoTitle) async {
   await FirebaseFirestore.instance
@@ -290,6 +292,8 @@ Future<void> firebaseLogIn(String userId, String userPw) async {
       await _todoController.initTodoTitleList();
       await _loginController.clearTextField();
       await _listController.initSearchResult();
+      await _listController.clearData();
+      await _chartController.clearData();
       await Get.off(() => Home());
     });
   } on FirebaseAuthException catch (e) {
