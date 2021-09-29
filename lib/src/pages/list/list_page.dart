@@ -237,11 +237,12 @@ class _ListPageState extends State<ListPage> {
       child: RefreshIndicator(
         color: context.theme.primaryColor,
         onRefresh: () async {
+          await Future.delayed(Duration(seconds: 1));
+          listCount = _listController.searchTodoList.value.todoList.isEmpty
+              ? _listController.searchResult.length
+              : _listController.searchTodoList.value.todoList.length;
           setState(() {
-            Future.delayed(Duration(seconds: 1));
-            listCount = _listController.searchTodoList.value.todoList.isEmpty
-                ? _listController.searchResult.length
-                : _listController.searchTodoList.value.todoList.length;
+            _listController.initSearchResult();
           });
         },
         child: ListView.builder(
@@ -379,14 +380,14 @@ class _ListPageState extends State<ListPage> {
                                 children: [
                                   Text(
                                     '${currentTimeRange.startTime.hour < 12 ? '오전' : '오후'} '
-                                    '${currentTimeRange.startTime.hour < 13 ? '${currentTimeRange.startTime.hour < 10 ? '0${currentTimeRange.startTime.hour} : ' : '${currentTimeRange.startTime.hour} : '}' : '${currentTimeRange.startTime.hour - 12 < 10 ? '0${currentTimeRange.startTime.hour - 12}' : '${currentTimeRange.startTime.hour - 12}'} : '}'
+                                    '${currentTimeRange.startTime.hour < 13 ? '${currentTimeRange.startTime.hour < 10 ? '0${currentTimeRange.startTime.hour}:' : '${currentTimeRange.startTime.hour}:'}' : '${currentTimeRange.startTime.hour - 12 < 10 ? '0${currentTimeRange.startTime.hour - 12}' : '${currentTimeRange.startTime.hour - 12}'}:'}'
                                     '${currentTimeRange.startTime.minute.toString() == '0' ? '00' : currentTimeRange.startTime.minute}',
                                     style: TextStyle(fontSize: 14),
                                   ),
                                   SizedBox(width: 10),
                                   Text(
                                     '${currentTimeRange.endTime.hour < 12 ? '오전' : '오후'} '
-                                    '${currentTimeRange.endTime.hour < 13 ? '${currentTimeRange.endTime.hour < 10 ? '0${currentTimeRange.endTime.hour} : ' : '${currentTimeRange.endTime.hour} : '}' : '${currentTimeRange.endTime.hour - 12 < 10 ? '0${currentTimeRange.endTime.hour - 12}' : '${currentTimeRange.endTime.hour - 12}'} : '}'
+                                    '${currentTimeRange.endTime.hour < 13 ? '${currentTimeRange.endTime.hour < 10 ? '0${currentTimeRange.endTime.hour}:' : '${currentTimeRange.endTime.hour}:'}' : '${currentTimeRange.endTime.hour - 12 < 10 ? '0${currentTimeRange.endTime.hour - 12}' : '${currentTimeRange.endTime.hour - 12}'}:'}'
                                     '${currentTimeRange.endTime.minute.toString() == '0' ? '00' : currentTimeRange.endTime.minute}',
                                     style: TextStyle(fontSize: 14),
                                   ),
@@ -593,5 +594,22 @@ class _ListPageState extends State<ListPage> {
         );
       },
     );
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    setState(() {
+      _listController.initSearchResult();
+      _listController.selectedDays.clear();
+      _listController.searchTerm('');
+      _listController.searchTitleController.value.clear();
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }
