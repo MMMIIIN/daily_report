@@ -18,7 +18,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -95,9 +94,7 @@ class _SettingsPageState extends State<SettingsPage> {
             totalSwitches: 2,
             labels: ['%', '분'],
             inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
-            activeBgColor: [
-              context.theme.primaryColor
-            ],
+            activeBgColor: [context.theme.primaryColor],
             initialLabelIndex: _settingsController.isPercentOrHourIndex.value,
             onToggle: (index) {
               _settingsController.setPercentOrHourIndex(index);
@@ -134,9 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         : Colors.white),
               ],
               inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
-              activeBgColor: [
-                context.theme.primaryColor
-              ],
+              activeBgColor: [context.theme.primaryColor],
               initialLabelIndex: _settingsController.listPageIndex.value,
               onToggle: (index) {
                 _settingsController.setListPageIndex(index);
@@ -160,9 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
             minHeight: 25,
             totalSwitches: 5,
             labels: ['5m', '10m', '15m', '20m', '30m'],
-            activeBgColor: [
-              context.theme.primaryColor
-            ],
+            activeBgColor: [context.theme.primaryColor],
             inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
             initialLabelIndex: _settingsController.isTimePickerTimeIndex.value,
             onToggle: (index) {
@@ -215,7 +208,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                     elevation: 0.0,
                     color: context.theme.primaryColor,
-                    child: Text('취소'),
+                    child: Text(
+                      '취소',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   MaterialButton(
                     onPressed: () {
@@ -224,7 +220,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                     elevation: 0.0,
                     color: context.theme.primaryColor,
-                    child: Text('확인'),
+                    child: Text(
+                      '확인',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               );

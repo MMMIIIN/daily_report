@@ -55,8 +55,8 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: colorList[
-                            _settingsController.selectPrimaryColorIndex.value]
+                color:
+                    colorList[_settingsController.selectPrimaryColorIndex.value]
                         .withOpacity(0.9),
                 borderRadius: BorderRadius.circular(10)),
             child: date.year == DateTime.now().year &&
@@ -106,7 +106,8 @@ class _HomePageState extends State<HomePage> {
                   height: 7,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: markerColorList[_settingsController.selectPrimaryColorIndex.value]),
+                      color: markerColorList[
+                          _settingsController.selectPrimaryColorIndex.value]),
                 ),
               );
             }
@@ -183,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                   sections: List<PieChartSectionData>.generate(
                       _todoController.currentIndexList.length, (index) {
                     final isTouched = index == touchedIndex;
-                    final radius = isTouched ? 80.0 : 60.0;
+                    final radius = isTouched ? context.mediaQuery.size.width * 0.17 : context.mediaQuery.size.width * 0.14;
                     return PieChartSectionData(
                       title:
                           '${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(0)}%',
@@ -197,7 +198,9 @@ class _HomePageState extends State<HomePage> {
                   }),
                 ),
               )
-            : Container(),
+            : Center(
+                child: Text('일정이 없습니다. 일정을 추가해보세요'),
+              ),
       ),
     );
   }
@@ -215,8 +218,8 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       children: [
                         Container(
-                          width: 18,
-                          height: 18,
+                          width: 17,
+                          height: 17,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: colorList[_todoController.currentUidList
@@ -235,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                                       .todoList[index].title,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),

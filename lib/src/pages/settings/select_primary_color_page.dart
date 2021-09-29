@@ -18,7 +18,7 @@ class SelectPrimaryColorPage extends StatelessWidget {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(10),
                   onTap: () {
-                    Get.off(Home());
+                    Get.off(() => Home());
                   },
                   child: Container(
                     alignment: Alignment.center,

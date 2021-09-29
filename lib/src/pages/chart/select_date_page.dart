@@ -28,6 +28,23 @@ class _SelectDatePageState extends State<SelectDatePage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   var rangeSelectionMode = RangeSelectionMode.toggledOn;
 
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: SafeArea(
+        child: Obx(
+          () => Column(
+            children: [
+              tableCalendar(),
+              twoButton(),
+              exampleText()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget tableCalendar() {
     return TableCalendar(
       calendarBuilders: CalendarBuilders(
@@ -91,15 +108,15 @@ class _SelectDatePageState extends State<SelectDatePage> {
                       style: TextStyle(fontSize: 10, color: Colors.white),
                     ),
                     Text(
-                            date.day.toString(),
-                            style: TextStyle(color: Colors.white),
-                          )
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.white),
+                    )
                   ],
                 )
               : Text(
-                      date.day.toString(),
-                      style: TextStyle(color: Colors.white),
-                    ),
+                  date.day.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
         ),
         rangeHighlightBuilder: (context, date, _) => Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
@@ -231,19 +248,19 @@ class _SelectDatePageState extends State<SelectDatePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: SafeArea(
-        child: Obx(
-          () => Column(
-            children: [
-              tableCalendar(),
-              twoButton(),
-            ],
-          ),
-        ),
-      ),
+  Widget exampleText() {
+    return Column(
+      children: [
+        SizedBox(height: 20,),
+        Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text('Tip : 시작 날짜 선택 후 종료 날짜 선택'),
+            ),
+          ],
+        )
+      ],
     );
   }
 }

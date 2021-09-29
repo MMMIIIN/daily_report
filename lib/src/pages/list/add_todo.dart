@@ -601,7 +601,7 @@ class _AddTodoState extends State<AddTodo> {
                           Get.back();
                         },
                         elevation: 0,
-                        color: context.theme.primaryColor.withOpacity(0.4),
+                        color: context.theme.primaryColor,
                         child: Text(
                           '취소',
                           style: TextStyle(color: Colors.white),
@@ -631,7 +631,7 @@ class _AddTodoState extends State<AddTodo> {
             customBorder:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               child: Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -647,7 +647,7 @@ class _AddTodoState extends State<AddTodo> {
                                   .todoTitleList[index].titleColor]),
                         ),
                         Container(
-                          width: context.mediaQuery.size.width * 0.4,
+                          width: context.mediaQuery.size.width * 0.35,
                           child: Text(
                             ' ${_todoController.todoTitleList[index].title}',
                             overflow: TextOverflow.ellipsis,
@@ -684,6 +684,7 @@ class _AddTodoState extends State<AddTodo> {
           onChanged: (text) {
             _todoController.memoText(text);
           },
+          textInputAction: TextInputAction.done,
           controller: _todoController.memoController.value,
           maxLines: 2,
           cursorColor: Colors.black,
@@ -885,7 +886,7 @@ class _AddTodoState extends State<AddTodo> {
                     _todoController.addTodo(todoAddDto..uid = currentTodoUid);
                     _chartController.makeRangeDate();
                     await _listController.initSearchResult();
-                    _listController.searchTitle('');
+                    await _listController.initSearchResult();
                     _todoController.clearMemoController();
                     _todoController
                         .initHome(_todoController.currentDateTime.value);
@@ -966,9 +967,9 @@ class _AddTodoState extends State<AddTodo> {
                 children: [
                   TimeRangePicker(
                     use24HourFormat: false,
-                    timeTextStyle: TextStyle(fontSize: 25, color: Colors.white),
+                    timeTextStyle: TextStyle(fontSize: context.mediaQuery.size.width * 0.06, color: Colors.white),
                     activeTimeTextStyle: TextStyle(
-                        fontSize: 30,
+                        fontSize: context.mediaQuery.size.width * 0.06,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                     hideButtons: true,
@@ -1033,6 +1034,7 @@ class _AddTodoState extends State<AddTodo> {
                           Get.back();
                         },
                         color: context.theme.primaryColor,
+                        elevation: 0,
                         child: Text(
                           '확 인',
                           style: TextStyle(color: Colors.white),

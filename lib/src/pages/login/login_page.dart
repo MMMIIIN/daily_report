@@ -233,8 +233,7 @@ class LoginPage extends StatelessWidget {
                                     _loginController.forgotPasswordEmail('');
                                   },
                                   elevation: 0,
-                                  color: context.theme.primaryColor
-                                      .withOpacity(0.5),
+                                  color: context.theme.primaryColor,
                                   child: Text(
                                     '취 소',
                                     style: TextStyle(color: Colors.white),
