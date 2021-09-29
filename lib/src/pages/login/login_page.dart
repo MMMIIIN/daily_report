@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
         decoration: BoxDecoration(
-          border: Border.all(),
+          color: context.theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -118,7 +118,7 @@ class LoginPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
         decoration: BoxDecoration(
-          border: Border.all(),
+          color: context.theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
