@@ -223,32 +223,47 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                MaterialButton(
-                                  onPressed: () {
+                                InkWell(
+                                  splashColor: context.theme.primaryColor.withOpacity(0.4),
+                                  highlightColor: context.theme.primaryColor.withOpacity(0.2),
+                                  onTap: () {
                                     Get.back();
                                     _loginController.forgotEmailController.value
                                         .clear();
                                     _loginController.forgotPasswordEmail('');
                                   },
-                                  elevation: 0,
-                                  color: context.theme.primaryColor,
-                                  child: Text(
-                                    '취 소',
-                                    style: TextStyle(color: Colors.white),
+                                  child: Container(
+                                    width: context.mediaQuery.size.width * 0.18,
+                                    height: context.mediaQuery.size.height * 0.043,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: context.theme.primaryColor)),
+                                    child: Center(
+                                      child: Text(
+                                        '취소',
+                                        style: TextStyle(color: context.theme.primaryColor, fontSize: 15),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                MaterialButton(
-                                  onPressed: () {
+                                SizedBox(width: 10),
+                                InkWell(
+                                  onTap: () {
                                     firebaseForgotUserPassword(_loginController
                                         .forgotPasswordEmail.value);
                                   },
-                                  elevation: 0,
-                                  color: context.theme.primaryColor,
-                                  child: Text(
-                                    '확 인',
-                                    style: TextStyle(color: Colors.white),
+                                  child: Container(
+                                    width: context.mediaQuery.size.width * 0.18,
+                                    height: context.mediaQuery.size.height * 0.043,
+                                    decoration: BoxDecoration(
+                                        color: context.theme.primaryColor),
+                                    child: Center(
+                                      child: Text(
+                                        '확인',
+                                        style: TextStyle(color: Colors.white, fontSize: 15),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],

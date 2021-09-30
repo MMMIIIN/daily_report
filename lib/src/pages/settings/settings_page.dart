@@ -197,41 +197,56 @@ class _SettingsPageState extends State<SettingsPage> {
       elevation: 0.0,
       onPressed: () {
         showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('로그아웃 하시겠습니까?'),
-                actions: [
-                  MaterialButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    elevation: 0.0,
-                    color: context.theme.primaryColor,
-                    child: Text(
-                      '취소',
-                      style: TextStyle(color: Colors.white),
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('로그아웃 하시겠습니까?'),
+              actions: [
+                InkWell(
+                  splashColor: context.theme.primaryColor.withOpacity(0.4),
+                  highlightColor: context.theme.primaryColor.withOpacity(0.2),
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Container(
+                    width: context.mediaQuery.size.width * 0.17,
+                    height: context.mediaQuery.size.height * 0.043,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: context.theme.primaryColor)),
+                    child: Center(
+                      child: Text(
+                        '취소',
+                        style: TextStyle(color: context.theme.primaryColor),
+                      ),
                     ),
                   ),
-                  MaterialButton(
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
-                      Get.back();
-                    },
-                    elevation: 0.0,
-                    color: context.theme.primaryColor,
-                    child: Text(
-                      '확인',
-                      style: TextStyle(color: Colors.white),
+                ),
+                InkWell(
+                  onTap: () {
+                    FirebaseAuth.instance.signOut();
+                    Get.back();
+                  },
+                  child: Container(
+                    width: context.mediaQuery.size.width * 0.17,
+                    height: context.mediaQuery.size.height * 0.043,
+                    decoration:
+                        BoxDecoration(color: context.theme.primaryColor),
+                    child: Center(
+                      child: Text(
+                        '확인',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
-                ],
-              );
-            });
+                ),
+              ],
+            );
+          },
+        );
       },
       color: context.theme.primaryColor,
       child: Text(
-        'logOut',
+        '로그아웃',
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
       ),
     );

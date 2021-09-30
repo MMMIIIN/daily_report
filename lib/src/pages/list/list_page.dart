@@ -455,73 +455,92 @@ class _ListPageState extends State<ListPage> {
                 ],
               ),
               IconButton(
-                  icon: Icon(IconsDB.trash, size: 26),
-                  splashRadius: 20,
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('삭제 하시겠습니까?'),
-                            actions: [
-                              MaterialButton(
-                                elevation: 0.0,
-                                color: context.theme.primaryColor,
-                                onPressed: () {
-                                  Get.back();
-                                },
+                icon: Icon(IconsDB.trash, size: 26),
+                splashRadius: 20,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('삭제 하시겠습니까?'),
+                        actions: [
+                          InkWell(
+                            splashColor:
+                                context.theme.primaryColor.withOpacity(0.4),
+                            highlightColor:
+                                context.theme.primaryColor.withOpacity(0.2),
+                            onTap: () {
+                              Get.back();
+                            },
+                            child: Container(
+                              width: context.mediaQuery.size.width * 0.17,
+                              height: context.mediaQuery.size.height * 0.043,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: context.theme.primaryColor)),
+                              child: Center(
                                 child: Text(
                                   '취소',
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                      color: context.theme.primaryColor),
                                 ),
                               ),
-                              MaterialButton(
-                                elevation: 0,
-                                color: context.theme.primaryColor,
-                                onPressed: () async {
-                                  _todoController.todoDelete(todoUid);
-                                  await todoFirebaseDelete(todoUid)
-                                      .then((value) {
-                                    _chartController.makeRangeDate();
-                                    if (_listController
-                                        .searchTerm.value.isEmpty) {
-                                      _listController.searchTitle('');
-                                    } else if (_listController
-                                        .searchTerm.value.isNotEmpty) {
-                                      _listController.searchTitle(
-                                          _listController.searchTerm.value);
-                                    }
-                                    if (_listController
-                                        .selectedDays.isNotEmpty) {
-                                      _listController.setSearchTodoList(
-                                          _listController.selectedDays);
-                                    }
-                                    if (_listController.searchTodoList.value
-                                        .todoList.isEmpty) {
-                                      _listController.selectedDays.clear();
-                                    }
-                                    _todoController.setCurrentIndex(
-                                        _todoController.currentDateTime.value);
-                                  });
-                                  Get.back();
-                                  Get.back();
-                                  setState(() {});
-                                  await Get.showSnackbar(GetBar(
-                                    duration: Duration(seconds: 2),
-                                    title: 'SUCCESS',
-                                    message: '성공적으로 삭제되었습니다.',
-                                    backgroundColor: successColor,
-                                  ));
-                                },
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              _todoController.todoDelete(todoUid);
+                              await todoFirebaseDelete(todoUid).then((value) {
+                                _chartController.makeRangeDate();
+                                if (_listController.searchTerm.value.isEmpty) {
+                                  _listController.searchTitle('');
+                                } else if (_listController
+                                    .searchTerm.value.isNotEmpty) {
+                                  _listController.searchTitle(
+                                      _listController.searchTerm.value);
+                                }
+                                if (_listController.selectedDays.isNotEmpty) {
+                                  _listController.setSearchTodoList(
+                                      _listController.selectedDays);
+                                }
+                                if (_listController
+                                    .searchTodoList.value.todoList.isEmpty) {
+                                  _listController.selectedDays.clear();
+                                }
+                                _todoController.setCurrentIndex(
+                                    _todoController.currentDateTime.value);
+                              });
+                              Get.back();
+                              Get.back();
+                              setState(() {});
+                              await Get.showSnackbar(
+                                GetBar(
+                                  duration: Duration(seconds: 2),
+                                  title: 'SUCCESS',
+                                  message: '성공적으로 삭제되었습니다.',
+                                  backgroundColor: successColor,
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: context.mediaQuery.size.width * 0.17,
+                              height: context.mediaQuery.size.height * 0.043,
+                              decoration: BoxDecoration(
+                                  color: context.theme.primaryColor),
+                              child: Center(
                                 child: Text(
                                   '삭제',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                            ],
-                          );
-                        });
-                  })
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              )
             ],
           ),
           content: Container(
@@ -559,21 +578,27 @@ class _ListPageState extends State<ListPage> {
             ),
           ),
           actions: [
-            MaterialButton(
-              elevation: 0.0,
-              color: context.theme.primaryColor,
-              onPressed: () {
+            InkWell(
+              splashColor: context.theme.primaryColor.withOpacity(0.4),
+              highlightColor: context.theme.primaryColor.withOpacity(0.2),
+              onTap: () {
                 Get.back();
               },
-              child: Text(
-                '취소',
-                style: TextStyle(color: Colors.white),
+              child: Container(
+                width: context.mediaQuery.size.width * 0.17,
+                height: context.mediaQuery.size.height * 0.043,
+                decoration: BoxDecoration(
+                    border: Border.all(color: context.theme.primaryColor)),
+                child: Center(
+                  child: Text(
+                    '취소',
+                    style: TextStyle(color: context.theme.primaryColor),
+                  ),
+                ),
               ),
             ),
-            MaterialButton(
-              elevation: 0,
-              color: context.theme.primaryColor,
-              onPressed: () {
+            InkWell(
+              onTap: () {
                 _todoController.titleTextController.value.text = title;
                 _todoController.selectColorIndex(colorIndex);
                 _todoController.memoText(memoTitle);
@@ -582,12 +607,20 @@ class _ListPageState extends State<ListPage> {
                 _todoController.editTodoUid(todoUid);
                 _todoController.clickedAddButton(false);
                 Get.to(
-                  () => AddTodo(),
+                      () => AddTodo(),
                 );
               },
-              child: Text(
-                '수정',
-                style: TextStyle(color: Colors.white),
+              child: Container(
+                width: context.mediaQuery.size.width * 0.17,
+                height: context.mediaQuery.size.height * 0.043,
+                decoration: BoxDecoration(
+                    color: context.theme.primaryColor),
+                child: Center(
+                  child: Text(
+                    '수정',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
             ),
           ],
@@ -595,6 +628,7 @@ class _ListPageState extends State<ListPage> {
       },
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState

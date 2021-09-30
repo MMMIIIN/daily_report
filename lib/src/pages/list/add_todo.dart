@@ -97,9 +97,10 @@ class _AddTodoState extends State<AddTodo> {
           context: context,
           builder: (_) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 100),
-            child: Obx(() => Dialog(
-              insetPadding: EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
+            child: Obx(
+              () => Dialog(
+                insetPadding: EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     TableCalendar(
@@ -174,7 +175,8 @@ class _AddTodoState extends State<AddTodo> {
                                   height: 7,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color: markerColorList[_settingsController.selectPrimaryColorIndex.value]),
+                                      color: markerColorList[_settingsController
+                                          .selectPrimaryColorIndex.value]),
                                 ),
                               );
                             }
@@ -217,44 +219,60 @@ class _AddTodoState extends State<AddTodo> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        MaterialButton(
-                          onPressed: () {
+                        InkWell(
+                          splashColor:
+                              context.theme.primaryColor.withOpacity(0.4),
+                          highlightColor:
+                              context.theme.primaryColor.withOpacity(0.2),
+                          onTap: () {
                             Get.back();
-                            _todoController.selectDateTime(
-                                _todoController.currentDateTime.value);
                           },
-                          color: context.theme.primaryColor,
-                          elevation: 0,
-                          child: Text(
-                            '취 소',
-                            style: TextStyle(color: Colors.white),
+                          child: Container(
+                            width: context.mediaQuery.size.width * 0.225,
+                            height: context.mediaQuery.size.height * 0.043,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: context.theme.primaryColor)),
+                            child: Center(
+                              child: Text(
+                                '취소',
+                                style: TextStyle(
+                                    color: context.theme.primaryColor),
+                              ),
+                            ),
                           ),
                         ),
-                        MaterialButton(
-                          onPressed: () {
+                        InkWell(
+                          onTap: () {
                             _todoController.currentDateTime(
                                 _todoController.selectDateTime.value);
                             Get.back();
                           },
-                          elevation: 0,
-                          color: context.theme.primaryColor,
-                          child: Text(
-                            '확 인',
-                            style: TextStyle(color: Colors.white),
+                          child: Container(
+                            width: context.mediaQuery.size.width * 0.225,
+                            height: context.mediaQuery.size.height * 0.043,
+                            decoration: BoxDecoration(
+                                color: context.theme.primaryColor),
+                            child: Center(
+                              child: Text(
+                                '확인',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
                           ),
-                        )
+                        ),
                       ],
                     )
                   ],
                 ),
               ),
             ),
-            ),
+          ),
         );
       },
       child: Obx(
         () => Container(
-          width: context.mediaQuery.size.width * 0.4,
+          width: context.mediaQuery.size.width * 0.5,
           height: 35,
           decoration: BoxDecoration(
             border: Border.all(),
@@ -434,22 +452,34 @@ class _AddTodoState extends State<AddTodo> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          MaterialButton(
-                            onPressed: () {
+                          InkWell(
+                            splashColor:
+                                context.theme.primaryColor.withOpacity(0.4),
+                            highlightColor:
+                                context.theme.primaryColor.withOpacity(0.2),
+                            onTap: () {
                               _todoController.makeRuleTitle('');
                               _todoController.makeRuleTitleController.value
                                   .clear();
                               Get.back();
                             },
-                            elevation: 0,
-                            color: context.theme.primaryColor,
-                            child: Text(
-                              '취 소',
-                              style: TextStyle(color: Colors.white),
+                            child: Container(
+                              width: context.mediaQuery.size.width * 0.225,
+                              height: context.mediaQuery.size.height * 0.043,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: context.theme.primaryColor)),
+                              child: Center(
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(
+                                      color: context.theme.primaryColor),
+                                ),
+                              ),
                             ),
                           ),
-                          MaterialButton(
-                            onPressed: () async {
+                          InkWell(
+                            onTap: () async {
                               await addTodoTitle(
                                 TodoTitle(
                                   title: _todoController.makeRuleTitle.value,
@@ -512,11 +542,17 @@ class _AddTodoState extends State<AddTodo> {
                               _todoController.makeRuleTitleController.value
                                   .clear();
                             },
-                            elevation: 0,
-                            color: context.theme.primaryColor.withOpacity(0.9),
-                            child: Text(
-                              '규칙추가',
-                              style: TextStyle(color: Colors.white),
+                            child: Container(
+                              width: context.mediaQuery.size.width * 0.225,
+                              height: context.mediaQuery.size.height * 0.043,
+                              decoration: BoxDecoration(
+                                  color: context.theme.primaryColor),
+                              child: Center(
+                                child: Text(
+                                  '규칙추가',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -596,19 +632,32 @@ class _AddTodoState extends State<AddTodo> {
                   content: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      MaterialButton(
-                        onPressed: () {
+                      InkWell(
+                        splashColor:
+                            context.theme.primaryColor.withOpacity(0.4),
+                        highlightColor:
+                            context.theme.primaryColor.withOpacity(0.2),
+                        onTap: () {
                           Get.back();
                         },
-                        elevation: 0,
-                        color: context.theme.primaryColor,
-                        child: Text(
-                          '취소',
-                          style: TextStyle(color: Colors.white),
+                        child: Container(
+                          width: context.mediaQuery.size.width * 0.225,
+                          height: context.mediaQuery.size.height * 0.043,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: context.theme.primaryColor)),
+                          child: Center(
+                            child: Text(
+                              '취소',
+                              style: TextStyle(
+                                  color: context.theme.primaryColor,
+                                  fontSize: 15),
+                            ),
+                          ),
                         ),
                       ),
-                      MaterialButton(
-                        onPressed: () {
+                      InkWell(
+                        onTap: () {
                           deleteTodoTitle(
                               _todoController.todoTitleList[index].uid);
                           _todoController.todoTitleList.removeWhere((element) =>
@@ -616,11 +665,18 @@ class _AddTodoState extends State<AddTodo> {
                               _todoController.todoTitleList[index].uid);
                           Get.back();
                         },
-                        elevation: 0,
-                        color: context.theme.primaryColor,
-                        child: Text(
-                          '규칙 삭제',
-                          style: TextStyle(color: Colors.white),
+                        child: Container(
+                          width: context.mediaQuery.size.width * 0.225,
+                          height: context.mediaQuery.size.height * 0.043,
+                          decoration:
+                              BoxDecoration(color: context.theme.primaryColor),
+                          child: Center(
+                            child: Text(
+                              '규칙 삭제',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -896,7 +952,7 @@ class _AddTodoState extends State<AddTodo> {
                   },
         child: Container(
           width: double.infinity,
-          height: 50,
+          height: context.mediaQuery.size.height * 0.06,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: _todoController.clickedAddButton.value
@@ -912,7 +968,7 @@ class _AddTodoState extends State<AddTodo> {
   Widget clickedText() {
     return Obx(
       () => Container(
-        width: context.mediaQuery.size.width * 0.25,
+        width: context.mediaQuery.size.width * 0.4,
         child: _todoController.clickedAddButton.value
             ? Row(
                 children: [
@@ -967,7 +1023,9 @@ class _AddTodoState extends State<AddTodo> {
                 children: [
                   TimeRangePicker(
                     use24HourFormat: false,
-                    timeTextStyle: TextStyle(fontSize: context.mediaQuery.size.width * 0.06, color: Colors.white),
+                    timeTextStyle: TextStyle(
+                        fontSize: context.mediaQuery.size.width * 0.06,
+                        color: Colors.white),
                     activeTimeTextStyle: TextStyle(
                         fontSize: context.mediaQuery.size.width * 0.06,
                         fontWeight: FontWeight.bold,
@@ -1010,15 +1068,27 @@ class _AddTodoState extends State<AddTodo> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      MaterialButton(
-                        onPressed: () {
+                      InkWell(
+                        splashColor:
+                            context.theme.primaryColor.withOpacity(0.4),
+                        highlightColor:
+                            context.theme.primaryColor.withOpacity(0.2),
+                        onTap: () {
                           Get.back();
                         },
-                        elevation: 0,
-                        color: context.theme.primaryColor,
-                        child: Text(
-                          '취 소',
-                          style: TextStyle(color: Colors.white),
+                        child: Container(
+                          width: context.mediaQuery.size.width * 0.2,
+                          height: context.mediaQuery.size.height * 0.043,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: context.theme.primaryColor)),
+                          child: Center(
+                            child: Text(
+                              '취소',
+                              style:
+                                  TextStyle(color: context.theme.primaryColor),
+                            ),
+                          ),
                         ),
                       ),
                       MaterialButton(

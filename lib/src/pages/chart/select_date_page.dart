@@ -215,36 +215,54 @@ class _SelectDatePageState extends State<SelectDatePage> {
   }
 
   Widget twoButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        MaterialButton(
-            onPressed: () {
+    return Padding(
+      padding: EdgeInsets.only(top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          InkWell(
+            splashColor: context.theme.primaryColor.withOpacity(0.4),
+            highlightColor: context.theme.primaryColor.withOpacity(0.2),
+            onTap: () {
               Get.offAll(() => Home(), transition: Transition.leftToRight);
             },
-            elevation: 0,
-            color: context.theme.primaryColor,
-            child: Text(
-              '취소',
-              style: TextStyle(color: Colors.white),
-            )),
-        MaterialButton(
-          onPressed: () {
-            if (_selectDateController.rangeBool.value) {
-              _chartController.makeRangeDate();
-              Get.offAll(() => Home(), transition: Transition.leftToRight);
-            }
-          },
-          elevation: 0,
-          color: _selectDateController.rangeBool.value
-              ? context.theme.primaryColor
-              : context.theme.primaryColor.withOpacity(0.4),
-          child: Text(
-            '확인',
-            style: TextStyle(color: Colors.white),
+            child: Container(
+              width: context.mediaQuery.size.width * 0.2,
+              height: context.mediaQuery.size.height * 0.043,
+              decoration: BoxDecoration(
+                  border: Border.all(color: context.theme.primaryColor)),
+              child: Center(
+                child: Text(
+                  '취소',
+                  style: TextStyle(color: context.theme.primaryColor),
+                ),
+              ),
+            ),
           ),
-        )
-      ],
+          InkWell(
+            onTap: () {
+              if (_selectDateController.rangeBool.value) {
+                _chartController.makeRangeDate();
+                Get.offAll(() => Home(), transition: Transition.leftToRight);
+              }
+            },
+            child: Container(
+              width: context.mediaQuery.size.width * 0.2,
+              height: context.mediaQuery.size.height * 0.043,
+              decoration: BoxDecoration(
+                  color: _selectDateController.rangeBool.value
+                      ? context.theme.primaryColor
+                      : context.theme.primaryColor.withOpacity(0.4)),
+              child: Center(
+                child: Text(
+                  '확인',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -262,5 +280,18 @@ class _SelectDatePageState extends State<SelectDatePage> {
         )
       ],
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _selectDateController.rangeBool(false);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }
