@@ -170,6 +170,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget showChart() {
     return Flexible(
+      flex: 2,
       child: GetBuilder<TodoController>(
         init: TodoController(),
         builder: (_) => _todoController.currentIndexList.isNotEmpty
@@ -207,6 +208,22 @@ class _HomePageState extends State<HomePage> {
                           .currentUidList.value.todoList[index].value
                           .toDouble(),
                       radius: radius,
+                      badgeWidget: isTouched ? Container(
+                        width: 50,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: colorList[_todoController.currentUidList.value.todoList[index].colorIndex].withOpacity(0.6)
+                        ),
+                        child: Center(
+                          child: Text('${_todoController.currentUidList.value.todoList[index].title}',
+                          style: TextStyle(
+                            // color: Colors.white,
+                            fontWeight: FontWeight.bold
+                          ),),
+                        ),
+                      ) : null,
+                      badgePositionPercentageOffset: 1.4,
                     );
                   }),
                 ),
