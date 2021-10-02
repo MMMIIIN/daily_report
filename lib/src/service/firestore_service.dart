@@ -241,9 +241,69 @@ Future<void> firebaseAuthSignUp(
         'endMinute': 0,
         'startHour': 0,
         'startMinute': 0,
-        'title': '꾹 눌러서 삭제',
+        'title': 'ex) 꾹 눌러서 삭제',
         'titleColorIndex': 0,
         'uid': 'initData'
+      });
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('todoTitle')
+          .doc('initData1')
+          .set({
+        'boolOfTime': true,
+        'endHour': 18,
+        'endMinute': 0,
+        'startHour': 9,
+        'startMinute': 0,
+        'title': 'ex) 회사',
+        'titleColorIndex': 1,
+        'uid': 'initData1'
+      });
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('todoTitle')
+          .doc('initData2')
+          .set({
+        'boolOfTime': false,
+        'endHour': 1,
+        'endMinute': 0,
+        'startHour': 0,
+        'startMinute': 0,
+        'title': 'ex) 밥',
+        'titleColorIndex': 2,
+        'uid': 'initData2'
+      });
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('todoTitle')
+          .doc('initData3')
+          .set({
+        'boolOfTime': true,
+        'endHour': 21,
+        'endMinute': 0,
+        'startHour': 19,
+        'startMinute': 0,
+        'title': 'ex) 운동',
+        'titleColorIndex': 3,
+        'uid': 'initData3'
+      });
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('todoTitle')
+          .doc('initData4')
+          .set({
+        'boolOfTime': false,
+        'endHour': 1,
+        'endMinute': 0,
+        'startHour': 0,
+        'startMinute': 0,
+        'title': 'ex) 공부',
+        'titleColorIndex': 4,
+        'uid': 'initData4'
       });
       FirebaseFirestore.instance
           .collection('user')
@@ -255,14 +315,35 @@ Future<void> firebaseAuthSignUp(
         'year': DateTime.now().year,
         'month': DateTime.now().month,
         'day': DateTime.now().day,
-        'title': '회원가입',
-        'memoTitle': '',
-        'startHour': DateTime.now().hour,
-        'startMinute': DateTime.now().minute,
-        'endHour': DateTime.now().hour + 1,
-        'endMinute': DateTime.now().minute,
-        'value': 60,
-        'colorIndex': 0
+        'title': 'ex) 회사',
+        'memoText': '',
+        'startHour': 9,
+        'startMinute': 0,
+        'endHour': 18,
+        'endMinute': 0,
+        'hourMinute': '9시간',
+        'value': 540,
+        'color': 1
+      });
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('todos')
+          .doc('initData1')
+          .set({
+        'uid': 'initData1',
+        'year': DateTime.now().year,
+        'month': DateTime.now().month,
+        'day': DateTime.now().day,
+        'title': 'ex) 운동',
+        'memoText': '',
+        'startHour': 19,
+        'startMinute': 0,
+        'endHour': 21,
+        'endMinute': 0,
+        'hourMinute': '2시간',
+        'value': 120,
+        'color': 3
       });
       Get.off(() => Home());
       _signUpController.intiDataSet();

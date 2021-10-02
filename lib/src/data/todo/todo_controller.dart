@@ -226,21 +226,77 @@ class TodoController extends GetxController {
   }
 
   void initData() {
-    var initData = TestTodo(
-        uid: 'initData',
-        ymd: DateTime.now(),
-        title: '회원가입',
-        startHour: DateTime.now().hour,
-        startMinute: DateTime.now().minute,
-        endHour: DateTime.now().hour + 1,
-        endMinute: DateTime.now().minute,
-        value: 60,
-        colorIndex: 0,
-        hourMinute: '1시간 0분');
-    loadTodoUidList.value.todoList.add(initData);
-    todoUidList.value.todoList.add(initData);
-    todoTitleList
-        .add(TodoTitle(title: '꾹 눌러서 삭제', titleColor: 0, uid: 'initData'));
+    var initData = [
+      TestTodo(
+          uid: 'initData',
+          ymd: DateTime.now(),
+          title: 'ex) 회사',
+          startHour: 9,
+          startMinute: 0,
+          endHour: 18,
+          endMinute: 0,
+          value: 540,
+          colorIndex: 1,
+          hourMinute: '9시간'),
+      TestTodo(
+          uid: 'initData1',
+          ymd: DateTime.now(),
+          title: 'ex) 운동',
+          startHour: 19,
+          startMinute: 0,
+          endHour: 21,
+          endMinute: 0,
+          value: 120,
+          colorIndex: 3,
+          hourMinute: '2시간'),
+    ];
+    loadTodoUidList.value.todoList.addAll(initData);
+    todoUidList.value.todoList.addAll(initData);
+    todoTitleList.addAll([
+      TodoTitle(title: 'ex) 꾹 눌러서 삭제', titleColor: 0, uid: 'initData'),
+      TodoTitle(
+        title: 'ex) 회사',
+        titleColor: 1,
+        uid: 'initData1',
+        boolOfTime: true,
+        timeRange: TimeRange(
+          startTime: TimeOfDay(hour: 9, minute: 0),
+          endTime: TimeOfDay(hour: 18, minute: 0),
+        ),
+      ),
+      TodoTitle(
+        title: 'ex) 밥',
+        titleColor: 2,
+        uid: 'initData2',
+      ),
+      TodoTitle(
+        title: 'ex) 운동',
+        titleColor: 3,
+        uid: 'initData3',
+        boolOfTime: true,
+        timeRange: TimeRange(
+          startTime: TimeOfDay(hour: 19, minute: 0),
+          endTime: TimeOfDay(hour: 21, minute: 0),
+        ),
+      ),
+      TodoTitle(
+        title: 'ex) 공부',
+        titleColor: 4,
+        uid: 'initData4',
+      ),
+    ]);
+    // todoTitleList.add(
+    //   TodoTitle(
+    //     title: '회사',
+    //     titleColor: 1,
+    //     uid: 'initData1',
+    //     boolOfTime: true,
+    //     timeRange: TimeRange(
+    //       startTime: TimeOfDay(hour: 9, minute: 0),
+    //       endTime: TimeOfDay(hour: 18, minute: 0),
+    //     ),
+    //   ),
+    // );
   }
 
   void clearMemoController() {
@@ -255,6 +311,27 @@ class TodoController extends GetxController {
   void initHome(DateTime dateTime) {
     currentDateTime(dateTime);
     setCurrentIndex(dateTime);
+  }
+
+  String getOfDay(int weekday) {
+    switch (weekday) {
+      case 1:
+        return '(월)';
+      case 2:
+        return '(화)';
+      case 3:
+        return '(수)';
+      case 4:
+        return '(목)';
+      case 5:
+        return '(금)';
+      case 6:
+        return '(토)';
+      case 7:
+        return '(일)';
+      default:
+        return '';
+    }
   }
 
   @override
