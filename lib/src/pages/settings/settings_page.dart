@@ -92,7 +92,7 @@ class _SettingsPageState extends State<SettingsPage> {
             minWidth: 40,
             minHeight: 30,
             totalSwitches: 2,
-            labels: ['%', '분'],
+            labels: ['분', '%'],
             inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
             activeBgColor: [context.theme.primaryColor],
             initialLabelIndex: _settingsController.isPercentOrHourIndex.value,
@@ -117,15 +117,15 @@ class _SettingsPageState extends State<SettingsPage> {
               minWidth: 40,
               minHeight: 30,
               totalSwitches: 2,
-              labels: [':', '분'],
+              labels: ['분', ':'],
               customTextStyles: [
                 TextStyle(
-                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
                     color: _settingsController.listPageIndex.value == 0
                         ? Colors.white
                         : Colors.black),
                 TextStyle(
-                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
                     color: _settingsController.listPageIndex.value == 0
                         ? Colors.black
                         : Colors.white),

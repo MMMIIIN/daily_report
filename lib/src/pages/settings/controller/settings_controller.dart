@@ -26,9 +26,9 @@ class SettingsController extends GetxController {
 
   void setPercentOrHour() {
     if (isPercentOrHourIndex.value == 0) {
-      GetStorage().write('isPercentOrHour', false);
-    } else {
       GetStorage().write('isPercentOrHour', true);
+    } else {
+      GetStorage().write('isPercentOrHour', false);
     }
   }
 
@@ -39,9 +39,9 @@ class SettingsController extends GetxController {
 
   void setListPage() {
     if(listPageIndex.value == 0){
-      GetStorage().write('isListPageBool', false);
-    } else {
       GetStorage().write('isListPageBool', true);
+    } else {
+      GetStorage().write('isListPageBool', false);
     }
   }
 
@@ -81,16 +81,16 @@ class SettingsController extends GetxController {
     var interval = GetStorage().read('timePickerOfInterval') ?? 1;
     var colorIndex = GetStorage().read('primaryColor') ?? 0;
     if (percentOrHour) {
-      isPercentOrHourIndex(1);
-      setPercentOrHourIndex(1);
-    } else {
       isPercentOrHourIndex(0);
       setPercentOrHourIndex(0);
+    } else {
+      isPercentOrHourIndex(1);
+      setPercentOrHourIndex(1);
     }
     if(listPageIndex) {
-      setListPageIndex(1);
-    } else {
       setListPageIndex(0);
+    } else {
+      setListPageIndex(1);
     }
     if (interval != null) {
       isTimePickerTimeIndex(interval);
