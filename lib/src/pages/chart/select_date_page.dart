@@ -37,7 +37,8 @@ class _SelectDatePageState extends State<SelectDatePage> {
             children: [
               tableCalendar(),
               twoButton(),
-              exampleText()
+              exampleText(),
+              // boolCheckList()
             ],
           ),
         ),
@@ -184,7 +185,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
           setState(() {
             _selectedDay = selectedDay;
             _focusedDay = focusedDay;
-            _rangeStart = null; // Important to clean those
+            _rangeStart = null;
             _rangeEnd = null;
             rangeSelectionMode = RangeSelectionMode.toggledOff;
           });
@@ -197,9 +198,10 @@ class _SelectDatePageState extends State<SelectDatePage> {
           _rangeStart = start;
           _rangeEnd = end;
           rangeSelectionMode = RangeSelectionMode.toggledOn;
+          _selectDateController.setRangeBool(
+            _rangeStart!, _rangeEnd ?? DateTime(2020,1,1)
+          );
         });
-        _selectDateController.setRangeTime(
-            _rangeStart ?? DateTime.now(), _rangeEnd ?? DateTime.now());
       },
       onFormatChanged: (format) {
         if (_calendarFormat != format) {
@@ -224,7 +226,10 @@ class _SelectDatePageState extends State<SelectDatePage> {
             splashColor: context.theme.primaryColor.withOpacity(0.4),
             highlightColor: context.theme.primaryColor.withOpacity(0.2),
             onTap: () {
+              _rangeEnd == null ? _rangeEnd = _rangeStart!.add(Duration(days: 1)) : null;
               Get.offAll(() => Home(), transition: Transition.leftToRight);
+              print(_rangeEnd);
+              print(_selectDateController.rangeEnd.value);
             },
             child: Container(
               width: context.mediaQuery.size.width * 0.2,
@@ -242,6 +247,8 @@ class _SelectDatePageState extends State<SelectDatePage> {
           InkWell(
             onTap: () {
               if (_selectDateController.rangeBool.value) {
+                _selectDateController.setRangeTime(
+                    _rangeStart ?? DateTime.now(), _rangeEnd ?? DateTime.now());
                 _chartController.makeRangeDate();
                 Get.offAll(() => Home(), transition: Transition.leftToRight);
               }
@@ -269,7 +276,9 @@ class _SelectDatePageState extends State<SelectDatePage> {
   Widget exampleText() {
     return Column(
       children: [
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         Row(
           children: [
             Padding(
@@ -281,6 +290,19 @@ class _SelectDatePageState extends State<SelectDatePage> {
       ],
     );
   }
+
+  // Widget boolCheckList() {
+  //   return Container(
+  //     height: context.mediaQuery.size.height * 0.3,
+  //     child: ListView.builder(
+  //       itemBuilder: (context, index) {
+  //         return Container(
+  //
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   @override
   void initState() {

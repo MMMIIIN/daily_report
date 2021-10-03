@@ -10,7 +10,6 @@ class SelectDateController extends GetxController{
   void setRangeTime(DateTime startTime, DateTime endTime){
     rangeStart(startTime);
     rangeEnd(endTime);
-    setRangeBool();
   }
 
   void setDefaultRangeTime(DateTime startTime, DateTime endTime){
@@ -18,10 +17,10 @@ class SelectDateController extends GetxController{
     defaultRangeEnd(endTime);
   }
 
-  void setRangeBool() {
-    if(rangeStart.value.hour == 0 && rangeEnd.value.hour == 0){
+  void setRangeBool(DateTime startTime, DateTime endTime) {
+    if(endTime != DateTime(2020,1,1)){
       rangeBool(true);
-    } else{
+    } else {
       rangeBool(false);
     }
   }
