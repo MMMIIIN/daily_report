@@ -38,7 +38,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
               tableCalendar(),
               twoButton(),
               exampleText(),
-              // boolCheckList()
+              boolCheckList()
             ],
           ),
         ),
@@ -201,6 +201,11 @@ class _SelectDatePageState extends State<SelectDatePage> {
           _selectDateController.setRangeBool(
             _rangeStart!, _rangeEnd ?? DateTime(2020,1,1)
           );
+          if(_selectDateController.rangeBool.value){
+            _chartController.makeRangeData(
+              DateTimeRange(start: _rangeStart!, end: _rangeEnd!)
+            );
+          }
         });
       },
       onFormatChanged: (format) {
@@ -291,18 +296,19 @@ class _SelectDatePageState extends State<SelectDatePage> {
     );
   }
 
-  // Widget boolCheckList() {
-  //   return Container(
-  //     height: context.mediaQuery.size.height * 0.3,
-  //     child: ListView.builder(
-  //       itemBuilder: (context, index) {
-  //         return Container(
-  //
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
+  Widget boolCheckList() {
+    return Container(
+      height: context.mediaQuery.size.height * 0.3,
+      child: ListView.builder(
+        itemCount: _chartController.titleList.length,
+        itemBuilder: (context, index) {
+          return Container(
+            child: Text('${_chartController.titleList[index]}'),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   void initState() {
