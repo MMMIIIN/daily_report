@@ -181,7 +181,8 @@ class LoginPage extends StatelessWidget {
                               padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  border: Border.all()),
+                                  color: context.theme.primaryColor.withOpacity(0.2)
+                              ),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,

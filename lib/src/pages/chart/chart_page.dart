@@ -59,11 +59,9 @@ class _ChartPageState extends State<ChartPage> {
       minHeight: 30,
       totalSwitches: 2,
       initialLabelIndex: _chartController.modeIndex.value,
-      labels: ['%', 'h'],
+      labels: ['h', '%'],
       inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
-      activeBgColor: [
-        context.theme.primaryColor
-      ],
+      activeBgColor: [context.theme.primaryColor],
       onToggle: (index) {
         _chartController.setMode(index);
       },
@@ -78,23 +76,24 @@ class _ChartPageState extends State<ChartPage> {
         Get.to(() => SelectDatePage());
       },
       child: Container(
-        width: context.mediaQuery.size.width * 0.6,
-        height: 50,
+        width: context.mediaQuery.size.width * 0.65,
+        height: 40,
         decoration: BoxDecoration(
-            color: context.theme.primaryColor.withOpacity(0.2),
+            border: Border.all(color: context.theme.primaryColor),
             borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '${_selectDateController.rangeStart.value.year} - '
-              '${_selectDateController.rangeStart.value.month} - '
-              '${_selectDateController.rangeStart.value.day} ~ '
-              '${_selectDateController.rangeEnd.value.year} - '
-              '${_selectDateController.rangeEnd.value.month} - '
+              '${_selectDateController.rangeStart.value.year}.'
+              '${_selectDateController.rangeStart.value.month}.'
+              '${_selectDateController.rangeStart.value.day} - '
+              '${_selectDateController.rangeEnd.value.year}.'
+              '${_selectDateController.rangeEnd.value.month}.'
               '${_selectDateController.rangeEnd.value.day}',
               style: TextStyle(
                 color: Colors.black.withOpacity(0.8),
+                fontSize: 16,
               ),
             ),
           ],
@@ -104,9 +103,8 @@ class _ChartPageState extends State<ChartPage> {
   }
 
   Widget showChart(BuildContext context) {
-    return GetBuilder<ChartController>(
-      init: ChartController(),
-      builder: (_) => Flexible(
+    return Obx(
+      () => Flexible(
         flex: 3,
         child: _chartController.checkChartPageList.value.todoList.isNotEmpty
             ? PieChart(
@@ -127,16 +125,17 @@ class _ChartPageState extends State<ChartPage> {
                   }),
                   startDegreeOffset: 270,
                   sectionsSpace: 4,
-                  centerSpaceRadius: context.mediaQuery.size.width / 3.5,
+                  centerSpaceRadius: context.mediaQuery.size.width / 5,
                   sections: List<PieChartSectionData>.generate(
                     _chartController.checkChartPageList.value.todoList.length,
                     (index) {
                       final isTouched = index == touchedIndex;
                       final radius = isTouched ? 70.0 : 50.0;
-                      final title = isTouched
-                          ? _chartController
-                              .checkChartPageList.value.todoList[index].title
-                          : '';
+                      final title = _chartController.checkChartPageList.value
+                                  .todoList[index].percent <
+                              5
+                          ? ''
+                          : '${_chartController.checkChartPageList.value.todoList[index].percent.toStringAsFixed(0)}%';
                       return PieChartSectionData(
                         title: title,
                         radius: radius,
@@ -145,6 +144,28 @@ class _ChartPageState extends State<ChartPage> {
                             .toDouble(),
                         color: colorList[_chartController.checkChartPageList
                             .value.todoList[index].colorIndex],
+                        badgeWidget: isTouched
+                            ? Container(
+                                width: 60,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: colorList[_chartController
+                                            .checkChartPageList
+                                            .value
+                                            .todoList[index]
+                                            .colorIndex]
+                                        .withOpacity(0.6)),
+                                child: Center(
+                                  child: Text(
+                                    '${_chartController.checkChartPageList.value.todoList[index].title}',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              )
+                            : null,
+                        badgePositionPercentageOffset: 1.4,
                       );
                     },
                   ),
@@ -189,14 +210,15 @@ class _ChartPageState extends State<ChartPage> {
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                          _chartController.modeIndex.value == 0
+                          _chartController.modeIndex.value == 1
                               ? Text(
                                   ' ${_chartController.checkChartPageList.value.todoList[index].percent.toStringAsFixed(1)} %',
                                   style: TextStyle(fontSize: 13),
                                   overflow: TextOverflow.ellipsis,
                                 )
                               : Text(
-                                  ' ${_chartController.checkChartPageList.value.todoList[index].hourMinute}')
+                                  ' ${_chartController.checkChartPageList.value.todoList[index].hourMinute}',
+                                  style: TextStyle(fontSize: 13))
                         ],
                       ),
                     ],
@@ -206,5 +228,18 @@ class _ChartPageState extends State<ChartPage> {
             ),
           )
         : Container();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _chartController.makeRangeDate();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }

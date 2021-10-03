@@ -275,7 +275,7 @@ class _AddTodoState extends State<AddTodo> {
           width: context.mediaQuery.size.width * 0.5,
           height: 35,
           decoration: BoxDecoration(
-            border: Border.all(),
+            border: Border.all(color: context.theme.primaryColor),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -288,8 +288,8 @@ class _AddTodoState extends State<AddTodo> {
                 '${_listController.getOfDay(_todoController.currentDateTime.value.weekday)}',
                 style: TextStyle(
                     fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400),
+                    color: Colors.black.withOpacity(0.8),
+                ),
               )
             ],
           ),
@@ -303,7 +303,7 @@ class _AddTodoState extends State<AddTodo> {
       () => Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
+          color: context.theme.primaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextField(
@@ -358,7 +358,7 @@ class _AddTodoState extends State<AddTodo> {
                         () => Container(
                           padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
                           decoration: BoxDecoration(
-                            border: Border.all(),
+                            color: context.theme.primaryColor.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: TextField(
@@ -731,7 +731,7 @@ class _AddTodoState extends State<AddTodo> {
   Widget memoField(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
+        color: context.theme.primaryColor.withOpacity(0.2),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -768,7 +768,7 @@ class _AddTodoState extends State<AddTodo> {
       child: Container(
         height: context.mediaQuery.size.height * 0.1,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
+            border: Border.all(color: context.theme.primaryColor),
             borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -785,15 +785,15 @@ class _AddTodoState extends State<AddTodo> {
                       '${_todoController.defaultTime.value.startTime.hour < 13 ? '${_todoController.defaultTime.value.startTime.hour}' : '${_todoController.defaultTime.value.startTime.hour - 12}'} : '
                       '${_todoController.defaultTime.value.startTime.minute}',
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.black.withOpacity(0.8),
                           fontSize: 20,
-                          fontWeight: FontWeight.w200),
+                      ),
                     ),
                   ],
                 ),
                 Text(
                   '-',
-                  style: TextStyle(color: Colors.black, fontSize: 20),
+                  style: TextStyle(color: Colors.black.withOpacity(0.8), fontSize: 20),
                 ),
                 Row(
                   children: [
@@ -802,9 +802,9 @@ class _AddTodoState extends State<AddTodo> {
                       '${_todoController.defaultTime.value.endTime.hour < 13 ? '${_todoController.defaultTime.value.endTime.hour}' : '${_todoController.defaultTime.value.endTime.hour - 12}'} : '
                       '${_todoController.defaultTime.value.endTime.minute}',
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.black.withOpacity(0.8),
                           fontSize: 20,
-                          fontWeight: FontWeight.w200),
+                          ),
                     ),
                   ],
                 ),
@@ -865,7 +865,7 @@ class _AddTodoState extends State<AddTodo> {
                             _todoController.currentDateTime.value.month,
                             _todoController.currentDateTime.value.day),
                         title: _todoController.titleTextController.value.text,
-                        memoText: _todoController.memoText.value,
+                        memoText: _todoController.memoController.value.text,
                         startHour:
                             _todoController.defaultTime.value.startTime.hour,
                         startMinute:
@@ -992,7 +992,6 @@ class _AddTodoState extends State<AddTodo> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
-                            // fontWeight: FontWeight.bold
                           ),
                         )
                       : Text(
@@ -1000,7 +999,6 @@ class _AddTodoState extends State<AddTodo> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
-                            // fontWeight: FontWeight.bold
                           ),
                         ),
                 ),
@@ -1126,5 +1124,11 @@ class _AddTodoState extends State<AddTodo> {
     // TODO: implement initState
     super.initState();
     _todoController.initDefaultValue();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }

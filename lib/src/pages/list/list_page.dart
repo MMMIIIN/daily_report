@@ -55,7 +55,9 @@ class _ListPageState extends State<ListPage> {
     return Container(
       height: context.mediaQuery.size.height * 0.06,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), border: Border.all()),
+          borderRadius: BorderRadius.circular(10),
+        color: context.theme.primaryColor.withOpacity(0.2)
+      ),
       child: TextField(
         onChanged: (text) {
           _listController.searchTerm(text);
@@ -232,7 +234,6 @@ class _ListPageState extends State<ListPage> {
     var listCount = _listController.searchTodoList.value.todoList.isEmpty
         ? _listController.searchResult.length
         : _listController.searchTodoList.value.todoList.length;
-    print(_listController.searchTodoList.value.todoList.isEmpty);
     return Expanded(
       child: RefreshIndicator(
         color: context.theme.primaryColor,
@@ -426,7 +427,6 @@ class _ListPageState extends State<ListPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        print('todoUid = $todoUid');
         return AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -491,7 +491,6 @@ class _ListPageState extends State<ListPage> {
                             onTap: () async {
                               _todoController.todoDelete(todoUid);
                               await todoFirebaseDelete(todoUid).then((value) {
-                                _chartController.makeRangeDate();
                                 if (_listController.searchTerm.value.isEmpty) {
                                   _listController.searchTitle('');
                                 } else if (_listController

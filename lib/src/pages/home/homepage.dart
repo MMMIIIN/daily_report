@@ -1,7 +1,6 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
-import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/list/add_todo.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:daily_report/src/service/firestore_service.dart';
@@ -15,7 +14,6 @@ import 'package:time_range_picker/time_range_picker.dart';
 
 final TodoController _todoController = Get.put(TodoController());
 final SettingsController _settingsController = Get.put(SettingsController());
-final ChartController _chartController = Get.put(ChartController());
 
 class HomePage extends StatefulWidget {
   @override
@@ -200,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                         ? context.mediaQuery.size.width * 0.17
                         : context.mediaQuery.size.width * 0.14;
                     return PieChartSectionData(
-                      title:
+                      title: _todoController.currentUidList.value.todoList[index].percent < 5 ? '' :
                           '${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(0)}%',
                       color: colorList[_todoController
                           .currentUidList.value.todoList[index].colorIndex],
@@ -208,21 +206,27 @@ class _HomePageState extends State<HomePage> {
                           .currentUidList.value.todoList[index].value
                           .toDouble(),
                       radius: radius,
-                      badgeWidget: isTouched ? Container(
-                        width: 50,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: colorList[_todoController.currentUidList.value.todoList[index].colorIndex].withOpacity(0.6)
-                        ),
-                        child: Center(
-                          child: Text('${_todoController.currentUidList.value.todoList[index].title}',
-                          style: TextStyle(
-                            // color: Colors.white,
-                            fontWeight: FontWeight.bold
-                          ),),
-                        ),
-                      ) : null,
+                      badgeWidget: isTouched
+                          ? Container(
+                              width: 60,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: colorList[_todoController
+                                          .currentUidList
+                                          .value
+                                          .todoList[index]
+                                          .colorIndex]
+                                      .withOpacity(0.6)),
+                              child: Center(
+                                child: Text(
+                                  '${_todoController.currentUidList.value.todoList[index].title}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            )
+                          : null,
                       badgePositionPercentageOffset: 1.4,
                     );
                   }),
@@ -240,6 +244,7 @@ class _HomePageState extends State<HomePage> {
       child: GetBuilder<TodoController>(
         builder: (_) => _todoController.currentIndexList.isNotEmpty
             ? ListView.builder(
+          shrinkWrap: true,
                 itemCount: _todoController.currentIndexList.length,
                 itemBuilder: (context, index) => InkWell(
                   borderRadius: BorderRadius.circular(10),
@@ -247,28 +252,28 @@ class _HomePageState extends State<HomePage> {
                     showDialog(
                       context: context,
                       builder: (_) => todoDialog(
-                        _todoController
-                            .currentUidList.value.todoList[index].colorIndex,
-                        _todoController
-                            .currentUidList.value.todoList[index].title,
-                        _todoController
-                            .currentUidList.value.todoList[index].ymd,
-                        _todoController
-                            .currentUidList.value.todoList[index].memoText,
-                        TimeRange(
-                          startTime: TimeOfDay(
-                              hour: _todoController.currentUidList.value
-                                  .todoList[index].startHour,
-                              minute: _todoController.currentUidList.value
-                                  .todoList[index].startMinute),
-                          endTime: TimeOfDay(
-                              hour: _todoController
-                                  .currentUidList.value.todoList[index].endHour,
-                              minute: _todoController.currentUidList.value
-                                  .todoList[index].endMinute),
-                        ),
-                        _todoController.currentUidList.value.todoList[index].uid
-                      ),
+                          _todoController
+                              .currentUidList.value.todoList[index].colorIndex,
+                          _todoController
+                              .currentUidList.value.todoList[index].title,
+                          _todoController
+                              .currentUidList.value.todoList[index].ymd,
+                          _todoController
+                              .currentUidList.value.todoList[index].memoText,
+                          TimeRange(
+                            startTime: TimeOfDay(
+                                hour: _todoController.currentUidList.value
+                                    .todoList[index].startHour,
+                                minute: _todoController.currentUidList.value
+                                    .todoList[index].startMinute),
+                            endTime: TimeOfDay(
+                                hour: _todoController.currentUidList.value
+                                    .todoList[index].endHour,
+                                minute: _todoController.currentUidList.value
+                                    .todoList[index].endMinute),
+                          ),
+                          _todoController
+                              .currentUidList.value.todoList[index].uid),
                     );
                   },
                   child: Padding(
@@ -292,7 +297,7 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  width: context.mediaQuery.size.width * 0.3,
+                                  width: context.mediaQuery.size.width * 0.25,
                                   child: Text(
                                     _todoController.currentUidList.value
                                         .todoList[index].title,
@@ -313,7 +318,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Container(
                                   alignment: Alignment.topRight,
-                                  width: context.mediaQuery.size.width * 0.2,
+                                  width: context.mediaQuery.size.width * 0.25,
                                   child: isPercentOrHour
                                       ? Text(
                                           ' ${_todoController.currentUidList.value.todoList[index].hourMinute}')
@@ -361,7 +366,8 @@ class _HomePageState extends State<HomePage> {
                   )),
             ],
           ),
-          IconButton(icon: Icon(IconsDB.trash),
+          IconButton(
+              icon: Icon(IconsDB.trash),
               splashRadius: 20,
               onPressed: () {
                 showDialog(
@@ -372,9 +378,9 @@ class _HomePageState extends State<HomePage> {
                       actions: [
                         InkWell(
                           splashColor:
-                          context.theme.primaryColor.withOpacity(0.4),
+                              context.theme.primaryColor.withOpacity(0.4),
                           highlightColor:
-                          context.theme.primaryColor.withOpacity(0.2),
+                              context.theme.primaryColor.withOpacity(0.2),
                           onTap: () {
                             Get.back();
                           },
@@ -397,7 +403,6 @@ class _HomePageState extends State<HomePage> {
                           onTap: () async {
                             _todoController.todoDelete(todoUid);
                             await todoFirebaseDelete(todoUid).then((value) {
-                              _chartController.makeRangeDate();
                               _todoController.setCurrentIndex(
                                   _todoController.currentDateTime.value);
                             });
@@ -502,6 +507,7 @@ class _HomePageState extends State<HomePage> {
             _todoController.selectColorIndex(colorIndex);
             _todoController.isEditMode(true);
             _todoController.editTodoUid(todoUid);
+            _todoController.clickedAddButton(false);
             Get.to(() => AddTodo());
           },
           child: Container(

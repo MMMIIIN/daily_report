@@ -1,10 +1,8 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/pages/license/license_page.dart';
-import 'package:daily_report/src/pages/login/login_page.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:daily_report/src/pages/settings/select_primary_color_page.dart';
-import 'package:daily_report/src/pages/signup/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,12 +32,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 timePickerOfTime(),
                 selectPrimaryColor(),
                 logoutButton(),
-                MaterialButton(onPressed: () {
-                  Get.to(() => SignUpPage());
-                }),
-                MaterialButton(onPressed: () {
-                  Get.to(() => LoginPage());
-                }),
               ],
             ),
             Column(
