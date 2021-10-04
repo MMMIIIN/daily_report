@@ -3,18 +3,24 @@ import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/select_date_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:time_range_picker/time_range_picker.dart';
 
 final TodoController _todoController = Get.put(TodoController());
 final SelectDateController _selectDateController =
-Get.put(SelectDateController());
+    Get.put(SelectDateController());
+
+class TitleList {
+  bool check;
+  String title;
+
+  TitleList({required this.title, this.check = true});
+}
 
 class ChartController extends GetxController {
   final currentIndexList = [].obs;
   Rx<TodoUidList> chartPageList = TodoUidList(todoList: []).obs;
   Rx<TodoUidList> checkChartPageList = TodoUidList(todoList: []).obs;
   final boolCheckList = <TestTodo>[].obs;
-  final titleList = <String>[].obs;
+  final titleList = <TitleList>[].obs;
 
   double totalSum = 0;
   RxInt modeIndex = 0.obs;
@@ -51,10 +57,10 @@ class ChartController extends GetxController {
     for (var i = 0; i < checkChartPageList.value.todoList.length; i++) {
       if (checkChartPageList.value.todoList[i].value % 60 == 0) {
         checkChartPageList.value.todoList[i].hourMinute =
-        '${checkChartPageList.value.todoList[i].value ~/ 60}시간 ';
+            '${checkChartPageList.value.todoList[i].value ~/ 60}시간 ';
       } else {
         checkChartPageList.value.todoList[i].hourMinute =
-        '${checkChartPageList.value.todoList[i].value ~/ 60}시간 '
+            '${checkChartPageList.value.todoList[i].value ~/ 60}시간 '
             '${checkChartPageList.value.todoList[i].value % 60}분';
       }
     }
@@ -85,17 +91,15 @@ class ChartController extends GetxController {
         end: _selectDateController.rangeEnd.value);
     chartPageList.value.todoList.clear();
     checkChartPageList.value.todoList.clear();
-    var rangeOfDays = timeRange.end
-        .difference(timeRange.start)
-        .inDays;
+    var rangeOfDays = timeRange.end.difference(timeRange.start).inDays;
     currentIndexList.clear();
     for (var i = 0; i <= rangeOfDays; i++) {
       var date = timeRange.start.add(Duration(days: i));
       for (var j = 0;
-      j < _todoController.loadTodoUidList.value.todoList.length;
-      j++) {
+          j < _todoController.loadTodoUidList.value.todoList.length;
+          j++) {
         if (_todoController.loadTodoUidList.value.todoList[j].ymd.year ==
-            date.year &&
+                date.year &&
             _todoController.loadTodoUidList.value.todoList[j].ymd.month ==
                 date.month &&
             _todoController.loadTodoUidList.value.todoList[j].ymd.day ==
@@ -106,7 +110,11 @@ class ChartController extends GetxController {
     }
     setChartList();
     chartPageList.value.todoList.forEach((element) {
-      makeChart(element);
+      titleList.forEach((element1) {
+        if (element.title == element1.title && element1.check) {
+          makeChart(element);
+        }
+      });
     });
     setPercent();
     sortChartList();
@@ -117,7 +125,7 @@ class ChartController extends GetxController {
     chartPageList.value.todoList.clear();
     for (var i = 0; i < currentIndexList.length; i++) {
       var item =
-      _todoController.loadTodoUidList.value.todoList[currentIndexList[i]];
+          _todoController.loadTodoUidList.value.todoList[currentIndexList[i]];
       chartPageList.value.todoList.add(TestTodo(
           uid: item.uid,
           ymd: item.ymd,
@@ -148,34 +156,37 @@ class ChartController extends GetxController {
     chartPageList.value.todoList.clear();
   }
 
-  void makeRangeData(DateTimeRange dateTimeRange) {
-    var day = dateTimeRange.end
-        .difference(dateTimeRange.start)
-        .inDays;
+  void makeSelectRangeData(DateTimeRange dateTimeRange) {
+    var day = dateTimeRange.end.difference(dateTimeRange.start).inDays;
     boolCheckList.clear();
     titleList.clear();
-    for(var i = 0; i <= day; i++){
+    for (var i = 0; i <= day; i++) {
       var date = dateTimeRange.start.add(Duration(days: i));
-      boolCheckList.addAll(
-      _todoController.loadTodoUidList.value.todoList.where((element) =>
-      element.ymd.year == date.year &&
-          element.ymd.month == date.month &&
-          element.ymd.day == date.day));
+      boolCheckList.addAll(_todoController.loadTodoUidList.value.todoList.where(
+          (element) =>
+              element.ymd.year == date.year &&
+              element.ymd.month == date.month &&
+              element.ymd.day == date.day));
     }
     titleCheck();
   }
 
   void titleCheck() {
     var index = -1;
-    for(var i = 0; i < boolCheckList.length; i++){
-      if(i == 0){
-        titleList.add(boolCheckList[0].title);
-      } else{
-        index = titleList.indexWhere((element) => element == boolCheckList[i].title);
-        if(index == -1){
-          titleList.add(boolCheckList[i].title);
+    for (var i = 0; i < boolCheckList.length; i++) {
+      if (i == 0) {
+        titleList.add(TitleList(title: boolCheckList[0].title));
+      } else {
+        index = titleList
+            .indexWhere((element) => element.title == boolCheckList[i].title);
+        if (index == -1) {
+          titleList.add(TitleList(title: boolCheckList[i].title));
         }
       }
     }
+  }
+
+  void setBool(int index, bool value) {
+    titleList[index].check = value;
   }
 }

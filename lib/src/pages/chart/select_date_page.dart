@@ -199,12 +199,10 @@ class _SelectDatePageState extends State<SelectDatePage> {
           _rangeEnd = end;
           rangeSelectionMode = RangeSelectionMode.toggledOn;
           _selectDateController.setRangeBool(
-            _rangeStart!, _rangeEnd ?? DateTime(2020,1,1)
-          );
-          if(_selectDateController.rangeBool.value){
-            _chartController.makeRangeData(
-              DateTimeRange(start: _rangeStart!, end: _rangeEnd!)
-            );
+              _rangeStart!, _rangeEnd ?? DateTime(2020, 1, 1));
+          if (_selectDateController.rangeBool.value) {
+            _chartController.makeSelectRangeData(
+                DateTimeRange(start: _rangeStart!, end: _rangeEnd!));
           }
         });
       },
@@ -231,7 +229,9 @@ class _SelectDatePageState extends State<SelectDatePage> {
             splashColor: context.theme.primaryColor.withOpacity(0.4),
             highlightColor: context.theme.primaryColor.withOpacity(0.2),
             onTap: () {
-              _rangeEnd == null ? _rangeEnd = _rangeStart!.add(Duration(days: 1)) : null;
+              _rangeEnd == null
+                  ? _rangeEnd = _rangeStart!.add(Duration(days: 1))
+                  : null;
               Get.offAll(() => Home(), transition: Transition.leftToRight);
               print(_rangeEnd);
               print(_selectDateController.rangeEnd.value);
@@ -302,8 +302,35 @@ class _SelectDatePageState extends State<SelectDatePage> {
       child: ListView.builder(
         itemCount: _chartController.titleList.length,
         itemBuilder: (context, index) {
-          return Container(
-            child: Text('${_chartController.titleList[index]}'),
+          return InkWell(
+            onTap: () {
+              setState(() {
+                _chartController.setBool(index,
+                    _chartController.titleList[index].check ? false : true);
+              });
+            },
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Checkbox(
+                    checkColor: Colors.white,
+                    activeColor: context.theme.primaryColor,
+                    value: _chartController.titleList[index].check,
+                    onChanged: (check) {
+                      setState(() {
+                        _chartController.setBool(index, check!);
+                      });
+                    }),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  height: context.mediaQuery.size.height * 0.05,
+                  width: context.mediaQuery.size.width * 0.8,
+                  child: Text('${_chartController.titleList[index].title}',
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
