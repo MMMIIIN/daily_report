@@ -56,8 +56,7 @@ class _ListPageState extends State<ListPage> {
       height: context.mediaQuery.size.height * 0.06,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-        color: context.theme.primaryColor.withOpacity(0.2)
-      ),
+          color: context.theme.primaryColor.withOpacity(0.2)),
       child: TextField(
         onChanged: (text) {
           _listController.searchTerm(text);
@@ -118,26 +117,16 @@ class _ListPageState extends State<ListPage> {
                       'today',
                       style: TextStyle(fontSize: 10, color: Colors.white),
                     ),
-                    date.weekday == 6 || date.weekday == 7
-                        ? Text(
-                            date.day.toString(),
-                            style: TextStyle(color: Colors.redAccent),
-                          )
-                        : Text(
-                            date.day.toString(),
-                            style: TextStyle(color: Colors.white),
-                          )
-                  ],
-                )
-              : date.weekday == 6 || date.weekday == 7
-                  ? Text(
-                      date.day.toString(),
-                      style: TextStyle(color: Colors.redAccent),
-                    )
-                  : Text(
+                    Text(
                       date.day.toString(),
                       style: TextStyle(color: Colors.white),
-                    ),
+                    )
+                  ],
+                )
+              : Text(
+                  date.day.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
         ),
         todayBuilder: (context, date, events) => Container(
           margin: const EdgeInsets.all(4),
@@ -309,10 +298,6 @@ class _ListPageState extends State<ListPage> {
                 customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
                 onTap: () {
-                  _todoController.setTime(
-                    currentTimeRange,
-                  );
-                  _todoController.initHome(currentDateTime);
                   todoDialog(context, currentTitle, memoTitle, currentDateTime,
                       currentTimeRange, currentColorIndex, todoUid);
                 },
@@ -599,6 +584,7 @@ class _ListPageState extends State<ListPage> {
             InkWell(
               onTap: () {
                 _todoController.titleTextController.value.text = title;
+                _todoController.titleText(title);
                 _todoController.selectColorIndex(colorIndex);
                 _todoController.memoText(memoTitle);
                 _todoController.memoController.value.text = memoTitle;
@@ -606,14 +592,13 @@ class _ListPageState extends State<ListPage> {
                 _todoController.editTodoUid(todoUid);
                 _todoController.clickedAddButton(false);
                 Get.to(
-                      () => AddTodo(),
+                  () => AddTodo(),
                 );
               },
               child: Container(
                 width: context.mediaQuery.size.width * 0.17,
                 height: context.mediaQuery.size.height * 0.043,
-                decoration: BoxDecoration(
-                    color: context.theme.primaryColor),
+                decoration: BoxDecoration(color: context.theme.primaryColor),
                 child: Center(
                   child: Text(
                     '수정',

@@ -147,8 +147,6 @@ class TodoController extends GetxController {
   }
 
   Future<void> initUidTodoList() async {
-    print('initUid');
-    print(FirebaseAuth.instance.currentUser!.uid);
     clearAllData();
     TestTodo sampleTodo;
     await FirebaseFirestore.instance
@@ -285,18 +283,6 @@ class TodoController extends GetxController {
         uid: 'initData4',
       ),
     ]);
-    // todoTitleList.add(
-    //   TodoTitle(
-    //     title: '회사',
-    //     titleColor: 1,
-    //     uid: 'initData1',
-    //     boolOfTime: true,
-    //     timeRange: TimeRange(
-    //       startTime: TimeOfDay(hour: 9, minute: 0),
-    //       endTime: TimeOfDay(hour: 18, minute: 0),
-    //     ),
-    //   ),
-    // );
   }
 
   void clearMemoController() {

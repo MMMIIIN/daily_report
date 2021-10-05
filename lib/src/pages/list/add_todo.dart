@@ -106,45 +106,32 @@ class _AddTodoState extends State<AddTodo> {
                     TableCalendar(
                         calendarBuilders: CalendarBuilders(
                           selectedBuilder: (context, date, events) => Container(
-                            margin: const EdgeInsets.all(4),
+                            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color:
-                                    context.theme.primaryColor.withOpacity(0.9),
+                                colorList[_settingsController.selectPrimaryColorIndex.value]
+                                    .withOpacity(0.9),
                                 borderRadius: BorderRadius.circular(10)),
                             child: date.year == DateTime.now().year &&
-                                    date.month == DateTime.now().month &&
-                                    date.day == DateTime.now().day
+                                date.month == DateTime.now().month &&
+                                date.day == DateTime.now().day
                                 ? Column(
-                                    children: [
-                                      Text(
-                                        'today',
-                                        style: TextStyle(
-                                            fontSize: 10, color: Colors.white),
-                                      ),
-                                      date.weekday == 6 || date.weekday == 7
-                                          ? Text(
-                                              date.day.toString(),
-                                              style: TextStyle(
-                                                  color: Colors.redAccent),
-                                            )
-                                          : Text(
-                                              date.day.toString(),
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )
-                                    ],
-                                  )
-                                : date.weekday == 6 || date.weekday == 7
-                                    ? Text(
-                                        date.day.toString(),
-                                        style:
-                                            TextStyle(color: Colors.redAccent),
-                                      )
-                                    : Text(
-                                        date.day.toString(),
-                                        style: TextStyle(color: Colors.white),
-                                      ),
+                              children: [
+                                Text(
+                                  'today',
+                                  style: TextStyle(fontSize: 10, color: Colors.white),
+                                ),
+                                Text(
+                                  date.day.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              ],
+                            )
+                                : Text(
+                              date.day.toString(),
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           todayBuilder: (context, date, events) => Container(
                             margin: const EdgeInsets.all(4),

@@ -198,8 +198,11 @@ class _HomePageState extends State<HomePage> {
                         ? context.mediaQuery.size.width * 0.17
                         : context.mediaQuery.size.width * 0.14;
                     return PieChartSectionData(
-                      title: _todoController.currentUidList.value.todoList[index].percent < 5 ? '' :
-                          '${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(0)}%',
+                      title: _todoController.currentUidList.value
+                                  .todoList[index].percent <
+                              7
+                          ? ''
+                          : '${_todoController.currentUidList.value.todoList[index].percent.toStringAsFixed(0)}%',
                       color: colorList[_todoController
                           .currentUidList.value.todoList[index].colorIndex],
                       value: _todoController
@@ -221,8 +224,7 @@ class _HomePageState extends State<HomePage> {
                               child: Center(
                                 child: Text(
                                   '${_todoController.currentUidList.value.todoList[index].title}',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
                             )
@@ -244,7 +246,7 @@ class _HomePageState extends State<HomePage> {
       child: GetBuilder<TodoController>(
         builder: (_) => _todoController.currentIndexList.isNotEmpty
             ? ListView.builder(
-          shrinkWrap: true,
+                shrinkWrap: true,
                 itemCount: _todoController.currentIndexList.length,
                 itemBuilder: (context, index) => InkWell(
                   borderRadius: BorderRadius.circular(10),
@@ -524,6 +526,13 @@ class _HomePageState extends State<HomePage> {
         )
       ],
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _todoController.initHome(_todoController.currentDateTime.value);
+    super.initState();
   }
 
   @override
