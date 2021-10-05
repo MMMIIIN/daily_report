@@ -50,16 +50,32 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget customImage(BuildContext context) {
-    return Container(
-      width: 200,
-      height: 200,
-      decoration: BoxDecoration(
-          color: context.theme.primaryColor.withOpacity(0.8),
-          shape: BoxShape.circle),
-      child: Center(
-        child: Text(
-          'Daily Report',
-          style: TextStyle(fontSize: 25, color: Colors.white, fontFamily: ''),
+    return Padding(
+      padding: EdgeInsets.only(top: 60),
+      child: Container(
+        width: context.mediaQuery.size.height * 0.2,
+        height: context.mediaQuery.size.height * 0.2,
+        decoration: BoxDecoration(
+          color: context.theme.primaryColor,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Center(
+          child: Container(
+            alignment: Alignment.center,
+            width: context.mediaQuery.size.height * 0.15,
+            height: context.mediaQuery.size.height * 0.15,
+            child: Text(
+              'DAILY REPORT',
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: '',
+                  fontStyle: FontStyle.italic),
+            ),
+          ),
         ),
       ),
     );
@@ -77,7 +93,10 @@ class LoginPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(IconsDB.mail_outlined),
+            Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Icon(IconsDB.mail_outlined),
+            ),
             Container(
               padding: EdgeInsets.only(left: 5),
               width: context.mediaQuery.size.width * 0.8,
@@ -94,6 +113,7 @@ class LoginPage extends StatelessWidget {
                 cursorColor: Colors.black,
                 controller: _loginController.emailController.value,
                 decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(top: 5),
                     hintText: 'example@email.com',
                     hintStyle: TextStyle(
                       color: Colors.black.withOpacity(0.4),
@@ -124,7 +144,10 @@ class LoginPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(IconsDB.locked_outlined),
+            Padding(
+              padding: EdgeInsets.only(top: 5),
+              child: Icon(IconsDB.locked_outlined),
+            ),
             Container(
               padding: EdgeInsets.only(left: 5),
               width: context.mediaQuery.size.width * 0.8,
@@ -139,6 +162,7 @@ class LoginPage extends StatelessWidget {
                 cursorColor: Colors.black,
                 controller: _loginController.passwordController.value,
                 decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(top: 5),
                     hintText: '비밀번호',
                     hintStyle: TextStyle(
                       color: Colors.black.withOpacity(0.4),
@@ -181,8 +205,8 @@ class LoginPage extends StatelessWidget {
                               padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: context.theme.primaryColor.withOpacity(0.2)
-                              ),
+                                  color: context.theme.primaryColor
+                                      .withOpacity(0.2)),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
@@ -227,8 +251,10 @@ class LoginPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 InkWell(
-                                  splashColor: context.theme.primaryColor.withOpacity(0.4),
-                                  highlightColor: context.theme.primaryColor.withOpacity(0.2),
+                                  splashColor: context.theme.primaryColor
+                                      .withOpacity(0.4),
+                                  highlightColor: context.theme.primaryColor
+                                      .withOpacity(0.2),
                                   onTap: () {
                                     Get.back();
                                     _loginController.forgotEmailController.value
@@ -237,13 +263,17 @@ class LoginPage extends StatelessWidget {
                                   },
                                   child: Container(
                                     width: context.mediaQuery.size.width * 0.18,
-                                    height: context.mediaQuery.size.height * 0.043,
+                                    height:
+                                        context.mediaQuery.size.height * 0.043,
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: context.theme.primaryColor)),
+                                        border: Border.all(
+                                            color: context.theme.primaryColor)),
                                     child: Center(
                                       child: Text(
                                         '취소',
-                                        style: TextStyle(color: context.theme.primaryColor, fontSize: 15),
+                                        style: TextStyle(
+                                            color: context.theme.primaryColor,
+                                            fontSize: 15),
                                       ),
                                     ),
                                   ),
@@ -256,13 +286,15 @@ class LoginPage extends StatelessWidget {
                                   },
                                   child: Container(
                                     width: context.mediaQuery.size.width * 0.18,
-                                    height: context.mediaQuery.size.height * 0.043,
+                                    height:
+                                        context.mediaQuery.size.height * 0.043,
                                     decoration: BoxDecoration(
                                         color: context.theme.primaryColor),
                                     child: Center(
                                       child: Text(
                                         '확인',
-                                        style: TextStyle(color: Colors.white, fontSize: 15),
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 15),
                                       ),
                                     ),
                                   ),

@@ -69,15 +69,24 @@ class SignUpPage extends StatelessWidget {
 
   Widget customImage(BuildContext context) {
     return Container(
-      width: 180,
-      height: 180,
+      margin: EdgeInsets.only(bottom: 30),
+      width: context.mediaQuery.size.height * 0.2,
+      height: context.mediaQuery.size.height * 0.2,
       decoration: BoxDecoration(
-          color: context.theme.primaryColor.withOpacity(0.8),
-          shape: BoxShape.circle),
+        color: context.theme.primaryColor,
+        borderRadius: BorderRadius.circular(50),
+      ),
       child: Center(
         child: Text(
-          'Daily Report',
-          style: TextStyle(fontSize: 25, color: Colors.white, fontFamily: ''),
+          'DAILY REPORT',
+          maxLines: 2,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 30,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: '',
+              fontStyle: FontStyle.italic),
         ),
       ),
     );
@@ -94,15 +103,18 @@ class SignUpPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _signUpController.genderIndex.value == 1
-                ? Icon(
-                    IconsDB.user_woman_outlined,
-                    size: 20,
-                  )
-                : Icon(
-                    IconsDB.user_man_outlined,
-                    size: 20,
-                  ),
+            Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: _signUpController.genderIndex.value == 1
+                  ? Icon(
+                      IconsDB.user_woman_outlined,
+                      size: 20,
+                    )
+                  : Icon(
+                      IconsDB.user_man_outlined,
+                      size: 20,
+                    ),
+            ),
             Container(
               padding: EdgeInsets.only(left: 5),
               width: context.mediaQuery.size.width * 0.8,
@@ -117,6 +129,7 @@ class SignUpPage extends StatelessWidget {
                 controller: _signUpController.signupNameController.value,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 5),
                   focusColor: Colors.red,
                   hintText: '이름',
                   hintStyle: TextStyle(
@@ -150,9 +163,12 @@ class SignUpPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(
-              IconsDB.mail_outlined,
-              size: 20,
+            Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Icon(
+                IconsDB.mail_outlined,
+                size: 20,
+              ),
             ),
             Container(
               padding: EdgeInsets.only(left: 5),
@@ -170,6 +186,7 @@ class SignUpPage extends StatelessWidget {
                 cursorColor: Colors.black,
                 controller: _signUpController.signupEmailController.value,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 5),
                   errorText: _signUpController.checkEmail.value ||
                           _signUpController.signupEmail.isEmpty
                       ? null
@@ -206,9 +223,12 @@ class SignUpPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(
-              IconsDB.locked_outlined,
-              size: 20,
+            Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Icon(
+                IconsDB.locked_outlined,
+                size: 20,
+              ),
             ),
             Container(
               padding: EdgeInsets.only(left: 5),
@@ -226,6 +246,7 @@ class SignUpPage extends StatelessWidget {
                 cursorColor: Colors.black,
                 controller: _signUpController.signupPasswordController.value,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 5),
                   errorText: _signUpController.checkPassword.value ||
                           _signUpController.signupPassword.isEmpty
                       ? null
@@ -262,9 +283,12 @@ class SignUpPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(
-              IconsDB.locked_filled,
-              size: 20,
+            Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Icon(
+                IconsDB.locked_filled,
+                size: 20,
+              ),
             ),
             Container(
               padding: EdgeInsets.only(left: 5),
@@ -281,6 +305,7 @@ class SignUpPage extends StatelessWidget {
                 obscureText: true,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 5),
                   hintText: '비밀번호 확인',
                   hintStyle: TextStyle(
                     color: Colors.black.withOpacity(0.4),
