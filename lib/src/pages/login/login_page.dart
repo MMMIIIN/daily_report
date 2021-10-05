@@ -69,7 +69,7 @@ class LoginPage extends StatelessWidget {
               maxLines: 2,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 30,
+                  fontSize: (context.mediaQuery.size.height * 0.15) * 0.24,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontFamily: '',
@@ -212,7 +212,7 @@ class LoginPage extends StatelessWidget {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: 5.0),
+                                    padding: EdgeInsets.only(left: 5.0,top: 8),
                                     child:
                                         Icon(IconsDB.mail_outlined, size: 20),
                                   ),
@@ -227,6 +227,7 @@ class LoginPage extends StatelessWidget {
                                         _loginController.setForgotEmail(text);
                                       },
                                       decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(top: 5),
                                           hintText: 'example@email.com',
                                           enabledBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(

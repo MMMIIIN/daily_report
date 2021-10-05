@@ -82,7 +82,7 @@ class SignUpPage extends StatelessWidget {
           maxLines: 2,
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 30,
+              fontSize: (context.mediaQuery.size.height * 0.15) * 0.24,
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontFamily: '',
