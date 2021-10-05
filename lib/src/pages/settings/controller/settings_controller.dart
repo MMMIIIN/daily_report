@@ -6,7 +6,7 @@ class SettingsController extends GetxController {
   RxInt isTimePickerTimeIndex = 1.obs;
   RxInt timePickerOfInterval = 10.obs;
   RxInt listPageIndex = 0.obs;
-  RxInt selectPrimaryColorIndex = 0.obs;
+  RxInt selectPrimaryColorIndex = 4.obs;
 
   RxString loginText = '로그인'.obs;
   RxBool clickedLogin = false.obs;
@@ -79,7 +79,7 @@ class SettingsController extends GetxController {
     var percentOrHour = GetStorage().read('isPercentOrHour') ?? false;
     var listPageIndex = GetStorage().read('isListPageBool') ?? false;
     var interval = GetStorage().read('timePickerOfInterval') ?? 1;
-    var colorIndex = GetStorage().read('primaryColor') ?? 0;
+    var colorIndex = GetStorage().read('primaryColor') ?? 4;
     if (percentOrHour) {
       isPercentOrHourIndex(0);
       setPercentOrHourIndex(0);
