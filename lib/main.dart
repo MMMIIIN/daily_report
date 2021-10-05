@@ -1,7 +1,6 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/src/binding/init_binding.dart';
 import 'package:daily_report/src/pages/app.dart';
-import 'package:daily_report/src/pages/chart/chart_page.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   runApp(MyApp());
 }
 
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
     return SimpleBuilder(builder: (_) {
       return Obx(
         () => GetMaterialApp(
-          // debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: false,
           title: 'Daily Report',
           theme: ThemeData(
               primaryColor:
@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
           initialBinding: InitBinding(),
           getPages: [
             GetPage(name: '/', page: () => App()),
-            GetPage(name: 'chart', page: () => ChartPage()),
           ],
         ),
       );
