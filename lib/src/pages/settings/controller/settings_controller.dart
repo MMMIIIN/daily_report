@@ -76,8 +76,8 @@ class SettingsController extends GetxController {
   }
 
   void setInitStorage() {
-    var percentOrHour = GetStorage().read('isPercentOrHour') ?? false;
-    var listPageIndex = GetStorage().read('isListPageBool') ?? false;
+    var percentOrHour = GetStorage().read('isPercentOrHour') ?? true;
+    var listPageIndex = GetStorage().read('isListPageBool') ?? true;
     var interval = GetStorage().read('timePickerOfInterval') ?? 1;
     var colorIndex = GetStorage().read('primaryColor') ?? 4;
     if (percentOrHour) {
