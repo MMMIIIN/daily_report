@@ -45,7 +45,7 @@ Future<void> addTodoTitle(TodoTitle todoTitle) async {
     Get.back();
     await Get.showSnackbar(
       GetBar(
-        title: 'SUCCESS!',
+        title: 'SUCCESS',
         message: '성공적으로 추가되었습니다.',
         backgroundColor: successColor,
         duration: Duration(seconds: 1),
@@ -410,4 +410,35 @@ void firebaseForgotUserPassword(String email) async {
       backgroundColor: errorColor,
     ));
   }
+}
+
+void deleteUser() async {
+  try {
+    deleteUserData();
+    await FirebaseAuth.instance.currentUser!.delete();
+    Get.back();
+    await Get.showSnackbar(GetBar(
+      title: 'SUCCESS',
+      message: '계정이 탈퇴되었습니다.',
+      duration: Duration(seconds: 2),
+      backgroundColor: successColor,
+    ));
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'requires-recent-login') {
+      await Get.showSnackbar(GetBar(
+        title: 'ERROR',
+        message: '재 로그인한 후 다시 시도해 주세요.',
+        duration: Duration(seconds: 2),
+        backgroundColor: errorColor,
+      ));
+    }
+  }
+}
+
+void deleteUserData() async {
+  await FirebaseFirestore.instance
+      .collection('delete')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .set({'uid': FirebaseAuth.instance.currentUser!.uid
+      });
 }
