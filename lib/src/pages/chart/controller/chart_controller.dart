@@ -21,6 +21,7 @@ class ChartController extends GetxController {
   Rx<TodoUidList> checkChartPageList = TodoUidList(todoList: []).obs;
   final boolCheckList = <TestTodo>[].obs;
   final titleList = <TitleList>[].obs;
+  bool isInitData = true;
 
   double totalSum = 0;
   RxInt modeIndex = 0.obs;
@@ -110,8 +111,8 @@ class ChartController extends GetxController {
     }
     setChartList();
     chartPageList.value.todoList.forEach((element) {
-      titleList.forEach((element1) {
-        if (element.title == element1.title && element1.check) {
+      titleList.forEach((listOfTitle) {
+        if (element.title == listOfTitle.title && listOfTitle.check) {
           makeChart(element);
         }
       });

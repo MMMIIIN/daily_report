@@ -310,7 +310,6 @@ class _SelectDatePageState extends State<SelectDatePage> {
               });
             },
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Checkbox(
                     checkColor: Colors.white,
