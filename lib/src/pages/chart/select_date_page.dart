@@ -232,9 +232,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
               _rangeEnd == null
                   ? _rangeEnd = _rangeStart!.add(Duration(days: 1))
                   : null;
-              Get.offAll(() => Home(), transition: Transition.leftToRight);
-              print(_rangeEnd);
-              print(_selectDateController.rangeEnd.value);
+              Get.back();
             },
             child: Container(
               width: context.mediaQuery.size.width * 0.2,
@@ -253,9 +251,9 @@ class _SelectDatePageState extends State<SelectDatePage> {
             onTap: () {
               if (_selectDateController.rangeBool.value) {
                 _selectDateController.setRangeTime(
-                    _rangeStart ?? DateTime.now(), _rangeEnd ?? DateTime.now());
+                    _rangeStart!, _rangeEnd!);
                 _chartController.makeRangeDate();
-                Get.offAll(() => Home(), transition: Transition.leftToRight);
+                Get.off(() => Home(), transition: Transition.leftToRight);
               }
             },
             child: Container(

@@ -241,12 +241,8 @@ class _ChartPageState extends State<ChartPage> {
   @override
   void initState() {
     // TODO: implement initState
-    _chartController.makeSelectRangeData(
-        DateTimeRange(start: _selectDateController.rangeStart.value,
-            end: _selectDateController.rangeEnd.value)
-    );
-    _chartController.makeRangeDate();
     super.initState();
+    _chartController.makeRangeDate();
   }
 
   @override

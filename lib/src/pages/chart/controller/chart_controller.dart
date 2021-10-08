@@ -21,7 +21,6 @@ class ChartController extends GetxController {
   Rx<TodoUidList> checkChartPageList = TodoUidList(todoList: []).obs;
   final boolCheckList = <TestTodo>[].obs;
   final titleList = <TitleList>[].obs;
-  bool isInitData = true;
 
   double totalSum = 0;
   RxInt modeIndex = 0.obs;
@@ -189,5 +188,13 @@ class ChartController extends GetxController {
 
   void setBool(int index, bool value) {
     titleList[index].check = value;
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    makeSelectRangeData(DateTimeRange(start: _selectDateController.rangeStart.value,
+        end: _selectDateController.rangeEnd.value));
   }
 }

@@ -897,6 +897,10 @@ class _AddTodoState extends State<AddTodo> {
                           .initHome(_todoController.currentDateTime.value);
                       _todoController.titleTextController.value.clear();
                       _todoController.titleText('');
+                      var titleListIndex = _chartController.titleList.indexWhere((listOfTitle) => listOfTitle.title == todoUpdateDto.title);
+                      if(titleListIndex == -1){
+                        _chartController.titleList.add(TitleList(title: todoUpdateDto.title));
+                      }
                       await Get.off(() => Home());
                     }
                   }
@@ -933,6 +937,10 @@ class _AddTodoState extends State<AddTodo> {
                     _todoController.clearMemoController();
                     _todoController
                         .initHome(_todoController.currentDateTime.value);
+                    var titleListIndex = _chartController.titleList.indexWhere((listOfTitle) => listOfTitle.title == todoAddDto.title);
+                    if(titleListIndex == -1){
+                      _chartController.titleList.add(TitleList(title: todoAddDto.title));
+                    }
                     await Get.offAll(() => Home());
                     _todoController.titleTextController.value.clear();
                     _todoController.titleText('');
