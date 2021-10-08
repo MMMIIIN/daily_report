@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget showChart() {
     return Flexible(
-      flex: 2,
+      flex: 3,
       child: GetBuilder<TodoController>(
         init: TodoController(),
         builder: (_) => _todoController.currentIndexList.isNotEmpty
@@ -243,6 +243,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget showChartList() {
     return Flexible(
+      flex: 2,
       child: GetBuilder<TodoController>(
         builder: (_) => _todoController.currentIndexList.isNotEmpty
             ? ListView.builder(
@@ -531,8 +532,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
-    _todoController.initHome(_todoController.currentDateTime.value);
     super.initState();
+    setState(() {
+      _todoController.initHome(_todoController.currentDateTime.value);
+    });
   }
 
   @override
