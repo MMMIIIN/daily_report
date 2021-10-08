@@ -222,15 +222,21 @@ Future<void> firebaseAuthSignUp(
       email: userEmail,
       password: userPw,
     )
-        .then((value) {
-      FirebaseAuth.instance.currentUser!.updateDisplayName(signupName);
-      FirebaseFirestore.instance
+        .then((value) async{
+      await _todoController.initUidTodoList();
+      await _todoController.initTodoTitleList();
+      await _loginController.clearTextField();
+      await _listController.initSearchResult();
+      await _listController.clearData();
+      await _chartController.clearData();
+      await FirebaseAuth.instance.currentUser!.updateDisplayName(signupName);
+      await FirebaseFirestore.instance
           .collection('user')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('info')
           .doc()
           .set({'gender': genderIndex, 'name': signupName});
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('user')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('todoTitle')
@@ -245,7 +251,7 @@ Future<void> firebaseAuthSignUp(
         'titleColorIndex': 0,
         'uid': 'initData'
       });
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('user')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('todoTitle')
@@ -260,7 +266,7 @@ Future<void> firebaseAuthSignUp(
         'titleColorIndex': 1,
         'uid': 'initData1'
       });
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('user')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('todoTitle')
@@ -275,7 +281,7 @@ Future<void> firebaseAuthSignUp(
         'titleColorIndex': 2,
         'uid': 'initData2'
       });
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('user')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('todoTitle')
@@ -290,7 +296,7 @@ Future<void> firebaseAuthSignUp(
         'titleColorIndex': 3,
         'uid': 'initData3'
       });
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('user')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('todoTitle')
@@ -305,7 +311,7 @@ Future<void> firebaseAuthSignUp(
         'titleColorIndex': 4,
         'uid': 'initData4'
       });
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('user')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('todos')
@@ -325,7 +331,7 @@ Future<void> firebaseAuthSignUp(
         'value': 540,
         'color': 1
       });
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('user')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('todos')
@@ -345,8 +351,8 @@ Future<void> firebaseAuthSignUp(
         'value': 120,
         'color': 3
       });
-      Get.off(() => Home());
       _signUpController.intiDataSet();
+      await Get.off(() => Home());
     });
   } on FirebaseAuthException catch (e) {
     await Get.showSnackbar(GetBar(
