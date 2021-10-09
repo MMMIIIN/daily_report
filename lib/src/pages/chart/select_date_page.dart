@@ -250,8 +250,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
           InkWell(
             onTap: () {
               if (_selectDateController.rangeBool.value) {
-                _selectDateController.setRangeTime(
-                    _rangeStart!, _rangeEnd!);
+                _selectDateController.setRangeTime(_rangeStart!, _rangeEnd!);
                 _chartController.makeRangeDate();
                 Get.off(() => Home(), transition: Transition.leftToRight);
               }
@@ -295,41 +294,44 @@ class _SelectDatePageState extends State<SelectDatePage> {
   }
 
   Widget boolCheckList() {
-    return Container(
-      height: context.mediaQuery.size.height * 0.3,
-      child: ListView.builder(
-        itemCount: _chartController.titleList.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              setState(() {
-                _chartController.setBool(index,
-                    _chartController.titleList[index].check ? false : true);
-              });
-            },
-            child: Row(
-              children: [
-                Checkbox(
-                    checkColor: Colors.white,
-                    activeColor: context.theme.primaryColor,
-                    value: _chartController.titleList[index].check,
-                    onChanged: (check) {
-                      setState(() {
-                        _chartController.setBool(index, check!);
-                      });
-                    }),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  height: context.mediaQuery.size.height * 0.05,
-                  width: context.mediaQuery.size.width * 0.8,
-                  child: Text('${_chartController.titleList[index].title}',
-                    overflow: TextOverflow.ellipsis,
+    return Flexible(
+      child: Container(
+        height: context.mediaQuery.size.height * 0.3,
+        child: ListView.builder(
+          itemCount: _chartController.titleList.length,
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: () {
+                setState(() {
+                  _chartController.setBool(index,
+                      _chartController.titleList[index].check ? false : true);
+                });
+              },
+              child: Row(
+                children: [
+                  Checkbox(
+                      checkColor: Colors.white,
+                      activeColor: context.theme.primaryColor,
+                      value: _chartController.titleList[index].check,
+                      onChanged: (check) {
+                        setState(() {
+                          _chartController.setBool(index, check!);
+                        });
+                      }),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    height: context.mediaQuery.size.height * 0.05,
+                    width: context.mediaQuery.size.width * 0.8,
+                    child: Text(
+                      '${_chartController.titleList[index].title}',
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
