@@ -215,7 +215,7 @@ Future<void> updateFireStore(TestTodo todo) async {
 }
 
 Future<void> firebaseAuthSignUp(
-    String userEmail, String userPw, String signupName, int genderIndex) async {
+    String userEmail, String userPw, String signupName) async {
   try {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
@@ -235,7 +235,7 @@ Future<void> firebaseAuthSignUp(
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('info')
           .doc()
-          .set({'gender': genderIndex, 'name': signupName});
+          .set({'name': signupName});
       await FirebaseFirestore.instance
           .collection('user')
           .doc(FirebaseAuth.instance.currentUser!.uid)

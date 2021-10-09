@@ -15,8 +15,6 @@ class SignUpController extends GetxController{
   RxString signupPassword = ''.obs;
   RxString signupPasswordCheck = ''.obs;
 
-  RxInt genderIndex = 0.obs;
-
   RxBool checkEmail = false.obs;
   RxBool checkPassword = false.obs;
   RxBool equalPassword = false.obs;
@@ -64,10 +62,6 @@ class SignUpController extends GetxController{
       checkPassword(false);
     }
     setAllCheck();
-  }
-
-  void setGenderIndex(int index) {
-    genderIndex(index);
   }
 
   void setAllCheck() {

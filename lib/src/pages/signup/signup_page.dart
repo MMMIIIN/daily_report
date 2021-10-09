@@ -53,7 +53,6 @@ class SignUpPage extends StatelessWidget {
                   signupEmailField(context),
                   signupPasswordField(context),
                   passwordCheckField(context),
-                  genderSwitch(context),
                   SizedBox(
                     height: context.mediaQuery.size.height * 0.05,
                   ),
@@ -105,12 +104,7 @@ class SignUpPage extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.only(top: 8.0),
-              child: _signUpController.genderIndex.value == 1
-                  ? Icon(
-                      IconsDB.user_woman_outlined,
-                      size: 20,
-                    )
-                  : Icon(
+              child: Icon(
                       IconsDB.user_man_outlined,
                       size: 20,
                     ),
@@ -330,23 +324,6 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  Widget genderSwitch(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5.0),
-      child: ToggleSwitch(
-        minWidth: double.infinity,
-        inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
-        activeBgColor: [context.theme.primaryColor],
-        labels: ['남', '여'],
-        totalSwitches: 2,
-        initialLabelIndex: _signUpController.genderIndex.value,
-        onToggle: (index) {
-          _signUpController.setGenderIndex(index);
-        },
-      ),
-    );
-  }
-
   Widget signUpButton(BuildContext context) {
     return GestureDetector(
       onTap: _signUpController.allCheck.value
@@ -356,7 +333,7 @@ class SignUpPage extends StatelessWidget {
                       _signUpController.signupEmail.value,
                       _signUpController.signupPassword.value,
                       _signUpController.signupName.value,
-                      _signUpController.genderIndex.value)
+              )
                   .then((value) => _signUpController.clickedButton(false));
             }
           : null,
