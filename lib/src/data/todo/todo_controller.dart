@@ -321,12 +321,12 @@ class TodoController extends GetxController {
   }
 
   @override
-  void onInit() {
+  void onInit() async{
     // TODO: implement onInit
     super.onInit();
     if (FirebaseAuth.instance.currentUser != null) {
-      initUidTodoList();
-      initTodoTitleList();
+      await initUidTodoList();
+      await initTodoTitleList();
     }
   }
 }
