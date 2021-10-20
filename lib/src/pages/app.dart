@@ -18,8 +18,8 @@ class App extends StatelessWidget {
           );
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          Timer(Duration(milliseconds: 2000), () {
-            Get.off(() => Home());
+          Timer(Duration(milliseconds: 2500), () {
+            Get.off(() => Home(), transition: Transition.noTransition);
           });
         }
         return loadingSplash(context);
