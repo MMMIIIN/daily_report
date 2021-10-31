@@ -2,6 +2,7 @@ import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
+import 'package:daily_report/src/pages/add/select_time.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
@@ -106,32 +107,34 @@ class _AddTodoState extends State<AddTodo> {
                     TableCalendar(
                         calendarBuilders: CalendarBuilders(
                           selectedBuilder: (context, date, events) => Container(
-                            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color:
-                                colorList[_settingsController.selectPrimaryColorIndex.value]
+                                color: colorList[_settingsController
+                                        .selectPrimaryColorIndex.value]
                                     .withOpacity(0.9),
                                 borderRadius: BorderRadius.circular(10)),
                             child: date.year == DateTime.now().year &&
-                                date.month == DateTime.now().month &&
-                                date.day == DateTime.now().day
+                                    date.month == DateTime.now().month &&
+                                    date.day == DateTime.now().day
                                 ? Column(
-                              children: [
-                                Text(
-                                  'today',
-                                  style: TextStyle(fontSize: 10, color: Colors.white),
-                                ),
-                                Text(
-                                  date.day.toString(),
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              ],
-                            )
+                                    children: [
+                                      Text(
+                                        'today',
+                                        style: TextStyle(
+                                            fontSize: 10, color: Colors.white),
+                                      ),
+                                      Text(
+                                        date.day.toString(),
+                                        style: TextStyle(color: Colors.white),
+                                      )
+                                    ],
+                                  )
                                 : Text(
-                              date.day.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
+                                    date.day.toString(),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                           ),
                           todayBuilder: (context, date, events) => Container(
                             margin: const EdgeInsets.all(4),
@@ -274,8 +277,8 @@ class _AddTodoState extends State<AddTodo> {
                 '${_todoController.currentDateTime.value.day} '
                 '${_listController.getOfDay(_todoController.currentDateTime.value.weekday)}',
                 style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black.withOpacity(0.8),
+                  fontSize: 20,
+                  color: Colors.black.withOpacity(0.8),
                 ),
               )
             ],
@@ -328,6 +331,7 @@ class _AddTodoState extends State<AddTodo> {
   }
 
   Widget makeRule() {
+    _todoController.clickedRuleAddButton(false);
     return MaterialButton(
         onPressed: () async {
           _todoController.initCheckBoxBool();
@@ -436,7 +440,7 @@ class _AddTodoState extends State<AddTodo> {
                           ],
                         ),
                       ),
-                      Row(
+                      Obx(() => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           InkWell(
@@ -466,70 +470,90 @@ class _AddTodoState extends State<AddTodo> {
                             ),
                           ),
                           InkWell(
-                            onTap: () async {
-                              await addTodoTitle(
-                                TodoTitle(
-                                  title: _todoController.makeRuleTitle.value,
-                                  titleColor:
-                                      _todoController.selectColorIndex.value,
-                                  boolOfTime:
-                                      _todoController.checkBoxBool.value,
-                                  timeRange: _todoController.checkBoxBool.value
-                                      ? _todoController.defaultTime.value
-                                      : TimeRange(
-                                          startTime:
-                                              TimeOfDay(hour: 0, minute: 0),
-                                          endTime:
-                                              TimeOfDay(hour: 1, minute: 0),
-                                        ),
-                                ),
-                              );
-                              _todoController.addTodoTitle(
-                                TodoTitle(
-                                    title: _todoController.makeRuleTitle.value,
-                                    titleColor:
-                                        _todoController.selectColorIndex.value,
-                                    uid: currentTodoTitleUid,
-                                    timeRange:
-                                        _todoController.checkBoxBool.value
-                                            ? TimeRange(
+                            onTap: _todoController.clickedRuleAddButton.value == false
+                                ? () async {
+                                    _todoController.clickedRuleAddButton(true);
+                                    await addTodoTitle(
+                                      TodoTitle(
+                                        title:
+                                            _todoController.makeRuleTitle.value,
+                                        titleColor: _todoController
+                                            .selectColorIndex.value,
+                                        boolOfTime:
+                                            _todoController.checkBoxBool.value,
+                                        timeRange: _todoController
+                                                .checkBoxBool.value
+                                            ? _todoController.defaultTime.value
+                                            : TimeRange(
                                                 startTime: TimeOfDay(
-                                                    hour: _todoController
-                                                        .defaultTime
-                                                        .value
-                                                        .startTime
-                                                        .hour,
-                                                    minute: _todoController
-                                                        .defaultTime
-                                                        .value
-                                                        .startTime
-                                                        .minute),
+                                                    hour: 0, minute: 0),
                                                 endTime: TimeOfDay(
-                                                    hour: _todoController
-                                                        .defaultTime
-                                                        .value
-                                                        .endTime
-                                                        .hour,
-                                                    minute: _todoController
-                                                        .defaultTime
-                                                        .value
-                                                        .endTime
-                                                        .minute),
-                                              )
-                                            : null,
-                                    boolOfTime:
-                                        _todoController.checkBoxBool.value),
-                              );
-                              _todoController.sortTodoTitleList();
-                              _todoController.titleTextController.value.text =
-                                  _todoController.makeRuleTitle.value;
-                              _todoController.titleText(
-                                  _todoController.makeRuleTitle.value);
-                              _todoController.makeRuleTitle('');
-                              _todoController.makeRuleTitleController.value
-                                  .clear();
-                            },
-                            child: Container(
+                                                    hour: 1, minute: 0),
+                                              ),
+                                      ),
+                                    );
+                                    _todoController.addTodoTitle(
+                                      TodoTitle(
+                                          title: _todoController
+                                              .makeRuleTitle.value,
+                                          titleColor: _todoController
+                                              .selectColorIndex.value,
+                                          uid: currentTodoTitleUid,
+                                          timeRange: _todoController
+                                                  .checkBoxBool.value
+                                              ? TimeRange(
+                                                  startTime: TimeOfDay(
+                                                      hour: _todoController
+                                                          .defaultTime
+                                                          .value
+                                                          .startTime
+                                                          .hour,
+                                                      minute: _todoController
+                                                          .defaultTime
+                                                          .value
+                                                          .startTime
+                                                          .minute),
+                                                  endTime: TimeOfDay(
+                                                      hour: _todoController
+                                                          .defaultTime
+                                                          .value
+                                                          .endTime
+                                                          .hour,
+                                                      minute: _todoController
+                                                          .defaultTime
+                                                          .value
+                                                          .endTime
+                                                          .minute),
+                                                )
+                                              : null,
+                                          boolOfTime: _todoController
+                                              .checkBoxBool.value),
+                                    );
+                                    _todoController.sortTodoTitleList();
+                                    _todoController
+                                            .titleTextController.value.text =
+                                        _todoController.makeRuleTitle.value;
+                                    _todoController.titleText(
+                                        _todoController.makeRuleTitle.value);
+                                    _todoController.makeRuleTitle('');
+                                    _todoController
+                                        .makeRuleTitleController.value
+                                        .clear();
+                                    _todoController.clickedRuleAddButton(false);
+                                  }
+                                : null,
+                            child: _todoController.clickedRuleAddButton.value ? Container(
+                              width: context.mediaQuery.size.width * 0.27,
+                              height: context.mediaQuery.size.height * 0.043,
+                              decoration: BoxDecoration(
+                                  color: context.theme.primaryColor.withOpacity(0.6)),
+                              child: Center(
+                                child: Text(
+                                  'loading...',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ) : Container(
                               width: context.mediaQuery.size.width * 0.225,
                               height: context.mediaQuery.size.height * 0.043,
                               decoration: BoxDecoration(
@@ -540,10 +564,11 @@ class _AddTodoState extends State<AddTodo> {
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                            ),
+                            ) ,
                           ),
                         ],
-                      )
+                      ),
+                      ),
                     ],
                   ),
                 ),
@@ -750,7 +775,8 @@ class _AddTodoState extends State<AddTodo> {
       customBorder:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onTap: () {
-        setTimeRange();
+        // setTimeRange();
+        Get.to(() => SelectTimePage());
       },
       child: Container(
         height: context.mediaQuery.size.height * 0.1,
@@ -772,15 +798,16 @@ class _AddTodoState extends State<AddTodo> {
                       '${_todoController.defaultTime.value.startTime.hour < 13 ? '${_todoController.defaultTime.value.startTime.hour}' : '${_todoController.defaultTime.value.startTime.hour - 12}'} : '
                       '${_todoController.defaultTime.value.startTime.minute}',
                       style: TextStyle(
-                          color: Colors.black.withOpacity(0.8),
-                          fontSize: 20,
+                        color: Colors.black.withOpacity(0.8),
+                        fontSize: 20,
                       ),
                     ),
                   ],
                 ),
                 Text(
                   '-',
-                  style: TextStyle(color: Colors.black.withOpacity(0.8), fontSize: 20),
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(0.8), fontSize: 20),
                 ),
                 Row(
                   children: [
@@ -789,9 +816,9 @@ class _AddTodoState extends State<AddTodo> {
                       '${_todoController.defaultTime.value.endTime.hour < 13 ? '${_todoController.defaultTime.value.endTime.hour}' : '${_todoController.defaultTime.value.endTime.hour - 12}'} : '
                       '${_todoController.defaultTime.value.endTime.minute}',
                       style: TextStyle(
-                          color: Colors.black.withOpacity(0.8),
-                          fontSize: 20,
-                          ),
+                        color: Colors.black.withOpacity(0.8),
+                        fontSize: 20,
+                      ),
                     ),
                   ],
                 ),
@@ -897,9 +924,12 @@ class _AddTodoState extends State<AddTodo> {
                           .initHome(_todoController.currentDateTime.value);
                       _todoController.titleTextController.value.clear();
                       _todoController.titleText('');
-                      var titleListIndex = _chartController.titleList.indexWhere((listOfTitle) => listOfTitle.title == todoUpdateDto.title);
-                      if(titleListIndex == -1){
-                        _chartController.titleList.add(TitleList(title: todoUpdateDto.title));
+                      var titleListIndex = _chartController.titleList
+                          .indexWhere((listOfTitle) =>
+                              listOfTitle.title == todoUpdateDto.title);
+                      if (titleListIndex == -1) {
+                        _chartController.titleList
+                            .add(TitleList(title: todoUpdateDto.title));
                       }
                       await Get.off(() => Home());
                     }
@@ -937,9 +967,11 @@ class _AddTodoState extends State<AddTodo> {
                     _todoController.clearMemoController();
                     _todoController
                         .initHome(_todoController.currentDateTime.value);
-                    var titleListIndex = _chartController.titleList.indexWhere((listOfTitle) => listOfTitle.title == todoAddDto.title);
-                    if(titleListIndex == -1){
-                      _chartController.titleList.add(TitleList(title: todoAddDto.title));
+                    var titleListIndex = _chartController.titleList.indexWhere(
+                        (listOfTitle) => listOfTitle.title == todoAddDto.title);
+                    if (titleListIndex == -1) {
+                      _chartController.titleList
+                          .add(TitleList(title: todoAddDto.title));
                     }
                     await Get.offAll(() => Home());
                     _todoController.titleTextController.value.clear();

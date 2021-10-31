@@ -35,6 +35,7 @@ class TodoController extends GetxController {
   RxBool clickedAddButton = false.obs;
   RxBool isEditMode = false.obs;
   RxString editTodoUid = ''.obs;
+  RxBool clickedRuleAddButton = false.obs;
 
   Rx<TimeRange> defaultTime = TimeRange(
           startTime: TimeOfDay(hour: 0, minute: 0),
@@ -42,6 +43,14 @@ class TodoController extends GetxController {
       .obs;
   RxInt defaultValue = 0.obs;
   RxInt selectColorIndex = 0.obs;
+
+  Rx<TimeOfDay> startTime = TimeOfDay(hour: 0, minute: 0).obs;
+  Rx<TimeOfDay> endTime = TimeOfDay(hour: 0, minute: 0).obs;
+  RxInt startHour = 0.obs;
+  RxInt startMinute = 0.obs;
+  RxInt endHour = 0.obs;
+  RxInt endMinute = 0.obs;
+  RxInt selectTime = 0.obs;
 
   void addTodo(TestTodo todo) {
     loadTodoUidList.value.todoList.add(todo);
