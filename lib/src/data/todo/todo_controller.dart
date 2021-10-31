@@ -61,13 +61,7 @@ class TodoController extends GetxController {
   }
 
   void todoUidCheckAdd(TestTodo data) {
-    var addIndex = todoUidList.value.todoList.indexWhere(
-        (element) => element.ymd == data.ymd && element.title == data.title);
-    if (addIndex != -1) {
-      todoUidList.value.todoList[addIndex].value += data.value;
-    } else {
-      todoUidList.value.todoList.add(data);
-    }
+    todoUidList.value.todoList.add(data);
   }
 
   void setHourMinute() {
@@ -330,7 +324,7 @@ class TodoController extends GetxController {
   }
 
   @override
-  void onInit() async{
+  void onInit() async {
     // TODO: implement onInit
     super.onInit();
     if (FirebaseAuth.instance.currentUser != null) {
