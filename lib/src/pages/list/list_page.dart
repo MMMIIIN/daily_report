@@ -2,7 +2,7 @@ import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
-import 'package:daily_report/src/pages/list/add_todo.dart';
+import 'package:daily_report/src/pages/add/add_todo.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
 import 'package:daily_report/src/service/firestore_service.dart';

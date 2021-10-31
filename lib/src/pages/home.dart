@@ -4,7 +4,7 @@ import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/chart/chart_page.dart';
 import 'package:daily_report/src/pages/home/homepage.dart';
-import 'package:daily_report/src/pages/list/add_todo.dart';
+import 'package:daily_report/src/pages/add/add_todo.dart';
 import 'package:daily_report/src/pages/list/list_page.dart';
 import 'package:daily_report/src/pages/login/login_page.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';

@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: 1.4.1
   cloud_firestore: ^2.2.0
   toggle_switch: ^1.2.0
+  flutter_time_picker_spinner: ^2.0.0
 
 
 
@@ -90,6 +91,5 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 flutter_native_splash:
-  image: assets/splash_screen_final.png
   color: "#FFFFFF"
   fullscreen: true

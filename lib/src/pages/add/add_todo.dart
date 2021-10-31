@@ -775,8 +775,8 @@ class _AddTodoState extends State<AddTodo> {
       customBorder:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onTap: () {
-        // setTimeRange();
-        Get.to(() => SelectTimePage());
+        setTimeRange();
+        // Get.to(() => SelectTimePage());
       },
       child: Container(
         height: context.mediaQuery.size.height * 0.1,
