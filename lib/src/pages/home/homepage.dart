@@ -443,8 +443,8 @@ class _HomePageState extends State<HomePage> {
       ),
       content: Container(
         height: memoText.isEmpty
-            ? context.mediaQuery.size.height * 0.12
-            : context.mediaQuery.size.height * 0.15,
+            ? context.mediaQuery.size.height * 0.14
+            : context.mediaQuery.size.height * 0.17,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,7 +2,6 @@ import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
 import 'package:daily_report/src/data/todo/todo.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
-import 'package:daily_report/src/pages/add/select_time.dart';
 import 'package:daily_report/src/pages/chart/controller/chart_controller.dart';
 import 'package:daily_report/src/pages/home.dart';
 import 'package:daily_report/src/pages/list/controller/list_controller.dart';
@@ -35,7 +34,7 @@ class _AddTodoState extends State<AddTodo> {
     return Material(
       child: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.all(10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

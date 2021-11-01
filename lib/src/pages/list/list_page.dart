@@ -19,7 +19,6 @@ class ListPage extends StatefulWidget {
 
 final TodoController _todoController = Get.put(TodoController());
 final ListController _listController = Get.put(ListController());
-final ChartController _chartController = Get.put(ChartController());
 final SettingsController _settingsController = Get.put(SettingsController());
 
 class _ListPageState extends State<ListPage> {
@@ -68,6 +67,7 @@ class _ListPageState extends State<ListPage> {
         cursorColor: Colors.black,
         controller: _listController.searchTitleController.value,
         decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(top: 5),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.transparent),
             ),

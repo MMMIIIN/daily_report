@@ -96,150 +96,151 @@ class _HomeState extends State<Home> {
   }
 
   Widget lightModeRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {
-            _homeController.changeTapMenu(0);
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: Container(
-              color: Colors.transparent,
-              width: context.mediaQuery.size.width * 0.15,
-              height: context.mediaQuery.size.height * 0.06,
-              child: Column(
-                children: [
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        _homeController.currentIndex.value == 0
-                            ? IconsDB.home_filled
-                            : IconsDB.home_outlined,
-                        size: 22,
-                        color: colorList[
-                            _settingsController.selectPrimaryColorIndex.value],
+    return Container(
+      height: context.mediaQuery.size.height * 0.07,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              _homeController.changeTapMenu(0);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Container(
+                color: Colors.transparent,
+                width: context.mediaQuery.size.width * 0.15,
+                height: context.mediaQuery.size.height * 0.06,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(0.0),
+                        child: Icon(
+                          _homeController.currentIndex.value == 0
+                              ? IconsDB.home_filled
+                              : IconsDB.home_outlined,
+                          size: 22,
+                          color: colorList[_settingsController
+                              .selectPrimaryColorIndex.value],
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    '홈',
-                    style: TextStyle(
-                        color: context.theme.primaryColor, fontSize: 13),
-                  ),
-                ],
+                    Text(
+                      '홈',
+                      style: TextStyle(
+                          color: context.theme.primaryColor, fontSize: 13),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            _homeController.changeTapMenu(1);
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(right: 30.0),
-            child: Container(
-              color: Colors.transparent,
-              width: context.mediaQuery.size.width * 0.15,
-              height: context.mediaQuery.size.height * 0.06,
-              child: Column(
-                children: [
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        _homeController.currentIndex.value == 1
-                            ? IconsDB.menu_filled
-                            : IconsDB.menu_outlined,
-                        size: 24,
-                        color: colorList[
-                            _settingsController.selectPrimaryColorIndex.value],
+          GestureDetector(
+            onTap: () {
+              _homeController.changeTapMenu(1);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 30.0),
+              child: Container(
+                color: Colors.transparent,
+                width: context.mediaQuery.size.width * 0.15,
+                height: context.mediaQuery.size.height * 0.06,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(0.0),
+                        child: Icon(
+                          _homeController.currentIndex.value == 1
+                              ? IconsDB.menu_filled
+                              : IconsDB.menu_outlined,
+                          size: 24,
+                          color: colorList[_settingsController
+                              .selectPrimaryColorIndex.value],
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    '리스트',
-                    style: TextStyle(
-                        color: context.theme.primaryColor, fontSize: 13),
-                  )
-                ],
+                    Text(
+                      '리스트',
+                      style: TextStyle(
+                          color: context.theme.primaryColor, fontSize: 13),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            _homeController.changeTapMenu(2);
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Container(
-              color: Colors.transparent,
-              width: context.mediaQuery.size.width * 0.15,
-              height: context.mediaQuery.size.height * 0.06,
-              child: Column(
-                children: [
-                  Flexible(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 2),
-                      child: Icon(
-                        _homeController.currentIndex.value == 2
-                            ? IconsDB.custom_chart_filled
-                            : IconsDB.custom_chart_outlined,
-                        size: 35,
-                        color: colorList[
-                            _settingsController.selectPrimaryColorIndex.value],
-                      ),
+          GestureDetector(
+            onTap: () {
+              _homeController.changeTapMenu(2);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 30.0),
+              child: Container(
+                color: Colors.transparent,
+                width: context.mediaQuery.size.width * 0.15,
+                height: context.mediaQuery.size.height * 0.06,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(
+                      _homeController.currentIndex.value == 2
+                          ? IconsDB.pie_chart_filled
+                          : IconsDB.pie_chart_outlined,
+                      size: 24,
+                      color: context.theme.primaryColor,
                     ),
-                  ),
-                  Text(
-                    '통계',
-                    style: TextStyle(
-                        color: context.theme.primaryColor, fontSize: 13),
-                  )
-                ],
+                    Text(
+                      '통계',
+                      style: TextStyle(
+                          color: context.theme.primaryColor, fontSize: 13),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            _homeController.changeTapMenu(3);
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: Container(
-              color: Colors.transparent,
-              width: context.mediaQuery.size.width * 0.15,
-              height: context.mediaQuery.size.height * 0.06,
-              child: Column(
-                children: [
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        _homeController.currentIndex.value == 3
-                            ? IconsDB.settings_filled
-                            : IconsDB.settings_outlined,
-                        size: 24,
-                        color: colorList[
-                            _settingsController.selectPrimaryColorIndex.value],
+          GestureDetector(
+            onTap: () {
+              _homeController.changeTapMenu(3);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: Container(
+                color: Colors.transparent,
+                width: context.mediaQuery.size.width * 0.15,
+                height: context.mediaQuery.size.height * 0.06,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(0.0),
+                        child: Icon(
+                          _homeController.currentIndex.value == 3
+                              ? IconsDB.settings_filled
+                              : IconsDB.settings_outlined,
+                          size: 24,
+                          color: colorList[_settingsController
+                              .selectPrimaryColorIndex.value],
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    '설정',
-                    style: TextStyle(
-                        color: context.theme.primaryColor, fontSize: 13),
-                  )
-                ],
+                    Text(
+                      '설정',
+                      style: TextStyle(
+                          color: context.theme.primaryColor, fontSize: 13),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
