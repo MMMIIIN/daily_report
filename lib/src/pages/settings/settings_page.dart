@@ -212,7 +212,7 @@ class _SettingsPageState extends State<SettingsPage> {
         children: [
           Text('시계 설정(분)'),
           ToggleSwitch(
-            minWidth: 50,
+            minWidth: 48,
             minHeight: 25,
             totalSwitches: 5,
             labels: ['5m', '10m', '15m', '20m', '30m'],

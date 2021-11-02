@@ -32,6 +32,9 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Daily Report',
           theme: ThemeData(
+            textTheme: TextTheme(
+                bodyText2: TextStyle(fontSize: 14)
+            ),
               primaryColor:
                   colorList[_settingsController.selectPrimaryColorIndex.value],
               fontFamily: 'Hyemin'),
