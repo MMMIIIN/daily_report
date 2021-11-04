@@ -48,3 +48,18 @@ List<Color> testColorList5 = [
   Color(0xfffcc419),
   Color(0xffff922b),
 ];
+
+List<Color> testColorList6 = [
+  Color(0xfffa5252),
+  Color(0xffe64980),
+  Color(0xffbe4bdb),
+  Color(0xff7950f2),
+  Color(0xff4c6ef5),
+  Color(0xff228be6),
+  Color(0xff15aabf),
+  Color(0xff12b886),
+  Color(0xff40c057),
+  Color(0xff82c91e),
+  Color(0xfffab005),
+  Color(0xfffd7e14),
+];

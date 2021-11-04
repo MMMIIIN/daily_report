@@ -115,6 +115,14 @@ class IconLicense extends StatelessWidget {
                   title: Text('Icons made by Smashicons from www.flaticon.com'),
                 ),
                 ListTile(
+                  leading: Icon(IconsDB.pie_chart_outlined),
+                  title: Text('Icons made by Pixel perfect from www.flaticon.com'),
+                ),
+                ListTile(
+                  leading: Icon(IconsDB.pie_chart_filled),
+                  title: Text('Icons made by Pixel perfect from www.flaticon.com'),
+                ),
+                ListTile(
                   leading: Icon(IconsDB.custom_chart_outlined,size: 35),
                   title: Text('Icons made by SeongXi'),
                 ),
