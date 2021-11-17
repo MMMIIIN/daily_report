@@ -41,50 +41,58 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    showDialog(context: context, builder: (_){
-                      return AlertDialog(
-                        title: Text('정말 계정을 탈퇴하시겠습니까?'),
-                        content: Text('해당 계정의 정보는 모두 삭제됩니다.'),
-                        actions: [
-                          InkWell(
-                            splashColor: context.theme.primaryColor.withOpacity(0.4),
-                            highlightColor: context.theme.primaryColor.withOpacity(0.2),
-                            onTap: () {
-                              Get.back();
-                            },
-                            child: Container(
-                              width: context.mediaQuery.size.width * 0.2,
-                              height: context.mediaQuery.size.height * 0.043,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: context.theme.primaryColor)),
-                              child: Center(
-                                child: Text(
-                                  '취소',
-                                  style: TextStyle(color: context.theme.primaryColor),
+                    showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text('정말 계정을 탈퇴하시겠습니까?'),
+                            content: Text('해당 계정의 정보는 모두 삭제됩니다.'),
+                            actions: [
+                              InkWell(
+                                splashColor:
+                                    context.theme.primaryColor.withOpacity(0.4),
+                                highlightColor:
+                                    context.theme.primaryColor.withOpacity(0.2),
+                                onTap: () {
+                                  Get.back();
+                                },
+                                child: Container(
+                                  width: context.mediaQuery.size.width * 0.2,
+                                  height:
+                                      context.mediaQuery.size.height * 0.043,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: context.theme.primaryColor)),
+                                  child: Center(
+                                    child: Text(
+                                      '취소',
+                                      style: TextStyle(
+                                          color: context.theme.primaryColor),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              deleteUser();
-                            },
-                            child: Container(
-                              width: context.mediaQuery.size.width * 0.2,
-                              height: context.mediaQuery.size.height * 0.043,
-                              decoration:
-                              BoxDecoration(color: context.theme.primaryColor),
-                              child: Center(
-                                child: Text(
-                                  '계정탈퇴',
-                                  style: TextStyle(color: Colors.white),
+                              InkWell(
+                                onTap: () {
+                                  deleteUser();
+                                },
+                                child: Container(
+                                  width: context.mediaQuery.size.width * 0.2,
+                                  height:
+                                      context.mediaQuery.size.height * 0.043,
+                                  decoration: BoxDecoration(
+                                      color: context.theme.primaryColor),
+                                  child: Center(
+                                    child: Text(
+                                      '계정탈퇴',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ],
-                      );
-                    });
+                            ],
+                          );
+                        });
                   },
                   child: Container(
                     width: context.mediaQuery.size.width * 0.225,
@@ -96,15 +104,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Center(
                       child: Text(
                         '계정 탈퇴',
-                        style: TextStyle(color: context.theme.primaryColor,
+                        style: TextStyle(
+                          color: context.theme.primaryColor,
                         ),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 10
-                ),
+                SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
                     Get.to(() => ShowLicensePage());
@@ -149,17 +156,23 @@ class _SettingsPageState extends State<SettingsPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('홈 화면 표시'),
-          ToggleSwitch(
-            minWidth: 40,
-            minHeight: 30,
-            totalSwitches: 2,
-            labels: ['분', '%'],
-            inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
-            activeBgColor: [context.theme.primaryColor],
-            initialLabelIndex: _settingsController.isPercentOrHourIndex.value,
-            onToggle: (index) {
-              _settingsController.setPercentOrHourIndex(index);
-            },
+          Obx(
+            () => ToggleSwitch(
+              minWidth: 40,
+              minHeight: 30,
+              totalSwitches: 2,
+              labels: ['분', '%'],
+              customTextStyles: [
+                customStyle(_settingsController.isPercentOrHourIndex.value, 0),
+                customStyle(_settingsController.isPercentOrHourIndex.value, 1),
+              ],
+              inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
+              activeBgColor: [context.theme.primaryColor],
+              initialLabelIndex: _settingsController.isPercentOrHourIndex.value,
+              onToggle: (index) {
+                _settingsController.setPercentOrHourIndex(index);
+              },
+            ),
           ),
         ],
       ),
@@ -180,11 +193,7 @@ class _SettingsPageState extends State<SettingsPage> {
               totalSwitches: 2,
               labels: ['분', ':'],
               customTextStyles: [
-                TextStyle(
-                    fontSize: 14,
-                    color: _settingsController.listPageIndex.value == 0
-                        ? Colors.white
-                        : Colors.black),
+                customStyle(_settingsController.listPageIndex.value, 0),
                 TextStyle(
                     fontWeight: FontWeight.w700,
                     color: _settingsController.listPageIndex.value == 0
@@ -211,18 +220,28 @@ class _SettingsPageState extends State<SettingsPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('시계 설정(분)'),
-          ToggleSwitch(
-            minWidth: 48,
-            minHeight: 25,
-            totalSwitches: 5,
-            labels: ['5m', '10m', '15m', '20m', '30m'],
-            activeBgColor: [context.theme.primaryColor],
-            inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
-            initialLabelIndex: _settingsController.isTimePickerTimeIndex.value,
-            onToggle: (index) {
-              _settingsController.setTimePickerTimeIndex(index);
-            },
-          )
+          Obx(
+            () => ToggleSwitch(
+              minWidth: 48,
+              minHeight: 25,
+              totalSwitches: 5,
+              labels: ['5m', '10m', '15m', '20m', '30m'],
+              customTextStyles: [
+                customStyle(_settingsController.timePickerOfInterval.value, 5),
+                customStyle(_settingsController.timePickerOfInterval.value, 10),
+                customStyle(_settingsController.timePickerOfInterval.value, 15),
+                customStyle(_settingsController.timePickerOfInterval.value, 20),
+                customStyle(_settingsController.timePickerOfInterval.value, 30),
+              ],
+              activeBgColor: [context.theme.primaryColor],
+              inactiveBgColor: context.theme.primaryColor.withOpacity(0.2),
+              initialLabelIndex:
+                  _settingsController.isTimePickerTimeIndex.value,
+              onToggle: (index) {
+                _settingsController.setTimePickerTimeIndex(index);
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -258,63 +277,68 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: EdgeInsets.symmetric(vertical: 10),
       child: GestureDetector(
         onTap: () {
-          showDialog(context: context, builder: (_){
-            return AlertDialog(
-              title: Text('아래 이메일로 문의주세요'),
-              content: Text('wbsldj7645@naver.com'),
-              actions: [
-                InkWell(
-                  splashColor: context.theme.primaryColor.withOpacity(0.4),
-                  highlightColor: context.theme.primaryColor.withOpacity(0.2),
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Container(
-                    width: context.mediaQuery.size.width * 0.17,
-                    height: context.mediaQuery.size.height * 0.043,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: context.theme.primaryColor)),
-                    child: Center(
-                      child: Text(
-                        '취소',
-                        style: TextStyle(color: context.theme.primaryColor),
+          showDialog(
+              context: context,
+              builder: (_) {
+                return AlertDialog(
+                  title: Text('아래 이메일로 문의주세요'),
+                  content: Text('wbsldj7645@naver.com'),
+                  actions: [
+                    InkWell(
+                      splashColor: context.theme.primaryColor.withOpacity(0.4),
+                      highlightColor:
+                          context.theme.primaryColor.withOpacity(0.2),
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Container(
+                        width: context.mediaQuery.size.width * 0.17,
+                        height: context.mediaQuery.size.height * 0.043,
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: context.theme.primaryColor)),
+                        child: Center(
+                          child: Text(
+                            '취소',
+                            style: TextStyle(color: context.theme.primaryColor),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Clipboard.setData(ClipboardData(text: 'wbsldj7645@naver.com'));
-                    Get.back();
-                    Get.showSnackbar(GetBar(
-                      title: 'SUCCESS',
-                      message: '이메일 주소가 복사되었습니다.',
-                      duration: Duration(seconds: 2),
-                      backgroundColor: successColor,
-                    ));
-                  },
-                  child: Container(
-                    width: context.mediaQuery.size.width * 0.17,
-                    height: context.mediaQuery.size.height * 0.043,
-                    decoration:
-                    BoxDecoration(color: context.theme.primaryColor),
-                    child: Center(
-                      child: Text(
-                        '복사',
-                        style: TextStyle(color: Colors.white),
+                    InkWell(
+                      onTap: () {
+                        Clipboard.setData(
+                            ClipboardData(text: 'wbsldj7645@naver.com'));
+                        Get.back();
+                        Get.showSnackbar(GetBar(
+                          title: 'SUCCESS',
+                          message: '이메일 주소가 복사되었습니다.',
+                          duration: Duration(seconds: 2),
+                          backgroundColor: successColor,
+                        ));
+                      },
+                      child: Container(
+                        width: context.mediaQuery.size.width * 0.17,
+                        height: context.mediaQuery.size.height * 0.043,
+                        decoration:
+                            BoxDecoration(color: context.theme.primaryColor),
+                        child: Center(
+                          child: Text(
+                            '복사',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ],
-            );
-          });
+                  ],
+                );
+              });
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              width: context.mediaQuery.size.width * 0.3,
+                width: context.mediaQuery.size.width * 0.3,
                 height: context.mediaQuery.size.height * 0.05,
                 color: Colors.transparent,
                 child: Text('문의하기')),
@@ -381,6 +405,13 @@ class _SettingsPageState extends State<SettingsPage> {
         '로그아웃',
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
       ),
+    );
+  }
+
+  TextStyle customStyle(int index, int value){
+    return TextStyle(
+      color: index == value ? Colors.white : Colors.black,
+      fontSize: 14,
     );
   }
 }
