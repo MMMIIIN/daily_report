@@ -5,6 +5,8 @@ import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 enum CATEGORY { DEFAULT, STUDY, SHOPPING, EXERCISE, SLEEP }
@@ -36,6 +38,7 @@ class TodoController extends GetxController {
   RxBool isEditMode = false.obs;
   RxString editTodoUid = ''.obs;
   RxBool clickedRuleAddButton = false.obs;
+  Rx<CalendarFormat> calendarFormat = CalendarFormat.twoWeeks.obs;
 
   Rx<TimeRange> defaultTime = TimeRange(
           startTime: TimeOfDay(hour: 0, minute: 0),
@@ -320,6 +323,19 @@ class TodoController extends GetxController {
         return '(일)';
       default:
         return '';
+    }
+  }
+
+  void setCalendarOfFormat(int index){
+    if(index == 0){
+      calendarFormat(CalendarFormat.week);
+      GetStorage().write('calendarIndex', index);
+    } else if(index == 1){
+      calendarFormat(CalendarFormat.twoWeeks);
+      GetStorage().write('calendarIndex', index);
+    } else{
+      calendarFormat(CalendarFormat.month);
+      GetStorage().write('calendarIndex', index);
     }
   }
 

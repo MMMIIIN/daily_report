@@ -1,5 +1,6 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
+import 'package:daily_report/main.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/add/add_todo.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
@@ -22,7 +24,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int touchedIndex = -1;
-  CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _selectedDay = _todoController.currentDateTime.value;
   bool isPercentOrHour = GetStorage().read('isPercentOrHour') ?? false;
 
@@ -43,13 +44,38 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var unitId = Theme.of(context).platform == TargetPlatform.iOS
+        ? 'ca-app-pub-2775109453177746/9063523768'
+        : 'ca-app-pub-2775109453177746/4898386775';
     return Material(
       child: SafeArea(
         child: Column(
           children: [
             showCalendar(),
-            showChart(),
-            showChartList(),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Container(
+                height: 60,
+                child: AdWidget(
+                  ad: BannerAd(
+                      size: AdSize.banner,
+                      adUnitId: unitId,
+                      listener: BannerAdListener(),
+                      request: AdRequest())
+                    ..load(),
+                ),
+              ),
+            ),
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    showChart(),
+                    showChartList(),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -123,7 +149,14 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         headerStyle: HeaderStyle(
-          formatButtonVisible: false,
+          // formatButtonVisible: false,
+          formatButtonShowsNext: false,
+          formatButtonDecoration: BoxDecoration(
+              color: context.theme.primaryColor.withOpacity(0.8),
+              borderRadius: BorderRadius.circular(10)),
+          formatButtonTextStyle: TextStyle(
+            color: Colors.white,
+          ),
           titleCentered: true,
           titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
         ),
@@ -133,7 +166,7 @@ class _HomePageState extends State<HomePage> {
         lastDay: LastDay,
         focusedDay: _todoController.currentDateTime.value,
         selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-        calendarFormat: _calendarFormat,
+        calendarFormat: _todoController.calendarFormat.value,
         daysOfWeekStyle: DaysOfWeekStyle(
           weekendStyle: TextStyle(color: Colors.red),
         ),
@@ -153,9 +186,9 @@ class _HomePageState extends State<HomePage> {
         },
         onDaySelected: _onDaySelected,
         onFormatChanged: (format) {
-          if (_calendarFormat != format) {
+          if (_todoController.calendarFormat.value != format) {
             setState(() {
-              _calendarFormat = format;
+              _todoController.calendarFormat.value = format;
             });
           }
         },
@@ -167,8 +200,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget showChart() {
-    return Flexible(
-      flex: 3,
+    return Container(
+      height: context.mediaQuery.size.height * 0.3,
+      // flex: 3,
       child: GetBuilder<TodoController>(
         init: TodoController(),
         builder: (_) => _todoController.currentIndexList.isNotEmpty
@@ -198,6 +232,8 @@ class _HomePageState extends State<HomePage> {
                         ? context.mediaQuery.size.width * 0.17
                         : context.mediaQuery.size.width * 0.14;
                     return PieChartSectionData(
+                      titleStyle: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
                       title: _todoController.currentUidList.value
                                   .todoList[index].percent <
                               7
@@ -242,8 +278,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget showChartList() {
-    return Flexible(
-      flex: 2,
+    return Container(
+      // height: context.mediaQuery.size.height * 0.2,
+      // flex: 2,
       child: GetBuilder<TodoController>(
         builder: (_) => _todoController.currentIndexList.isNotEmpty
             ? ListView.builder(
