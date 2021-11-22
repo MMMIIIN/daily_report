@@ -326,14 +326,14 @@ class TodoController extends GetxController {
     }
   }
 
-  void setCalendarOfFormat(int index){
-    if(index == 0){
+  void setCalendarOfFormat(int index) {
+    if (index == 0) {
       calendarFormat(CalendarFormat.week);
       GetStorage().write('calendarIndex', index);
-    } else if(index == 1){
+    } else if (index == 1) {
       calendarFormat(CalendarFormat.twoWeeks);
       GetStorage().write('calendarIndex', index);
-    } else{
+    } else {
       calendarFormat(CalendarFormat.month);
       GetStorage().write('calendarIndex', index);
     }

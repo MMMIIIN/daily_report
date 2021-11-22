@@ -1,6 +1,5 @@
 import 'package:daily_report/color.dart';
 import 'package:daily_report/icons.dart';
-import 'package:daily_report/main.dart';
 import 'package:daily_report/src/data/todo/todo_controller.dart';
 import 'package:daily_report/src/pages/add/add_todo.dart';
 import 'package:daily_report/src/pages/settings/controller/settings_controller.dart';
@@ -42,30 +41,61 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  BannerAd? _banner;
+  bool _loadingBanner = false;
+
+  Future<void> _createBanner(BuildContext context, String unitId) async {
+    final size = await AdSize.getAnchoredAdaptiveBannerAdSize(
+        Orientation.portrait, MediaQuery.of(context).size.width.truncate()
+        );
+    if (size == null) {
+      return;
+    }
+    final banner = BannerAd(
+      size: size,
+      request: AdRequest(),
+      adUnitId: unitId,
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          setState(() {
+            _banner = ad as BannerAd?;
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          ad.dispose();
+        },
+        onAdOpened: (Ad ad) {},
+        onAdClosed: (Ad ad) {},
+      ),
+    );
+    return banner.load();
+  }
+
   @override
   Widget build(BuildContext context) {
     var unitId = Theme.of(context).platform == TargetPlatform.iOS
         ? 'ca-app-pub-2775109453177746/9063523768'
         : 'ca-app-pub-2775109453177746/4898386775';
+    if (!_loadingBanner) {
+      _loadingBanner = true;
+      _createBanner(context, unitId);
+    }
     return Material(
       child: SafeArea(
         child: Column(
           children: [
             showCalendar(),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Container(
-                height: 60,
-                child: AdWidget(
-                  ad: BannerAd(
-                      size: AdSize.banner,
-                      adUnitId: unitId,
-                      listener: BannerAdListener(),
-                      request: AdRequest())
-                    ..load(),
+            if(_banner != null)
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Container(
+                  width: _banner!.size.width.toDouble(),
+                  height: _banner!.size.height.toDouble(),
+                  child: AdWidget(
+                    ad: _banner!,
+                  ),
                 ),
               ),
-            ),
             Flexible(
               child: SingleChildScrollView(
                 child: Column(
@@ -579,5 +609,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _banner?.dispose();
   }
 }

@@ -3,7 +3,6 @@ import 'package:daily_report/src/pages/signup/controller/signup_controller.dart'
 import 'package:daily_report/src/service/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class SignUpPage extends StatelessWidget {
   final SignUpController _signUpController = Get.put(SignUpController());

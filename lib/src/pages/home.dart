@@ -50,6 +50,7 @@ class _HomeState extends State<Home> {
                         return HomePage();
                       case 1:
                         return ListPage();
+                        // return CommunityPage();
                       case 2:
                         return ChartPage();
                       case 3:
@@ -191,7 +192,8 @@ class _HomeState extends State<Home> {
                           ? IconsDB.pie_chart_filled
                           : IconsDB.pie_chart_outlined,
                       size: 24,
-                      color: context.theme.primaryColor,
+                      color: colorList[_settingsController
+                          .selectPrimaryColorIndex.value],
                     ),
                     Text(
                       '통계',

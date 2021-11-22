@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 final ChartController _chartController = Get.put(ChartController());
@@ -20,9 +21,47 @@ class ChartPage extends StatefulWidget {
 class _ChartPageState extends State<ChartPage> {
   var now = DateTime.now();
   int touchedIndex = -1;
+  BannerAd? _banner;
+  bool _loadingBanner = false;
+
+  Future<void> _createBanner(BuildContext context, String unitId) async {
+    final size = await AdSize.getAnchoredAdaptiveBannerAdSize(
+        Orientation.portrait, MediaQuery.of(context).size.width.truncate()
+    );
+    if (size == null) {
+      return;
+    }
+    final banner = BannerAd(
+      size: size,
+      request: AdRequest(),
+      adUnitId: unitId,
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          setState(() {
+            _banner = ad as BannerAd?;
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          ad.dispose();
+        },
+        onAdOpened: (Ad ad) {},
+        onAdClosed: (Ad ad) {},
+      ),
+    );
+    return banner.load();
+  }
 
   @override
   Widget build(BuildContext context) {
+    var unitId = Theme.of(context).platform == TargetPlatform.iOS
+        ? 'ca-app-pub-2775109453177746/4999610502'
+        : 'ca-app-pub-2775109453177746/4898386775';
+
+    if (!_loadingBanner) {
+      _loadingBanner = true;
+      _createBanner(context, unitId);
+    }
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -45,6 +84,17 @@ class _ChartPageState extends State<ChartPage> {
                 ],
               ),
               showChart(context),
+              if(_banner != null)
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Container(
+                    width: _banner!.size.width.toDouble(),
+                    height: _banner!.size.height.toDouble(),
+                    child: AdWidget(
+                      ad: _banner!,
+                    ),
+                  ),
+                ),
               chartList(),
             ],
           ),
@@ -257,5 +307,6 @@ class _ChartPageState extends State<ChartPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _banner?.dispose();
   }
 }
