@@ -339,6 +339,17 @@ class TodoController extends GetxController {
     }
   }
 
+  void setCurrentTime() {
+    var currentMinute = (DateTime.now().minute * 0.1).round() * 10;
+    if(currentMinute == 60){
+      currentMinute = 0;
+    }
+    startTime(TimeOfDay(hour: DateTime.now().hour - 1, minute: currentMinute));
+    endTime(TimeOfDay(hour: DateTime.now().hour, minute: currentMinute));
+
+    defaultTime(TimeRange(startTime: startTime.value, endTime: endTime.value));
+  }
+
   @override
   void onInit() async {
     // TODO: implement onInit
@@ -347,5 +358,6 @@ class TodoController extends GetxController {
       await initUidTodoList();
       await initTodoTitleList();
     }
+    setCurrentTime();
   }
 }
