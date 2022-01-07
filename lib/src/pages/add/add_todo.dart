@@ -50,15 +50,86 @@ class _AddTodoState extends State<AddTodo> {
               Obx(() => printTodo()),
               makeRule(),
               memoField(context),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Obx(
-                    () => Expanded(
-                      child: setTime(context),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: [
+              //     Obx(
+              //       () => Expanded(
+              //         child: setTime(context),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              Container(
+                width: double.infinity,
+                height: context.mediaQuery.size.height * 0.11,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text('시간 설정'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InkWell(
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: () {
+                            showDatePicker(
+                                DateTime(
+                                    2022,
+                                    1,
+                                    1,
+                                    _todoController.startTime.value.hour,
+                                    _todoController.startTime.value.minute),
+                                0);
+                          },
+                          child: Container(
+                            width: context.mediaQuery.size.width * 0.3,
+                            height: context.mediaQuery.size.height * 0.05,
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: context.theme.primaryColor),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                  '${_todoController.startTime.value.hour < 12 ? '오전' : '오후'} '
+                                  '${_todoController.startTime.value.hour < 13 ? '${_todoController.startTime.value.hour}' : '${_todoController.startTime.value.hour - 12}'} : '
+                                  '${_todoController.startTime.value.minute}'),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: () {
+                            showDatePicker(
+                                DateTime(
+                                    2022,
+                                    1,
+                                    1,
+                                    _todoController.endTime.value.hour,
+                                    _todoController.endTime.value.minute),
+                                1);
+                          },
+                          child: Container(
+                            width: context.mediaQuery.size.width * 0.3,
+                            height: context.mediaQuery.size.height * 0.05,
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: context.theme.primaryColor),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                  '${_todoController.endTime.value.hour < 12 ? '오전' : '오후'} '
+                                  '${_todoController.endTime.value.hour < 13 ? '${_todoController.endTime.value.hour}' : '${_todoController.endTime.value.hour - 12}'} : '
+                                  '${_todoController.endTime.value.minute}'),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               colorSelect(),
               completeButton()
@@ -439,134 +510,147 @@ class _AddTodoState extends State<AddTodo> {
                           ],
                         ),
                       ),
-                      Obx(() => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          InkWell(
-                            splashColor:
-                                context.theme.primaryColor.withOpacity(0.4),
-                            highlightColor:
-                                context.theme.primaryColor.withOpacity(0.2),
-                            onTap: () {
-                              _todoController.makeRuleTitle('');
-                              _todoController.makeRuleTitleController.value
-                                  .clear();
-                              Get.back();
-                            },
-                            child: Container(
-                              width: context.mediaQuery.size.width * 0.225,
-                              height: context.mediaQuery.size.height * 0.043,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: context.theme.primaryColor)),
-                              child: Center(
-                                child: Text(
-                                  '취소',
-                                  style: TextStyle(
-                                      color: context.theme.primaryColor),
+                      Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            InkWell(
+                              splashColor:
+                                  context.theme.primaryColor.withOpacity(0.4),
+                              highlightColor:
+                                  context.theme.primaryColor.withOpacity(0.2),
+                              onTap: () {
+                                _todoController.makeRuleTitle('');
+                                _todoController.makeRuleTitleController.value
+                                    .clear();
+                                Get.back();
+                              },
+                              child: Container(
+                                width: context.mediaQuery.size.width * 0.225,
+                                height: context.mediaQuery.size.height * 0.043,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: context.theme.primaryColor)),
+                                child: Center(
+                                  child: Text(
+                                    '취소',
+                                    style: TextStyle(
+                                        color: context.theme.primaryColor),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          InkWell(
-                            onTap: _todoController.clickedRuleAddButton.value == false
-                                ? () async {
-                                    _todoController.clickedRuleAddButton(true);
-                                    await addTodoTitle(
-                                      TodoTitle(
-                                        title:
-                                            _todoController.makeRuleTitle.value,
-                                        titleColor: _todoController
-                                            .selectColorIndex.value,
-                                        boolOfTime:
-                                            _todoController.checkBoxBool.value,
-                                        timeRange: _todoController
-                                                .checkBoxBool.value
-                                            ? _todoController.defaultTime.value
-                                            : TimeRange(
-                                                startTime: TimeOfDay(
-                                                    hour: 0, minute: 0),
-                                                endTime: TimeOfDay(
-                                                    hour: 1, minute: 0),
-                                              ),
-                                      ),
-                                    );
-                                    _todoController.addTodoTitle(
-                                      TodoTitle(
+                            InkWell(
+                              onTap: _todoController
+                                          .clickedRuleAddButton.value ==
+                                      false
+                                  ? () async {
+                                      _todoController
+                                          .clickedRuleAddButton(true);
+                                      await addTodoTitle(
+                                        TodoTitle(
                                           title: _todoController
                                               .makeRuleTitle.value,
                                           titleColor: _todoController
                                               .selectColorIndex.value,
-                                          uid: currentTodoTitleUid,
-                                          timeRange: _todoController
-                                                  .checkBoxBool.value
-                                              ? TimeRange(
-                                                  startTime: TimeOfDay(
-                                                      hour: _todoController
-                                                          .defaultTime
-                                                          .value
-                                                          .startTime
-                                                          .hour,
-                                                      minute: _todoController
-                                                          .defaultTime
-                                                          .value
-                                                          .startTime
-                                                          .minute),
-                                                  endTime: TimeOfDay(
-                                                      hour: _todoController
-                                                          .defaultTime
-                                                          .value
-                                                          .endTime
-                                                          .hour,
-                                                      minute: _todoController
-                                                          .defaultTime
-                                                          .value
-                                                          .endTime
-                                                          .minute),
-                                                )
-                                              : null,
                                           boolOfTime: _todoController
-                                              .checkBoxBool.value),
-                                    );
-                                    _todoController.sortTodoTitleList();
-                                    _todoController
-                                            .titleTextController.value.text =
-                                        _todoController.makeRuleTitle.value;
-                                    _todoController.titleText(
-                                        _todoController.makeRuleTitle.value);
-                                    _todoController.makeRuleTitle('');
-                                    _todoController
-                                        .makeRuleTitleController.value
-                                        .clear();
-                                    _todoController.clickedRuleAddButton(false);
-                                  }
-                                : null,
-                            child: _todoController.clickedRuleAddButton.value ? Container(
-                              width: context.mediaQuery.size.width * 0.27,
-                              height: context.mediaQuery.size.height * 0.043,
-                              decoration: BoxDecoration(
-                                  color: context.theme.primaryColor.withOpacity(0.6)),
-                              child: Center(
-                                child: Text(
-                                  'loading...',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ) : Container(
-                              width: context.mediaQuery.size.width * 0.225,
-                              height: context.mediaQuery.size.height * 0.043,
-                              decoration: BoxDecoration(
-                                  color: context.theme.primaryColor),
-                              child: Center(
-                                child: Text(
-                                  '규칙추가',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ) ,
-                          ),
-                        ],
-                      ),
+                                              .checkBoxBool.value,
+                                          timeRange:
+                                              _todoController.checkBoxBool.value
+                                                  ? _todoController
+                                                      .defaultTime.value
+                                                  : TimeRange(
+                                                      startTime: TimeOfDay(
+                                                          hour: 0, minute: 0),
+                                                      endTime: TimeOfDay(
+                                                          hour: 1, minute: 0),
+                                                    ),
+                                        ),
+                                      );
+                                      _todoController.addTodoTitle(
+                                        TodoTitle(
+                                            title: _todoController
+                                                .makeRuleTitle.value,
+                                            titleColor: _todoController
+                                                .selectColorIndex.value,
+                                            uid: currentTodoTitleUid,
+                                            timeRange: _todoController
+                                                    .checkBoxBool.value
+                                                ? TimeRange(
+                                                    startTime: TimeOfDay(
+                                                        hour: _todoController
+                                                            .defaultTime
+                                                            .value
+                                                            .startTime
+                                                            .hour,
+                                                        minute: _todoController
+                                                            .defaultTime
+                                                            .value
+                                                            .startTime
+                                                            .minute),
+                                                    endTime: TimeOfDay(
+                                                        hour: _todoController
+                                                            .defaultTime
+                                                            .value
+                                                            .endTime
+                                                            .hour,
+                                                        minute: _todoController
+                                                            .defaultTime
+                                                            .value
+                                                            .endTime
+                                                            .minute),
+                                                  )
+                                                : null,
+                                            boolOfTime: _todoController
+                                                .checkBoxBool.value),
+                                      );
+                                      _todoController.sortTodoTitleList();
+                                      _todoController
+                                              .titleTextController.value.text =
+                                          _todoController.makeRuleTitle.value;
+                                      _todoController.titleText(
+                                          _todoController.makeRuleTitle.value);
+                                      _todoController.makeRuleTitle('');
+                                      _todoController
+                                          .makeRuleTitleController.value
+                                          .clear();
+                                      _todoController
+                                          .clickedRuleAddButton(false);
+                                    }
+                                  : null,
+                              child: _todoController.clickedRuleAddButton.value
+                                  ? Container(
+                                      width:
+                                          context.mediaQuery.size.width * 0.27,
+                                      height: context.mediaQuery.size.height *
+                                          0.043,
+                                      decoration: BoxDecoration(
+                                          color: context.theme.primaryColor
+                                              .withOpacity(0.6)),
+                                      child: Center(
+                                        child: Text(
+                                          'loading...',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      width:
+                                          context.mediaQuery.size.width * 0.225,
+                                      height: context.mediaQuery.size.height *
+                                          0.043,
+                                      decoration: BoxDecoration(
+                                          color: context.theme.primaryColor),
+                                      child: Center(
+                                        child: Text(
+                                          '규칙추가',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -1142,6 +1226,46 @@ class _AddTodoState extends State<AddTodo> {
         ),
       ),
     );
+  }
+
+  void showDatePicker(DateTime dateTime, int changeIndex) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext builder) {
+          return Container(
+            height: context.mediaQuery.size.height * 0.35,
+            color: Colors.white,
+            child: CupertinoDatePicker(
+              mode: CupertinoDatePickerMode.time,
+              minuteInterval: _settingsController.timePickerOfInterval.value,
+              initialDateTime: dateTime,
+              onDateTimeChanged: (value) {
+                if (value != null && value != dateTime) {
+                  setState(() {
+                    if (changeIndex == 0) {
+                      // _todoController.defaultTime(TimeRange(
+                      //     startTime:
+                      //         TimeOfDay(hour: value.hour, minute: value.minute),
+                      //     endTime: _todoController.defaultTime.value.endTime));
+                      _todoController.startTime(
+                          TimeOfDay(hour: value.hour, minute: value.minute));
+                    } else {
+                      // _todoController.defaultTime(
+                      //   TimeRange(
+                      //       startTime:
+                      //           _todoController.defaultTime.value.startTime,
+                      //       endTime: TimeOfDay(
+                      //           hour: value.hour, minute: value.minute)),
+                      // );
+                      _todoController.endTime(
+                          TimeOfDay(hour: value.hour, minute: value.minute));
+                    }
+                  });
+                }
+              },
+            ),
+          );
+        });
   }
 
   @override
