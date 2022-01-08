@@ -341,13 +341,43 @@ class TodoController extends GetxController {
 
   void setCurrentTime() {
     var currentMinute = (DateTime.now().minute * 0.1).round() * 10;
-    if(currentMinute == 60){
+    if (currentMinute == 60) {
       currentMinute = 0;
     }
     startTime(TimeOfDay(hour: DateTime.now().hour - 1, minute: currentMinute));
     endTime(TimeOfDay(hour: DateTime.now().hour, minute: currentMinute));
 
     defaultTime(TimeRange(startTime: startTime.value, endTime: endTime.value));
+  }
+
+  void initCurrentTimeInterval(int interval) {
+    if (DateTime.now().minute + interval - DateTime.now().minute % interval ==
+        60) {
+      startTime(TimeOfDay(hour: DateTime.now().hour + 1, minute: 0));
+      endTime(TimeOfDay(hour: DateTime.now().hour + 2, minute: 0));
+    } else {
+      startTime(TimeOfDay(
+          hour: DateTime.now().hour,
+          minute: DateTime.now().minute +
+              interval -
+              DateTime.now().minute % interval));
+      endTime(TimeOfDay(
+          hour: DateTime.now().hour + 1,
+          minute: DateTime.now().minute +
+              interval -
+              DateTime.now().minute % interval));
+    }
+  }
+
+  int getCurrentTimeOfValue() {
+    var value = DateTime(2022, 1, 1, endTime.value.hour, endTime.value.minute)
+        .difference(
+            DateTime(2022, 1, 1, startTime.value.hour, startTime.value.minute)).inMinutes;
+    if(value < 0) {
+      value + 1440;
+    }
+    defaultValue(value);
+    return value;
   }
 
   @override
