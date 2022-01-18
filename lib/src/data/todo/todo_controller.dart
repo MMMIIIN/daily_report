@@ -48,7 +48,9 @@ class TodoController extends GetxController {
   RxInt selectColorIndex = 0.obs;
 
   Rx<TimeOfDay> startTime = TimeOfDay(hour: 0, minute: 0).obs;
+  Rx<TimeOfDay> dummyStartTime = TimeOfDay(hour: 0, minute: 0).obs;
   Rx<TimeOfDay> endTime = TimeOfDay(hour: 0, minute: 0).obs;
+  Rx<TimeOfDay> dummyEndTime = TimeOfDay(hour: 0, minute: 0).obs;
   RxInt startHour = 0.obs;
   RxInt startMinute = 0.obs;
   RxInt endHour = 0.obs;
@@ -123,6 +125,12 @@ class TodoController extends GetxController {
       val!.startTime = time.startTime;
       val.endTime = time.endTime;
     });
+  }
+
+  void setTimeOfDay(TimeRange time) {
+    startTime(
+        TimeOfDay(hour: time.startTime.hour, minute: time.startTime.minute));
+    endTime(TimeOfDay(hour: time.endTime.hour, minute: time.endTime.minute));
   }
 
   void initDefaultValue() {
@@ -372,8 +380,9 @@ class TodoController extends GetxController {
   int getCurrentTimeOfValue() {
     var value = DateTime(2022, 1, 1, endTime.value.hour, endTime.value.minute)
         .difference(
-            DateTime(2022, 1, 1, startTime.value.hour, startTime.value.minute)).inMinutes;
-    if(value < 0) {
+            DateTime(2022, 1, 1, startTime.value.hour, startTime.value.minute))
+        .inMinutes;
+    if (value < 0) {
       value + 1440;
     }
     defaultValue(value);

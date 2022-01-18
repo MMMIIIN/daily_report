@@ -51,7 +51,7 @@ class _AddTodoState extends State<AddTodo> {
               makeRule(),
               memoField(context),
               setTime(),
-              printHourMinuteOfValue(),
+              Obx(() => printHourMinuteOfValue()),
               colorSelect(),
               completeButton()
             ],
@@ -778,62 +778,73 @@ class _AddTodoState extends State<AddTodo> {
     return Container(
       width: double.infinity,
       height: context.mediaQuery.size.height * 0.11,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text('시간 설정'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                borderRadius: BorderRadius.circular(10),
-                onTap: () {
-                  showDatePicker(
-                      DateTime(2022, 1, 1, _todoController.startTime.value.hour,
-                          _todoController.startTime.value.minute),
-                      0);
-                },
-                child: Container(
-                  width: context.mediaQuery.size.width * 0.3,
-                  height: context.mediaQuery.size.height * 0.05,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: context.theme.primaryColor),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Text(
-                        '${_todoController.startTime.value.hour < 12 ? '오전' : '오후'} '
-                        '${_todoController.startTime.value.hour < 13 ? '${_todoController.startTime.value.hour}' : '${_todoController.startTime.value.hour - 12}'} : '
-                        '${_todoController.startTime.value.minute}'),
-                  ),
-                ),
-              ),
-              InkWell(
-                borderRadius: BorderRadius.circular(10),
-                onTap: () {
-                  showDatePicker(
-                      DateTime(2022, 1, 1, _todoController.endTime.value.hour,
-                          _todoController.endTime.value.minute),
-                      1);
-                },
-                child: Container(
-                  width: context.mediaQuery.size.width * 0.3,
-                  height: context.mediaQuery.size.height * 0.05,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: context.theme.primaryColor),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Text(
-                        '${_todoController.endTime.value.hour < 12 ? '오전' : '오후'} '
-                        '${_todoController.endTime.value.hour < 13 ? '${_todoController.endTime.value.hour}' : '${_todoController.endTime.value.hour - 12}'} : '
-                        '${_todoController.endTime.value.minute}'),
+      child: Obx(
+        () => Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('시간 설정'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () {
+                    showDatePicker(
+                        DateTime(
+                            2022,
+                            1,
+                            1,
+                            _todoController.startTime.value.hour,
+                            _todoController.startTime.value.minute),
+                        0);
+                  },
+                  child: Container(
+                    width: context.mediaQuery.size.width * 0.3,
+                    height: context.mediaQuery.size.height * 0.05,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: context.theme.primaryColor),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                          '${_todoController.startTime.value.hour < 12 ? '오전' : '오후'} '
+                          '${_todoController.startTime.value.hour < 13 ? '${_todoController.startTime.value.hour}' : '${_todoController.startTime.value.hour - 12}'} : '
+                          '${_todoController.startTime.value.minute}'),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () {
+                    showDatePicker(
+                        DateTime(2022, 1, 1, _todoController.endTime.value.hour,
+                            _todoController.endTime.value.minute),
+                        1);
+                  },
+                  child: Container(
+                    width: context.mediaQuery.size.width * 0.3,
+                    height: context.mediaQuery.size.height * 0.05,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: context.theme.primaryColor),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                          '${_todoController.endTime.value.hour < 12 ? '오전' : '오후'} '
+                          '${_todoController.endTime.value.hour < 13 ? '${_todoController.endTime.value.hour}' : '${_todoController.endTime.value.hour - 12}'} : '
+                          '${_todoController.endTime.value.minute}'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -844,23 +855,19 @@ class _AddTodoState extends State<AddTodo> {
       value += 1440;
     }
     if (value < 60) {
-      return Text('$value분',
-        style: TextStyle(
-          fontSize: 20
-        ),
+      return Text(
+        '$value분',
+        style: TextStyle(fontSize: 20),
       );
     } else if (value % 60 == 0) {
-      return Text('${(value / 60).floor().toDouble().toStringAsFixed(0)}시간',
-        style: TextStyle(
-          fontSize: 20
-        ),
+      return Text(
+        '${(value / 60).floor().toDouble().toStringAsFixed(0)}시간',
+        style: TextStyle(fontSize: 20),
       );
     } else {
       return Text(
-          '${(value / 60).floor().toDouble().toStringAsFixed(0)}시간 ${value % 60}분',
-        style: TextStyle(
-          fontSize: 20
-        ),
+        '${(value / 60).floor().toDouble().toStringAsFixed(0)}시간 ${value % 60}분',
+        style: TextStyle(fontSize: 20),
       );
     }
   }
@@ -1109,9 +1116,11 @@ class _AddTodoState extends State<AddTodo> {
                     end: _todoController.defaultTime.value.endTime,
                     onStartChange: (startTime) {
                       changeStartTime = startTime;
+                      _todoController.startTime(startTime);
                     },
                     onEndChange: (endTime) {
                       changeEndTime = endTime;
+                      _todoController.endTime(endTime);
                     },
                     ticks: 24,
                     handlerRadius: 8,
@@ -1187,23 +1196,59 @@ class _AddTodoState extends State<AddTodo> {
           return Container(
             height: context.mediaQuery.size.height * 0.35,
             color: Colors.white,
-            child: CupertinoDatePicker(
-              mode: CupertinoDatePickerMode.time,
-              minuteInterval: _settingsController.timePickerOfInterval.value,
-              initialDateTime: dateTime,
-              onDateTimeChanged: (value) {
-                if (value != null && value != dateTime) {
-                  setState(() {
-                    if (changeIndex == 0) {
-                      _todoController.startTime(
-                          TimeOfDay(hour: value.hour, minute: value.minute));
-                    } else {
-                      _todoController.endTime(
-                          TimeOfDay(hour: value.hour, minute: value.minute));
-                    }
-                  });
-                }
-              },
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CupertinoButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: Text(
+                        '취소',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                    SizedBox(width: 30),
+                    CupertinoButton(
+                      onPressed: () {
+                        if (changeIndex == 0) {
+                          _todoController
+                              .startTime(_todoController.dummyStartTime.value);
+                          Get.back();
+                        } else {
+                          _todoController
+                              .endTime(_todoController.dummyEndTime.value);
+                          Get.back();
+                        }
+                      },
+                      child: Text('확인'),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.time,
+                    minuteInterval:
+                        _settingsController.timePickerOfInterval.value,
+                    initialDateTime: dateTime,
+                    onDateTimeChanged: (value) {
+                      if (value != null && value != dateTime) {
+                        setState(() {
+                          if (changeIndex == 0) {
+                            _todoController.dummyStartTime(TimeOfDay(
+                                hour: value.hour, minute: value.minute));
+                          } else {
+                            _todoController.dummyEndTime(TimeOfDay(
+                                hour: value.hour, minute: value.minute));
+                          }
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
           );
         });
@@ -1213,8 +1258,10 @@ class _AddTodoState extends State<AddTodo> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _todoController.initCurrentTimeInterval(
-        _settingsController.timePickerOfInterval.value);
+    if (_todoController.isEditMode.value == false) {
+      _todoController.initCurrentTimeInterval(
+          _settingsController.timePickerOfInterval.value);
+    }
   }
 
   @override
