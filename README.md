@@ -1,3 +1,5 @@
+<div align="center"> 
+  
 [<img src="https://user-images.githubusercontent.com/78677571/211783393-e0d11589-d2b3-4f36-877a-0c701721e0af.png" width="100">](https://apps.apple.com/kr/app/%EB%8D%B0%EC%9D%BC%EB%A6%AC%EB%A6%AC%ED%8F%AC%ED%8A%B8-dailyreport/id1589196065?l=en)
 
 ## 데일리리포트 : DailyReport
@@ -9,9 +11,11 @@
 
 [<img width="220" alt="스크린샷 2021-11-19 오후 3 52 02" src="https://user-images.githubusercontent.com/55099365/196023806-5eb7be0f-c7cf-4661-bb39-35a15146c33a.png">](https://apps.apple.com/kr/app/%EB%8D%B0%EC%9D%BC%EB%A6%AC%EB%A6%AC%ED%8F%AC%ED%8A%B8-dailyreport/id1589196065?l=en)
 
-
+</div>
 
 ---
+
+
 
 
 ### 📱 ScreenShot
@@ -40,33 +44,55 @@
 |---|---|---|
 |<img src="https://user-images.githubusercontent.com/78677571/211772407-64aac1be-0bc3-4704-b91f-3aee73a99a2e.PNG" width="300">|<img src="https://user-images.githubusercontent.com/78677571/211772403-a7a3b281-96cb-49e5-afdc-fc064a48b61a.PNG" width="300">|<img src="https://user-images.githubusercontent.com/78677571/211781579-8a71b888-a476-4eb8-a588-ed8ecf9b2f8b.PNG" width="300">|
 
+---
 
-### 🛠️ Development Environment
+
+
+
+
+### ⚙️ Development Environment
 
 <img src="http://img.shields.io/badge/-Flutter-02569B?style=flat&logo=Flutter&logoColor=white" width="100" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
+
+<br>
+
+---
 
 
 ### 🛠️ Skill
 
-상태관리 : GetX
+상태관리 : [GetX](https://pub.dev/packages/get)
 
 - Firebase Auth
 - Firebase Storage
 - Google Admob
 
+<br>
+
+---
+
+
 ### 📝 Library
 
 |Name|Version|
 |---|---|
-|get|^4.1.4|
-|fl_chart|^0.36.1|
-|time_range_picker|^2.0.1|
-|get_storage|^2.0.2|
-|table_calendar|^3.0.1|
-|intl|^0.17.0|
-|firebase_core|1.3.0|
-|firebase_auth|1.4.1|
-|cloud_firestore|^2.2.0|
-|google_mobile_ads|0.13.0|
+|[get](https://pub.dev/packages/get)|^4.1.4|
+|[fl_chart](https://pub.dev/packages/fl_chart)|^0.36.1|
+|[time_range_picker](https://pub.dev/packages/time_range_picker)|^2.0.1|
+|[get_storage](https://pub.dev/packages/get_storage)|^2.0.2|
+|[table_calendar](https://pub.dev/packages/table_calendar)|^3.0.1|
+|[intl](https://pub.dev/packages/intl)|^0.17.0|
+|[firebase_core](https://pub.dev/packages/firebase_core)|1.3.0|
+|[firebase_auth](https://pub.dev/packages/firebase_auth)|1.4.1|
+|[cloud_firestore](https://pub.dev/packages/cloud_firestore)|^2.2.0|
+|[google_mobile_ads](https://pub.dev/packages/google_mobile_ads)|0.13.0|
+
+<br>
+
+---
+
+
+
+### 🔒 License
 
 [개인정보처리방침](https://deeply-tea-3fa.notion.site/8efb3f99bfa64b63b25907969722e893)
